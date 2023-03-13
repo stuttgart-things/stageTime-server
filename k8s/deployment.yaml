@@ -1,0 +1,107 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: yacht-application-server
+  name: yacht-application-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yacht-application-server
+  template:
+    metadata:
+      labels:
+        app: yacht-application-server
+    spec:
+      serviceAccountName: yacht-application-server
+      containers:
+      - image: scr.app.sthings.tiab.ssc.sva.de/yacht-application-server/yacht-application-server:23.0306.1235
+        envFrom:
+        - secretRef:
+            name: redis-connection
+        - configMapRef:
+            name: yas-configuration
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+          requests:
+            cpu: 50m
+            memory: 50Mi
+        name: yacht-application-server
+        ports:
+        - containerPort: 50051
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: yacht-application-server
+  name: yacht-application-server
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 50051
+  selector:
+    app: yacht-application-server
+  type: ClusterIP
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: yacht-application-server-ingress
+  namespace: yacht
+spec:
+  commonName: yas.dev.sthings.tiab.ssc.sva.de
+  dnsNames:
+  - yas.dev.sthings.tiab.ssc.sva.de
+  issuerRef:
+    name: cluster-issuer-ssc
+    kind: ClusterIssuer
+  secretName: yacht-application-server-ingress-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+  name: yacht-application-server-ingress
+  namespace: yacht
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: yas.dev.sthings.tiab.ssc.sva.de
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: yacht-application-server
+            port:
+              number: 80
+  tls:
+  - secretName: yacht-application-server-ingress-tls
+    hosts:
+      - yas.dev.sthings.tiab.ssc.sva.de
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: redis-connection
+data:
+  REDIS_SERVER: MTAuMzEuMTAxLjEzOA==
+  REDIS_PORT: NjM3OQ==
+  REDIS_PASSWORD: QXRsYW43aXM=
+  REDIS_QUEUE: cmVkaXNxdWV1ZTp5YWNodC1yZXZpc2lvbnJ1bnM=
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: yas-configuration
+data:
+  PIPELINE_WORKSPACE: yacht-tekton

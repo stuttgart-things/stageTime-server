@@ -1,0 +1,12 @@
+syntax = "proto3";
+ 
+package revisionrun;
+ 
+option go_package = "codehub.sva.de/Lab/stuttgart-things/yacht/yacht-application-server";
+
+message Pipelinerun {
+    string name = 1;
+    double stage = 2;
+    string params = 3;
+    string workspaces = 4;
+}

@@ -1,0 +1,17 @@
+syntax = "proto3";
+ 
+package revisionrun;
+ 
+option go_package = "codehub.sva.de/Lab/stuttgart-things/yacht/yacht-application-server";
+ 
+import "revisionrun/response.proto";
+import "revisionrun/revisionrun.proto";
+
+
+service YachtApplicationService {
+    rpc CreateRevisionRun(CreateRevisionRunRequest) returns (Response) {}
+ 
+//    rpc UpdateLeague(UpdateRevisionRunRequest) returns (Response) {}
+//    rpc FindLeague(FindRevisionRunRequest) returns (Response) {}
+//    rpc DeleteLeague(DeleteRevisionRunRequest) returns (Response) {}
+}

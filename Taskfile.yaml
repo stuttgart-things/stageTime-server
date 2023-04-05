@@ -1,6 +1,5 @@
 ---
 version: "3"
-
 vars:
   MODULE: github.com/stuttgart-things/yacht-application-server
   REGISTRY: eu.gcr.io

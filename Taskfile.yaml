@@ -1,0 +1,84 @@
+---
+version: "3"
+
+vars:
+  MODULE: github.com/stuttgart-things/yacht-application-server
+  REGISTRY: eu.gcr.io
+  REPOSITORY_NAME: stuttgart-things
+  LOCAL_BIN_SERVER_PORT: 50051
+  LOCAL_CONTAINER_SERVER_PORT: 8011
+  INGRESS_URL: yas.teasle.sthings.tiab.ssc.sva.de:443
+  CI_PROJECT_NAME:
+    sh: echo ${PWD##*/}
+  DATE:
+    sh: date +"%y.%m%d.%H%M"
+  GIT_COMMIT:
+    sh: git log -n 1 --format=%h
+  MAJOR: 0
+  MINOR: 4
+  PATCH: 0
+
+tasks:
+  lint:
+    desc: Lint code
+    cmds:
+      - cmd: golangci-lint run
+        ignore_error: true
+
+  build-server:
+    desc: Build server
+    deps: [lint, proto]
+    cmds:
+      - go mod tidy
+      - CGO_ENABLED=0
+      - GOOS=linux
+      - go install -ldflags="-X main.version=v{{ .MAJOR }}.{{ .MINOR }}.{{ .PATCH }} -X main.date={{ .DATE }} -X main.commit={{ .GIT_COMMIT }}"
+
+  proto:
+    desc: Generate Go code from proto
+    cmds:
+      - protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative revisionrun/*.proto
+
+  build-container:
+    desc: Build container image
+    deps: [build-server]
+    cmds:
+      - sudo nerdctl build -t {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .CI_PROJECT_NAME }}:{{ .DATE }} --build-arg VERSION={{ .MAJOR }}.{{ .MINOR }}.{{ .PATCH }} --build-arg BUILD_DATE={{ .DATE }} --build-arg COMMIT={{ .GIT_COMMIT }} --build-arg GIT_PAT=${CODEHUB_PAT} .
+      - sudo nerdctl push {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .CI_PROJECT_NAME }}:{{ .DATE }}
+
+  run-server:
+    desc: Run server locally
+    deps: [build-server]
+    cmds:
+      - "{{ .CI_PROJECT_NAME }}"
+    env:
+      SERVER_PORT: "{{ .LOCAL_SERVER_PORT }}"
+
+  run-client:
+    desc: Run client locally
+    deps: [build-server]
+    cmds:
+      - go run client/client.go
+    env:
+      SERVER_PORT: "{{ .LOCAL_CONTAINER_SERVER_PORT }}"
+      GRPC_GO_LOG_VERBOSITY_LEVEL: 99
+      GRPC_GO_LOG_SEVERITY_LEVEL: info
+      YAS_URL: "{{ .INGRESS_URL }}"
+
+  run-container:
+    desc: Run container image
+    deps: [build-container]
+    cmds:
+      - sudo nerdctl run -e SERVER_PORT={{ .LOCAL_CONTAINER_SERVER_PORT }} -p {{ .LOCAL_CONTAINER_SERVER_PORT }}:{{ .LOCAL_CONTAINER_SERVER_PORT }}  {{ .REGISTRY }}/{{ .CI_PROJECT_NAME }}/{{ .CI_PROJECT_NAME }}:{{ .DATE }}
+
+  push:
+    desc: Commit & push the app
+    deps: [build-server]
+    cmds:
+      - git pull
+      - git add *
+      - |
+        echo "Enter COMMIT_MESSAGE:"
+        read COMMIT_MESSAGE;
+        git commit -am "${COMMIT_MESSAGE} for {{ .MAJOR }}.{{ .MINOR }}.{{ .PATCH }}"
+      - git push

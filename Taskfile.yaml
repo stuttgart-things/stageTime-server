@@ -24,7 +24,6 @@ tasks:
     cmds:
       - cmd: golangci-lint run
         ignore_error: true
-
   build-server:
     desc: Build server
     deps: [lint, proto]
@@ -33,19 +32,16 @@ tasks:
       - CGO_ENABLED=0
       - GOOS=linux
       - go install -ldflags="-X main.version=v{{ .MAJOR }}.{{ .MINOR }}.{{ .PATCH }} -X main.date={{ .DATE }} -X main.commit={{ .GIT_COMMIT }}"
-
   proto:
     desc: Generate Go code from proto
     cmds:
       - protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative revisionrun/*.proto
-
   build-container:
     desc: Build container image
     deps: [build-server]
     cmds:
       - sudo nerdctl build -t {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .CI_PROJECT_NAME }}:{{ .DATE }} --build-arg VERSION={{ .MAJOR }}.{{ .MINOR }}.{{ .PATCH }} --build-arg BUILD_DATE={{ .DATE }} --build-arg COMMIT={{ .GIT_COMMIT }} --build-arg GIT_PAT=${CODEHUB_PAT} .
       - sudo nerdctl push {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .CI_PROJECT_NAME }}:{{ .DATE }}
-
   run-server:
     desc: Run server locally
     deps: [build-server]
@@ -53,7 +49,6 @@ tasks:
       - "{{ .CI_PROJECT_NAME }}"
     env:
       SERVER_PORT: "{{ .LOCAL_SERVER_PORT }}"
-
   run-client:
     desc: Run client locally
     deps: [build-server]
@@ -64,13 +59,22 @@ tasks:
       GRPC_GO_LOG_VERBOSITY_LEVEL: 99
       GRPC_GO_LOG_SEVERITY_LEVEL: info
       YAS_URL: "{{ .INGRESS_URL }}"
-
   run-container:
     desc: Run container image
     deps: [build-container]
     cmds:
       - sudo nerdctl run -e SERVER_PORT={{ .LOCAL_CONTAINER_SERVER_PORT }} -p {{ .LOCAL_CONTAINER_SERVER_PORT }}:{{ .LOCAL_CONTAINER_SERVER_PORT }}  {{ .REGISTRY }}/{{ .CI_PROJECT_NAME }}/{{ .CI_PROJECT_NAME }}:{{ .DATE }}
-
+  tag:
+    desc: commit, push & tag the module
+    deps: [lint]
+    cmds:
+      - go mod tidy
+      - git pull
+      - git add *
+      - git commit -am 'updated {{ .PROJECT_NAME }} {{ .DATE }} for tag version {{ .UPDATED_TAG_VERSION }}'
+      - git push
+      - git tag -a {{ .UPDATED_TAG_VERSION }} -m 'updated for stuttgart-things {{.DATE}} for tag version {{ .UPDATED_TAG_VERSION }}'
+      - git push origin --tags
   push:
     desc: Commit & push the app
     deps: [build-server]

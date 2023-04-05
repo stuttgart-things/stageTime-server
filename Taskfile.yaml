@@ -75,6 +75,11 @@ tasks:
       - git push
       - git tag -a {{ .UPDATED_TAG_VERSION }} -m 'updated for stuttgart-things {{.DATE}} for tag version {{ .UPDATED_TAG_VERSION }}'
       - git push origin --tags
+    vars:
+      UPDATED_TAG:
+        sh: old_tag=$(git describe --tags --abbrev=0 | cut -d "." -f3); new_tag=$((old_tag+1)); echo $new_tag
+      UPDATED_TAG_VERSION:
+        sh: t1=$(git describe --tags --abbrev=0 | cut -f1 -d'.'); t2=$(git describe --tags --abbrev=0 | cut -f2 -d'.'); echo $t1.$t2.{{.UPDATED_TAG}}
   push:
     desc: Commit & push the app
     deps: [build-server]

@@ -14,8 +14,10 @@ vars:
   GIT_COMMIT:
     sh: git log -n 1 --format=%h
   MAJOR: 0
-  MINOR: 4
+  MINOR: 3
   PATCH: 0
+  VERSION:
+    sh: old_tag=$(git describe --tags --abbrev=0 | cut -d "." -f3); new_tag=$((old_tag+1)); echo $new_tag
 
 tasks:
   lint:

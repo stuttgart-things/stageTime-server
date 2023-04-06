@@ -10,7 +10,7 @@ WORKDIR /src/
 COPY . .
 
 RUN go mod tidy
-RUN CGO_ENABLED=0 go build -o /bin/yacht-application-server \
+RUN CGO_ENABLED=0 go build -buildvcs=false -o /bin/yacht-application-server \
     -ldflags="-X main.version=v${VERSION} -X main.date=${BUILD_DATE} -X main.commit=${COMMIT}"
 
 FROM alpine:3.16.0

@@ -1,0 +1,15 @@
+---
+# services:
+#   yacht-application-server:
+#     labels:
+#       app: yacht-application-server
+#     ports:
+#       - name: app-port
+#         protocol: TCP
+#         value: 50051
+#         expose:
+#           service:
+#             type: ClusterIP
+#             port: 80
+#     selectorLabels:
+#       app: yacht-application-server

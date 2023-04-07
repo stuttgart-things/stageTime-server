@@ -3,7 +3,7 @@
     "pushed_at": "2023-02-200T22:40:36Z",
     "author": "patrick-hermann-sva",
     "repo_url": "https://github.com/stuttgart-things/yacht-application-server.git",
-    "commit_id": "03eee7226417",
+    "commit_id": "03eee7226418",
     "pipelineruns": [
       {
         "name": "build-kaniko-image",

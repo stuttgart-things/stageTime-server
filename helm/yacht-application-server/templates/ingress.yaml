@@ -1,4 +1,0 @@
-{{- $envVar := . -}}
-{{- range $ingress, $ingressDefinition := .Values.ingress -}}
-{{ include "sthings-k8s-toolkit.ingress" (list $envVar $ingress $ingressDefinition) }}
-{{ end -}}

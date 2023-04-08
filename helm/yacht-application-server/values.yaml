@@ -1,12 +1,33 @@
+---
+namespace: yacht
+
 configmaps:
-  sthings-k8s-operator-manager-config:
-    controller_manager_config.yaml: |
-      apiVersion: controller-runtime.sigs.k8s.io/v1alpha1
-      kind: ControllerManagerConfig
-      health:
-        healthProbeBindAddress: :6789
-      metrics:
-        bindAddress: 127.0.0.1:8080
-      leaderElection:
-        leaderElect: true
-        resourceName: 811c9dc5.stuttgart-things.sthings.tiab.ssc.sva.de
+  yas-configuration:
+    PIPELINE_WORKSPACE: yacht-tekton
+
+secrets:
+  redis-connection:
+    name: redis-connection
+    labels:
+      app: yacht-application-server
+    dataType: data
+    secretKVs:
+      REDIS_SERVER: MTAuMzEuMTAxLjEzOA==
+      REDIS_PORT: NjM3OQ==
+      REDIS_PASSWORD: QXRsYW43aXM=
+      REDIS_QUEUE: cmVkaXNxdWV1ZTp5YWNodC1yZXZpc2lvbnJ1bnM=
+
+services:
+  yacht-application-server:
+    labels:
+      app: yacht-application-server
+    ports:
+      - name: yas-port
+        protocol: TCP
+        value: 50051
+        expose:
+          service:
+            type: ClusterIP
+            port: 80
+    selectorLabels:
+      app: yacht-application-server

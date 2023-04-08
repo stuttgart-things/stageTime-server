@@ -5,6 +5,58 @@ configmaps:
   yas-configuration:
     PIPELINE_WORKSPACE: yacht-tekton
 
+deployment:
+  name: yacht-application-server
+  labels:
+    app: sthings-slides
+  selectorLabels:
+    app: sthings-slides
+  image: scr.tiab.labda.sva.de/sthings-slides-template/sthings-slides-template
+  tag: go-1.19
+  replicaCount: 1
+  imagePullPolicy: Always
+  ports:
+    app-port:
+      containerPort: 8080
+      protocol: TCP
+  volumeMounts:
+    workdir:
+      mountPath: /work-dir
+  allowPrivilegeEscalation: "false"
+  privileged: "false"
+  runAsNonRoot: "true"
+  readOnlyRootFilesystem: "true"
+  probes:
+    livenessProbe:
+      tcpSocket:
+        path: /
+        port: app-port
+    readinessProbe:
+      tcpSocket:
+        path: /
+        port: app-port
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+  volumes:
+    workdir:
+      volumeKind: emptyDir
+  initContainer:
+    name: download-presentationfiles
+    image: scr.labul.sva.de/sthings-tekton-runner/sthings-tekton-runner
+    initTag: 2.0.0
+    command:
+      - "sh"
+      - "-c"
+      - "for file in sva-sthings-hackngrill.md workshop-kubernetes-seitenbau.md; do wget -nd -np -P /work-dir https://artifacts.tiab.labda.sva.de/presentationfiles/$file; done"
+    volumeMounts:
+      workdir:
+        mountPath: /work-dir
+
 secrets:
   redis-connection:
     name: redis-connection

@@ -17,7 +17,7 @@ spec:
     spec:
       serviceAccountName: yacht-application-server
       containers:
-      - image: scr.app.sthings.tiab.ssc.sva.de/yacht-application-server/yacht-application-server:23.0306.1235
+      - image: eu.gcr.io/stuttgart-things/yacht-application-server:23.0409.0739
         envFrom:
         - secretRef:
             name: redis-connection
@@ -55,9 +55,9 @@ metadata:
   name: yacht-application-server-ingress
   namespace: yacht
 spec:
-  commonName: yas.dev.sthings.tiab.ssc.sva.de
+  commonName: yas.dev.sthings-pve.labul.sva.de
   dnsNames:
-  - yas.dev.sthings.tiab.ssc.sva.de
+  - yas.dev.sthings-pve.labul.sva.de
   issuerRef:
     name: cluster-issuer-ssc
     kind: ClusterIssuer
@@ -74,7 +74,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: yas.dev.sthings.tiab.ssc.sva.de
+  - host: yas.dev.sthings-pve.labul.sva.de
     http:
       paths:
       - path: /
@@ -87,7 +87,7 @@ spec:
   tls:
   - secretName: yacht-application-server-ingress-tls
     hosts:
-      - yas.dev.sthings.tiab.ssc.sva.de
+      - yas.dev.sthings-pve.labul.sva.de
 ---
 apiVersion: v1
 kind: Secret

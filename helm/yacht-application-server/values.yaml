@@ -1,9 +1,9 @@
 ---
 namespace: yacht
 
-# configmaps:
-#   yas-configuration:
-#     PIPELINE_WORKSPACE: yacht-tekton
+configmaps:
+  yas-configuration:
+    PIPELINE_WORKSPACE: yacht-tekton
 
 deployment:
   name: yacht-application-server
@@ -31,53 +31,70 @@ deployment:
       cpu: 100m
       memory: 128Mi
 
-# secrets:
-#   redis-connection:
-#     name: redis-connection
-#     labels:
-#       app: yacht-application-server
-#     dataType: data
-#     secretKVs:
-#       REDIS_SERVER: MTAuMzEuMTAxLjEzOA==
-#       REDIS_PORT: NjM3OQ==
-#       REDIS_PASSWORD: QXRsYW43aXM=
-#       REDIS_QUEUE: cmVkaXNxdWV1ZTp5YWNodC1yZXZpc2lvbnJ1bnM=
+secrets:
+  redis-connection:
+    name: redis-connection
+    labels:
+      app: yacht-application-server
+    dataType: data
+    secretKVs:
+      REDIS_SERVER: MTAuMzEuMTAxLjEzOA==
+      REDIS_PORT: NjM3OQ==
+      REDIS_PASSWORD: QXRsYW43aXM=
+      REDIS_QUEUE: cmVkaXNxdWV1ZTp5YWNodC1yZXZpc2lvbnJ1bnM=
 
-# services:
-#   yacht-application-server:
-#     labels:
-#       app: yacht-application-server
-#     ports:
-#       - name: yas-port
-#         protocol: TCP
-#         value: 50051
-#         expose:
-#           service:
-#             type: ClusterIP
-#             port: 80
-#     selectorLabels:
-#       app: yacht-application-server
+services:
+  yacht-application-server:
+    labels:
+      app: yacht-application-server
+    ports:
+      - name: yas-port
+        protocol: TCP
+        value: 50051
+        expose:
+          service:
+            type: ClusterIP
+            port: 80
+    selectorLabels:
+      app: yacht-application-server
 
-# ingress:
-#   yacht-application-server:
-#     labels:
-#       app: yacht-application-server
-#     name: yacht-application-server
-#     ingressClassName: nginx
-#     annotations:
-#       nginx.ingress.kubernetes.io/ssl-redirect: "true"
-#       nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
-#     service:
-#       name: yacht-application-server
-#       port: 80
-#       path: /
-#       pathType: Prefix
-#     hostname: yas
-#     clusterName: dev
-#     domain: sthings.tiab.ssc.sva.de
-#     tls:
-#       secretName: yacht-application-server-ingress-tls
-#       host: yas.dev.sthings.tiab.ssc.sva.de
+customresources:
+  yas-ingress-certificate:
+    apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: yacht-application-server-ingress
+      labels:
+        app: yacht-application-server
+    spec:
+      commonName: yas.dev.sthings-pve.labul.sva.de
+      dnsNames:
+      - yas.dev.sthings-pve.labul.sva.de
+      issuerRef:
+        name: cluster-issuer-approle
+        kind: ClusterIssuer
+      secretName: yacht-application-server-ingress-tls
+
+ingress:
+  yacht-application-server:
+    labels:
+      app: yacht-application-server
+    name: yacht-application-server
+    ingressClassName: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+    service:
+      name: yacht-application-server
+      port: 80
+      path: /
+      pathType: Prefix
+    hostname: yas
+    clusterName: dev
+    domain: sthings-pve.labul.sva.de
+    tls:
+      secretName: yacht-application-server-ingress-tls
+      host: yas.dev.sthings-pve.labul.sva.de
 
 # RBAC
 serviceAccounts:

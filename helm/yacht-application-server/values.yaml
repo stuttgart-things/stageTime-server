@@ -8,20 +8,17 @@ configmaps:
 deployment:
   name: yacht-application-server
   labels:
-    app: sthings-slides
+    app: yacht-application-server
   selectorLabels:
-    app: sthings-slides
-  image: scr.tiab.labda.sva.de/sthings-slides-template/sthings-slides-template
-  tag: go-1.19
+    app: yacht-application-server
+  image: eu.gcr.io/stuttgart-things/yacht-application-server
+  tag: 23.0409.0739
   replicaCount: 1
   imagePullPolicy: Always
   ports:
     app-port:
-      containerPort: 8080
+      containerPort: 50051
       protocol: TCP
-  volumeMounts:
-    workdir:
-      mountPath: /work-dir
   allowPrivilegeEscalation: "false"
   privileged: "false"
   runAsNonRoot: "true"
@@ -40,22 +37,8 @@ deployment:
       cpu: 100m
       memory: 128Mi
     limits:
-      cpu: 200m
-      memory: 256Mi
-  volumes:
-    workdir:
-      volumeKind: emptyDir
-  initContainer:
-    name: download-presentationfiles
-    image: scr.labul.sva.de/sthings-tekton-runner/sthings-tekton-runner
-    initTag: 2.0.0
-    command:
-      - "sh"
-      - "-c"
-      - "for file in sva-sthings-hackngrill.md workshop-kubernetes-seitenbau.md; do wget -nd -np -P /work-dir https://artifacts.tiab.labda.sva.de/presentationfiles/$file; done"
-    volumeMounts:
-      workdir:
-        mountPath: /work-dir
+      cpu: 50m
+      memory: 64Mi
 
 secrets:
   redis-connection:
@@ -104,3 +87,61 @@ ingress:
     tls:
       secretName: yacht-application-server-ingress-tls
       host: yas.dev.sthings.tiab.ssc.sva.de
+
+# RBAC
+serviceAccounts:
+  yacht-application-server:
+    labels:
+      app: yacht-application-server
+
+roles:
+  yacht-application-server:
+    labels:
+      app: yacht-application-server
+    rules:
+      - apiGroups:
+        - ""
+        resources:
+        - pods
+        verbs:
+        - get
+        - list
+        - watch
+        - create
+
+roleBindings:
+  yacht-application-server:
+    labels:
+      app: yacht-application-server
+    roleRef:
+      kind: Role
+      name: yacht-application-server
+      apiGroup: rbac.authorization.k8s.io
+    subjects:
+      - kind: ServiceAccount
+        name: yacht-application-server
+        namespace: yacht
+
+clusterRoles:
+  list-all-namespaces:
+    labels:
+      app: yacht-application-server
+    rules:
+      - apiGroups:
+        - ""
+        resources:
+        - namespaces
+        verbs:
+        - get
+        - list
+
+clusterRoleBindings:
+  list-all-namespaces-yas:
+    roleRef:
+      kind: ClusterRole
+      name: list-all-namespaces
+      apiGroup: rbac.authorization.k8s.io
+    subjects:
+      - kind: ServiceAccount
+        name: yacht-application-server
+        namespace: yacht

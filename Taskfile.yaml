@@ -13,9 +13,12 @@ vars:
     sh: date +"%y.%m%d.%H%M"
   GIT_COMMIT:
     sh: git log -n 1 --format=%h
-  MAJOR: 0
-  MINOR: 3
-  PATCH: 0
+  MAJOR:
+    sh: git describe --tags --abbrev=0 | cut -d "." -f1
+  MINOR:
+    sh: git describe --tags --abbrev=0 | cut -d "." -f2
+  PATCH:
+    sh: git describe --tags --abbrev=0 | cut -d "." -f3
   VERSION:
     sh: old_tag=$(git describe --tags --abbrev=0 | cut -d "." -f3); new_tag=$((old_tag+1)); echo $new_tag
 

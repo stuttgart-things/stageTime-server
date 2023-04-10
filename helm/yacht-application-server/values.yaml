@@ -1,5 +1,5 @@
 ---
-namespace: yacht
+namespace: yas2
 
 configmaps:
   yas-configuration:
@@ -67,11 +67,11 @@ customresources:
       labels:
         app: yacht-application-server
     spec:
-      commonName: yas.dev.sthings-pve.labul.sva.de
+      commonName: yas.app.sthings.tiab.ssc.sva.de
       dnsNames:
-      - yas.dev.sthings-pve.labul.sva.de
+      - yas.app.sthings.tiab.ssc.sva.de
       issuerRef:
-        name: cluster-issuer-approle
+        name: cluster-issuer-ssc #cluster-issuer-approle
         kind: ClusterIssuer
       secretName: yacht-application-server-ingress-tls
 
@@ -85,16 +85,16 @@ ingress:
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
     service:
-      name: yacht-application-server
+      name: yacht-application-server-service
       port: 80
       path: /
       pathType: Prefix
     hostname: yas
     clusterName: dev
-    domain: sthings-pve.labul.sva.de
+    domain: app.sthings.tiab.ssc.sva.de
     tls:
       secretName: yacht-application-server-ingress-tls
-      host: yas.dev.sthings-pve.labul.sva.de
+      host: yas.app.sthings.tiab.ssc.sva.de
 
 # RBAC
 serviceAccounts:

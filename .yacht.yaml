@@ -1,0 +1,5 @@
+---
+pipelineruns:
+  - build-kaniko-image:
+      params: context=/kaniko/decksman, dockerfile=./Dockerfile
+      workspaces: ""

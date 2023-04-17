@@ -1,0 +1,10 @@
+---
+pipelineruns:
+  - build-yas-image:
+      stage: 0
+      pipeline: build-container-image
+      params: dockerfile=./Dockerfile; git-revision={{ .gitRevision }}, gitRepoUrl={{ .gitRepoUrl }}
+  - build-yas-chart:
+      stage: 1
+      pipeline: build-helm-chart
+      params: ""

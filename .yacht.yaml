@@ -1,6 +1,5 @@
 ---
 pipelineruns:
-<<<<<<< HEAD
   - build-yas-image:
       stage: 0
       pipeline: build-container-image
@@ -9,8 +8,3 @@ pipelineruns:
       stage: 1
       pipeline: build-helm-chart
       params: ""
-=======
-  - build-kaniko-image:
-      params: context=/kaniko/decksman, dockerfile=./Dockerfile
-      workspaces: ""
->>>>>>> a12bdfb6c2a2e9ee17a6105d057b371fbf833543

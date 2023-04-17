@@ -1,4 +1,3 @@
----
 revisionrun:
   - build-yas-image:
       stage: 0

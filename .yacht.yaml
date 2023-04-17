@@ -1,5 +1,5 @@
 ---
-pipelineruns:
+revisionrun:
   - build-yas-image:
       stage: 0
       pipeline: build-container-image

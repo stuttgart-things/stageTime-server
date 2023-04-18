@@ -9,7 +9,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github/yacht-application-server/server"
 	"net"
 	"os"
 

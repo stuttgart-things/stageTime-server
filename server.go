@@ -9,11 +9,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github/yacht-application-server/server"
 	"net"
 	"os"
 
 	sthingsBase "github.com/stuttgart-things/sthingsBase"
-	internal "github.com/stuttgart-things/yacht-application-server/internal"
+	server "github.com/stuttgart-things/yacht-application-server/server"
 
 	"google.golang.org/grpc/reflection"
 
@@ -70,7 +71,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, req *revisionrun.CreateRe
 
 	log := sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
 
-	internal.RenderPipelineRuns(req)
+	server.RenderPipelineRuns(req)
 
 	receivedRevisionRun := bytes.Buffer{}
 
@@ -92,15 +93,15 @@ func (s Server) CreateRevisionRun(ctx context.Context, req *revisionrun.CreateRe
 	fmt.Println("PipelineRuns:", len(req.Pipelineruns))
 
 	// TEST RENDERING
-	renderedPipelineruns := internal.RenderPipelineRuns(req)
+	renderedPipelineruns := server.RenderPipelineRuns(req)
 	fmt.Println(renderedPipelineruns)
 	log.Info("all pipelineRuns can be rendered")
 
 	// TEST RENDERING
-	internal.SendStatsToRedis(renderedPipelineruns)
+	server.SendStatsToRedis(renderedPipelineruns)
 
 	// SEND PIPELINERUN TO REDIS MessageQueue
-	internal.SendPipelineRunToMessageQueue(renderedPipelineruns)
+	server.SendPipelineRunToMessageQueue(renderedPipelineruns)
 	log.Info("revisionRun was stored in MessageQueue")
 
 	return &revisionrun.Response{

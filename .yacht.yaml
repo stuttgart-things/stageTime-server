@@ -6,4 +6,4 @@ revisionrun:
   - build-yas-chart:
       stage: 1
       pipeline: build-helm-chart
-      params: helm-chart-path=gitops/apps, helm-chart-name=sthings-cluster, helm-chart-tag=0.2.1, registry=scr.tiab.labda.sva.de, working-image=scr.tiab.labda.sva.de/sthings-k8s-workspace/sthings-k8s-workspace:281126-1644", gitRepoUrl={{ .gitRepoUrl }}; git-revision={{ .gitRevision }}
+      params: helm-chart-path=gitops/apps, helm-chart-name=sthings-cluster, helm-chart-tag=0.2.1, registry=scr.tiab.labda.sva.de, working-image=scr.tiab.labda.sva.de/sthings-k8s-workspace/sthings-k8s-workspace:281126-1644, gitRepoUrl={{ .gitRepoUrl }}; git-revision={{ .gitRevision }}

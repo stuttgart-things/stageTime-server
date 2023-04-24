@@ -2,7 +2,7 @@ revisionrun:
   - build-yas-image:
       stage: 0
       pipeline: build-kaniko-image
-      params: dockerfile=./Dockerfile; gitRepoUrl={{ .gitRepoUrl }}; git-revision={{ .gitRevision }}  
+      params: dockerfile=./Dockerfile, gitRepoUrl={{ .gitRepoUrl }}, git-revision={{ .gitRevision }}  
   - build-yas-chart:
       stage: 1
       pipeline: build-helm-chart

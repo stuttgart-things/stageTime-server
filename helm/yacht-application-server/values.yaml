@@ -30,6 +30,8 @@ deployment:
       imagePullPolicy: Always
       tag: 23.0507.1713-0.3.4
       securityContext: {}
+    manager:
+      tag: 23.0507.1907-0.3.4
 secrets:
   redis-connection:
     name: redis-connection

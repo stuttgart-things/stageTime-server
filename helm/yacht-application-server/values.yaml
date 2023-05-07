@@ -1,5 +1,5 @@
 ---
-namespace: yas2
+namespace: yacht
 
 configmaps:
   yas-configuration:

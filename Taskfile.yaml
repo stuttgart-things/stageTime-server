@@ -108,6 +108,7 @@ tasks:
   package:
     desc: Update Chart.yaml and package archive
     cmds:
+      - cd ./helm/{{ .PROJECT_NAME }} && helm dep update
       - git add ./helm/*/*
       - yq e -i '.version = "{{ .UPDATED_TAG_VERSION }}"' ./helm/*/Chart.yaml
       - "sed -i 's/appVersion: .*/appVersion: {{ .UPDATED_TAG_VERSION }}/g' ./helm/*/Chart.yaml"

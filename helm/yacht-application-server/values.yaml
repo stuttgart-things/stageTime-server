@@ -1,17 +1,16 @@
+---
 namespace: yacht
+
 configmaps:
   yas-configuration:
     PIPELINE_WORKSPACE: yacht-tekton
+
 deployment:
   name: yacht-application-server
   labels:
     app: yacht-application-server
   selectorLabels:
     app: yacht-application-server
-  image: eu.gcr.io/stuttgart-things/yacht-application-server
-  tag: 23.0409.0739
-  replicaCount: 1
-  imagePullPolicy: Always
   ports:
     app-port:
       containerPort: 50051
@@ -28,8 +27,12 @@ deployment:
       cpu: 100m
       memory: 128Mi
   containers:
-    manager:
-      tag: 23.0507.1652-0.3.4
+    yacht-application-server:
+      image: eu.gcr.io/stuttgart-things/yacht-application-server
+      replicaCount: 1
+      imagePullPolicy: Always
+      tag: 23.0507.1713-0.3.4
+      securityContext: {}
 secrets:
   redis-connection:
     name: redis-connection

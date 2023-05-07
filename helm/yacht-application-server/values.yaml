@@ -1,10 +1,7 @@
----
 namespace: yacht
-
 configmaps:
   yas-configuration:
     PIPELINE_WORKSPACE: yacht-tekton
-
 deployment:
   name: yacht-application-server
   labels:
@@ -30,7 +27,9 @@ deployment:
     limits:
       cpu: 100m
       memory: 128Mi
-
+  containers:
+    manager:
+      tag: 23.0507.1652-0.3.4
 secrets:
   redis-connection:
     name: redis-connection
@@ -42,7 +41,6 @@ secrets:
       REDIS_PORT: NjM3OQ==
       REDIS_PASSWORD: QXRsYW43aXM=
       REDIS_QUEUE: cmVkaXNxdWV1ZTp5YWNodC1yZXZpc2lvbnJ1bnM=
-
 services:
   yacht-application-server:
     labels:
@@ -57,7 +55,6 @@ services:
             port: 80
     selectorLabels:
       app: yacht-application-server
-
 customresources:
   yas-ingress-certificate:
     apiVersion: cert-manager.io/v1
@@ -69,12 +66,11 @@ customresources:
     spec:
       commonName: yas.app.sthings.tiab.ssc.sva.de
       dnsNames:
-      - yas.app.sthings.tiab.ssc.sva.de
+        - yas.app.sthings.tiab.ssc.sva.de
       issuerRef:
         name: cluster-issuer-ssc #cluster-issuer-approle
         kind: ClusterIssuer
       secretName: yacht-application-server-ingress-tls
-
 ingress:
   yacht-application-server:
     labels:
@@ -95,28 +91,25 @@ ingress:
     tls:
       secretName: yacht-application-server-ingress-tls
       host: yas.app.sthings.tiab.ssc.sva.de
-
 # RBAC
 serviceAccounts:
   yacht-application-server:
     labels:
       app: yacht-application-server
-
 roles:
   yacht-application-server:
     labels:
       app: yacht-application-server
     rules:
       - apiGroups:
-        - ""
+          - ""
         resources:
-        - pods
+          - pods
         verbs:
-        - get
-        - list
-        - watch
-        - create
-
+          - get
+          - list
+          - watch
+          - create
 roleBindings:
   yacht-application-server:
     labels:
@@ -129,20 +122,18 @@ roleBindings:
       - kind: ServiceAccount
         name: yacht-application-server
         namespace: yacht
-
 clusterRoles:
   list-all-namespaces:
     labels:
       app: yacht-application-server
     rules:
       - apiGroups:
-        - ""
+          - ""
         resources:
-        - namespaces
+          - namespaces
         verbs:
-        - get
-        - list
-
+          - get
+          - list
 clusterRoleBindings:
   list-all-namespaces-yas:
     roleRef:

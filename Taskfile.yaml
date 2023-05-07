@@ -8,7 +8,7 @@ vars:
   LOCAL_BIN_SERVER_PORT: 50051
   LOCAL_CONTAINER_SERVER_PORT: 8011
   INGRESS_URL: yas.teasle.sthings.tiab.ssc.sva.de:443
-  CI_PROJECT_NAME:
+  PROJECT_NAME:
     sh: echo ${PWD##*/}
   DATE:
     sh: date +"%y.%m%d.%H%M"
@@ -22,6 +22,10 @@ vars:
     sh: git describe --tags --abbrev=0 | cut -d "." -f3
   VERSION:
     sh: old_tag=$(git describe --tags --abbrev=0 | cut -d "." -f3); new_tag=$((old_tag+1)); echo $new_tag
+  UPDATED_TAG:
+    sh: old_tag=$(git describe --tags --abbrev=0 | cut -d "." -f3); new_tag=$((old_tag+1)); echo $new_tag
+  UPDATED_TAG_VERSION:
+    sh: t1=$(git describe --tags --abbrev=0 | cut -f1 -d'.'); t2=$(git describe --tags --abbrev=0 | cut -f2 -d'.'); echo $t1.$t2.{{.UPDATED_TAG}}
 
 tasks:
 
@@ -45,18 +49,18 @@ tasks:
     cmds:
       - protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative revisionrun/*.proto
 
-  build-container:
+  build-image:
     desc: Build container image
     deps: [build-server]
     cmds:
-      - sudo nerdctl build -t {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .CI_PROJECT_NAME }}:{{ .DATE }} --build-arg VERSION={{ .MAJOR }}.{{ .MINOR }}.{{ .PATCH }} --build-arg BUILD_DATE={{ .DATE }} --build-arg COMMIT={{ .GIT_COMMIT }} --build-arg GIT_PAT=${CODEHUB_PAT} .
-      - sudo nerdctl push {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .CI_PROJECT_NAME }}:{{ .DATE }}
+      - sudo nerdctl build -t {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT_NAME }}:{{ .DATE }} --build-arg VERSION={{ .MAJOR }}.{{ .MINOR }}.{{ .PATCH }} --build-arg BUILD_DATE={{ .DATE }} --build-arg COMMIT={{ .GIT_COMMIT }} --build-arg GIT_PAT=${CODEHUB_PAT} .
+      - sudo nerdctl push {{ .REGISTRY }}/{{ .REPOSITORY_NAME }}/{{ .PROJECT_NAME }}:{{ .DATE }}
 
   run-server:
     desc: Run server locally
     deps: [build-server]
     cmds:
-      - "{{ .CI_PROJECT_NAME }}"
+      - "{{ .PROJECT_NAME }}"
     env:
       SERVER_PORT: "{{ .LOCAL_SERVER_PORT }}"
 
@@ -73,9 +77,9 @@ tasks:
 
   run-container:
     desc: Run container image
-    deps: [build-container]
+    deps: [build-image]
     cmds:
-      - sudo nerdctl run -e SERVER_PORT={{ .LOCAL_CONTAINER_SERVER_PORT }} -p {{ .LOCAL_CONTAINER_SERVER_PORT }}:{{ .LOCAL_CONTAINER_SERVER_PORT }}  {{ .REGISTRY }}/{{ .CI_PROJECT_NAME }}/{{ .CI_PROJECT_NAME }}:{{ .DATE }}
+      - sudo nerdctl run -e SERVER_PORT={{ .LOCAL_CONTAINER_SERVER_PORT }} -p {{ .LOCAL_CONTAINER_SERVER_PORT }}:{{ .LOCAL_CONTAINER_SERVER_PORT }}  {{ .REGISTRY }}/{{ .PROJECT_NAME }}/{{ .PROJECT_NAME }}:{{ .DATE }}
   tag:
     desc: commit, push & tag the module
     deps: [lint]
@@ -88,10 +92,6 @@ tasks:
       - git tag -a {{ .UPDATED_TAG_VERSION }} -m 'updated for stuttgart-things {{.DATE}} for tag version {{ .UPDATED_TAG_VERSION }}'
       - git push origin --tags
     vars:
-      UPDATED_TAG:
-        sh: old_tag=$(git describe --tags --abbrev=0 | cut -d "." -f3); new_tag=$((old_tag+1)); echo $new_tag
-      UPDATED_TAG_VERSION:
-        sh: t1=$(git describe --tags --abbrev=0 | cut -f1 -d'.'); t2=$(git describe --tags --abbrev=0 | cut -f2 -d'.'); echo $t1.$t2.{{.UPDATED_TAG}}
 
   push:
     desc: Commit & push the app
@@ -109,7 +109,14 @@ tasks:
     desc: Update Chart.yaml and package archive
     cmds:
       - git add ./helm/*/*
-      - "sed -i 's/version: .*/version: {{ .UPDATED_TAG_VERSION }}/g' ./helm/*/Chart.yaml"
+      - yq e -i '.version = "{{ .UPDATED_TAG_VERSION }}"' ./helm/*/Chart.yaml
       - "sed -i 's/appVersion: .*/appVersion: {{ .UPDATED_TAG_VERSION }}/g' ./helm/*/Chart.yaml"
       - yq e -i '.deployment.containers.manager.tag = "{{ .DATE }}-{{ .UPDATED_TAG_VERSION }}"' ./helm/*/values.yaml
       - helm package ./helm/*/
+
+  push-chart:
+    desc: Push to registry
+    deps: [build-image, package]
+    cmds:
+      - helm push {{ .PROJECT_NAME }}-{{ .UPDATED_TAG_VERSION }}.tgz oci://{{ .REGISTRY }}/{{ .REPOSITORY_NAME }}
+      - rm -rf {{ .PROJECT_NAME }}-{{ .UPDATED_TAG_VERSION }}.tgz

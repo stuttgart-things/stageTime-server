@@ -1,10 +1,7 @@
----
 namespace: yacht
-
 configmaps:
   yas-configuration:
     PIPELINE_WORKSPACE: yacht-tekton
-
 deployment:
   name: yacht-application-server
   labels:

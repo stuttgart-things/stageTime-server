@@ -95,7 +95,7 @@ tasks:
 
   push:
     desc: Commit & push the app
-    deps: [build-server]
+    deps: [build-server, tag, push-chart]
     cmds:
       - git pull
       - git add *

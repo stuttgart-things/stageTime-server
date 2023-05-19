@@ -91,7 +91,6 @@ tasks:
       - git push
       - git tag -a {{ .UPDATED_TAG_VERSION }} -m 'updated for stuttgart-things {{.DATE}} for tag version {{ .UPDATED_TAG_VERSION }}'
       - git push origin --tags
-    vars:
 
   push:
     desc: Commit & push the app

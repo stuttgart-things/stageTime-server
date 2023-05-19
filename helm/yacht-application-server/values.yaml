@@ -28,7 +28,7 @@ deployment:
       image: eu.gcr.io/stuttgart-things/yacht-application-server
       replicaCount: 1
       imagePullPolicy: Always
-      tag: 23.0507.1918-0.3.6
+      tag: 23.0519.1524-0.3.6
       securityContext: {}
 secrets:
   redis-connection:

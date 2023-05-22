@@ -80,6 +80,7 @@ tasks:
     deps: [build-image]
     cmds:
       - nerdctl run -e SERVER_PORT={{ .LOCAL_CONTAINER_SERVER_PORT }} -p {{ .LOCAL_CONTAINER_SERVER_PORT }}:{{ .LOCAL_CONTAINER_SERVER_PORT }}  {{ .REGISTRY }}/{{ .PROJECT_NAME }}/{{ .PROJECT_NAME }}:{{ .DATE }}
+
   tag:
     desc: commit, push & tag the module
     deps: [lint]
@@ -101,7 +102,7 @@ tasks:
       - |
         echo "Enter COMMIT_MESSAGE:"
         read COMMIT_MESSAGE;
-        git commit -am "${COMMIT_MESSAGE} for {{ .MAJOR }}.{{ .MINOR }}.{{ .PATCH }}"
+        git commit -am "${COMMIT_MESSAGE} for {{ .UPDATED_TAG_VERSION }}"
       - git push
 
   package:

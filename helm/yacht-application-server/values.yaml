@@ -86,7 +86,7 @@ ingress:
       path: /
       pathType: Prefix
     hostname: yas
-    clusterName: dev
+    # clusterName: dev
     domain: app.sthings.tiab.ssc.sva.de
     tls:
       secretName: yacht-application-server-ingress-tls

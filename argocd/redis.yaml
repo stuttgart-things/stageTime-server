@@ -12,7 +12,7 @@ spec:
     #server: 'https://10.100.136.78:6443'
   source:
     repoURL: https://charts.bitnami.com/bitnami
-    chart: redis/redis
+    chart: redis
     targetRevision: 17.11.3
     plugin:
       name: argocd-vault-plugin-helm

@@ -1,0 +1,40 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: redis-deployment
+  namespace: argocd
+spec:
+  project: app
+  destination:
+    name: dev8
+    namespace: yacht
+    #server: 'https://10.100.136.78:6443'
+  source:
+    repoURL: https://charts.bitnami.com/bitnami
+    chart: redis/redis
+    targetRevision: 17.11.3
+    plugin:
+      name: argocd-vault-plugin-helm
+      env:
+        - name: HELM_VALUES
+          value: |
+            master:
+              service:
+                type: ClusterIP
+              persistence:
+                enabled: false
+                medium: ""
+            replica:
+              replicaCount: 2
+              persistence:
+                enabled: false
+                medium: ""
+            auth:
+              password: <path:apps/data/yacht#redis-password>
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

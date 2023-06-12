@@ -1,0 +1,45 @@
+# ---
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: yacht-application-server-deployment
+#   namespace: argocd
+# spec:
+#   project: app
+#   destination:
+#     name: dev8
+#     namespace: yacht
+#     #server: 'https://10.100.136.78:6443'
+#   source:
+#     repoURL: eu.gcr.io/stuttgart-things
+#     chart: yacht-application-server
+#     targetRevision: 0.3.8
+#     plugin:
+#       name: argocd-vault-plugin-helm
+#       env:
+#         - name: HELM_VALUES
+#           value: |
+#             configmaps:
+#               yas-configuration:
+#                 PIPELINE_WORKSPACE: yacht-tekton
+#             ingress:
+#               yacht-application-server:
+#                 hostname: yas
+#                 clusterName: dev8
+#                 domain: 4sthings.tiab.ssc.sva.de
+#                 tls:
+#                   host: yas.dev8.4sthings.tiab.ssc.sva.de
+#             customresources:
+#               yas-ingress-certificate:
+#                 spec:
+#                   commonName: yas.dev8.4sthings.tiab.ssc.sva.de
+#                   dnsNames:
+#                   - yas.dev8.4sthings.tiab.ssc.sva.de
+#                   issuerRef:
+#                     name: cluster-issuer-approle
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#     syncOptions:
+#       - CreateNamespace=true

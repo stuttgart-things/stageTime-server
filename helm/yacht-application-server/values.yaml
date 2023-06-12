@@ -1,7 +1,9 @@
 namespace: yacht
+
 configmaps:
   yas-configuration:
     PIPELINE_WORKSPACE: yacht-tekton
+
 deployment:
   name: yacht-application-server
   labels:
@@ -16,6 +18,7 @@ deployment:
   privileged: "false"
   runAsNonRoot: "false"
   readOnlyRootFilesystem: "true"
+  serviceAccount: yacht-application-server
   resources:
     requests:
       cpu: 50m
@@ -29,7 +32,9 @@ deployment:
       replicaCount: 1
       imagePullPolicy: Always
       tag: 23.0522.0850-0.3.8
-      securityContext: {}
+      securityContext:
+        capabilities: {}
+
 secrets:
   redis-connection:
     name: redis-connection
@@ -41,6 +46,7 @@ secrets:
       REDIS_PORT: NjM3OQ==
       REDIS_PASSWORD: QXRsYW43aXM=
       REDIS_QUEUE: cmVkaXNxdWV1ZTp5YWNodC1yZXZpc2lvbnJ1bnM=
+
 services:
   yacht-application-server:
     labels:
@@ -55,6 +61,7 @@ services:
             port: 80
     selectorLabels:
       app: yacht-application-server
+
 customresources:
   yas-ingress-certificate:
     apiVersion: cert-manager.io/v1
@@ -71,6 +78,7 @@ customresources:
         name: cluster-issuer-ssc #cluster-issuer-approle
         kind: ClusterIssuer
       secretName: yacht-application-server-ingress-tls
+
 ingress:
   yacht-application-server:
     labels:
@@ -91,6 +99,7 @@ ingress:
     tls:
       secretName: yacht-application-server-ingress-tls
       host: yas.app.sthings.tiab.ssc.sva.de
+
 # RBAC
 serviceAccounts:
   yacht-application-server:

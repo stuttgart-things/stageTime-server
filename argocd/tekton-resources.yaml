@@ -27,12 +27,12 @@ spec:
 
             enableWorkspaces: true
             workspaces:
-            yacht-kaniko-workspace:
-              volumeMode: Filesystem
-              storageClassName: nfs4-csi
-              storage: 5Gi
-              accessModes:
-                - ReadWriteOnce
+              yacht-kaniko-workspace:
+                volumeMode: Filesystem
+                storageClassName: nfs4-csi
+                storage: 5Gi
+                accessModes:
+                  - ReadWriteOnce
 
             enableGitSecretsSSH: true
             gitSecretsSSH:

@@ -69,7 +69,7 @@ spec:
               eu-gcr:
                 labels:
                   app: yacht-teton
-                dockerConfigJson: <path:apps/data/yacht#eu-gcr>
+                dockerConfigJson: <path:apps/data/yacht#eu-gcr | base64encode>
             enableGitSecretsBasicAuth: false
             gitSecretsBasicAuth:
               codehub-basicauth:

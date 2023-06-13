@@ -44,14 +44,14 @@ spec:
                 secretKVs:
                   id_rsa: <path:apps/data/yacht#codehub-ssh>
 
-            # enableSecrets: true
-            # secrets:
-            #   gitlab-pipeline-token3:
-            #     name: gitlab-pipeline-token3
-            #     labels:
-            #       app: sthings-tekton
-            #     secretKVs:
-            #       token: <path:apps/data/yacht#redis-password>
+            enableSecrets: true
+            secrets:
+              msteams:
+                name: msteams
+                labels:
+                  app: yacht
+                secretKVs:
+                  url: <path:apps/data/yacht#msteams>
 
             enableRegistryCredentials: true
             registryCredentials:

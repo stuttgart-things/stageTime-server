@@ -15,15 +15,15 @@ spec:
   source:
     repoURL: eu.gcr.io/stuttgart-things
     chart: yacht-tekton-resources
-    targetRevision: v0.47.3
+    targetRevision: v0.47.6
     plugin:
       name: argocd-vault-plugin-helm
       env:
         - name: HELM_VALUES
           value: |
             defaultNamespace: yacht
-            enableTasks: false
-            enablePipelines: false
+            enableTasks: true
+            enablePipelines: true
 
             enableWorkspaces: true
             workspaces:
@@ -66,10 +66,10 @@ spec:
                 labels:
                   app: yacht-teton
                 dockerConfigJson: <path:apps/data/yacht#scr-labda>
-              eu-gcr:
-                labels:
-                  app: yacht-teton
-                dockerConfigJson: <path:apps/data/yacht#eu-gcr>
+              # eu-gcr:
+              #   labels:
+              #     app: yacht-teton
+              #   dockerConfigJson: <path:apps/data/yacht#eu-gcr>
             enableGitSecretsBasicAuth: false
             gitSecretsBasicAuth:
               codehub-basicauth:

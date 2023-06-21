@@ -30,7 +30,7 @@ spec:
                 enabled: false
                 medium: ""
             replica:
-              replicaCount: 2
+              replicaCount: 1
               persistence:
                 enabled: false
                 medium: ""

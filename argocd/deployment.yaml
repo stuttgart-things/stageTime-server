@@ -39,7 +39,7 @@ spec:
             secrets:
               redis-connection:
                 secretKVs:
-                  REDIS_SERVER: cmVkaXMtZGVwbG95bWVudC1oZWFkbGVzcw==
+                  REDIS_SERVER: cmVkaXMtZGVwbG95bWVudC55YWNodC5zdmMuY2x1c3Rlci5sb2NhbA==
   syncPolicy:
     automated:
       prune: true

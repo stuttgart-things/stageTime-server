@@ -1,4 +1,3 @@
----
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -12,7 +11,7 @@ spec:
   source:
     repoURL: eu.gcr.io/stuttgart-things
     chart: yacht-application-server
-    targetRevision: 0.3.8
+    targetRevision: 0.3.10
     plugin:
       name: argocd-vault-plugin-helm
       env:
@@ -39,7 +38,7 @@ spec:
             secrets:
               redis-connection:
                 secretKVs:
-                  REDIS_SERVER: cmVkaXMtZGVwbG95bWVudC55YWNodC5zdmMuY2x1c3Rlci5sb2NhbA==
+                  REDIS_SERVER: cmVkaXMtZGVwbG95bWVudC1oZWFkbGVzcy55YWNodC5zdmMuY2x1c3Rlci5sb2NhbA==
   syncPolicy:
     automated:
       prune: true

@@ -21,6 +21,8 @@ spec:
       env:
         - name: HELM_VALUES
           value: |
+            sentinel:
+              enabled: true
             master:
               service:
                 type: ClusterIP

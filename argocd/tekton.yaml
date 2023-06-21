@@ -1,25 +1,25 @@
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: tekton-pipelines-deployment
-  namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "-2"
-spec:
-  project: app
-  destination:
-    name: dev8
-    namespace: tekton-pipelines
-  source:
-    chart: yacht-tekton-base
-    repoURL: eu.gcr.io/stuttgart-things
-    targetRevision: v0.48.1
-    helm:
-      releaseName: tekton-pipelines
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+# ---
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: tekton-pipelines-deployment
+#   namespace: argocd
+#   annotations:
+#     argocd.argoproj.io/sync-wave: "-2"
+# spec:
+#   project: app
+#   destination:
+#     name: dev8
+#     namespace: tekton-pipelines
+#   source:
+#     chart: yacht-tekton-base
+#     repoURL: eu.gcr.io/stuttgart-things
+#     targetRevision: v0.48.1
+#     helm:
+#       releaseName: tekton-pipelines
+#   syncPolicy:
+#     automated:
+#       prune: true
+#       selfHeal: true
+#     syncOptions:
+#       - CreateNamespace=true

@@ -19,7 +19,7 @@ spec:
           value: |
             configmaps:
               yas-configuration:
-                PIPELINE_WORKSPACE: yacht-tekton
+                PIPELINE_WORKSPACE: tekton-cd
             ingress:
               yacht-application-server:
                 hostname: yas

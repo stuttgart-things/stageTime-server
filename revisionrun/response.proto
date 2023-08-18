@@ -1,24 +1,24 @@
 syntax = "proto3";
- 
+
 package revisionrun;
- 
-option go_package = "codehub.sva.de/Lab/stuttgart-things/yacht/yacht-application-server";
- 
+
+option go_package = "github.com/stuttgart-things/sweatShop-server";
+
 message Response {
     enum Result {
         SUCCESS = 0;
         ERROR = 1;
     }
- 
+
     message Success {
         bytes data = 1;
     }
- 
+
     message Error {
         string message = 1;
         bytes errors = 2;
     }
- 
+
     Result result = 1;
     Success success = 2;
     Error error = 3;

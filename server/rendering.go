@@ -15,7 +15,7 @@ import (
 	"time"
 
 	sthingsBase "github.com/stuttgart-things/sthingsBase"
-	revisionrun "github.com/stuttgart-things/yacht-application-server/revisionrun"
+	revisionrun "github.com/stuttgart-things/sweatShop-server/revisionrun"
 )
 
 var (
@@ -55,9 +55,9 @@ metadata:
   namespace: {{ .Namespace }}
   labels:
     argocd.argoproj.io/instance: tekton-runs
-    yacht/commit: "{{ .RevisionRunCommitId }}"
-    yacht/repo: {{ .RevisionRunRepoName }}
-    yacht/author: {{ .RevisionRunAuthor }}
+    sweatShop/commit: "{{ .RevisionRunCommitId }}"
+    sweatShop/repo: {{ .RevisionRunRepoName }}
+    sweatShop/author: {{ .RevisionRunAuthor }}
     tekton.dev/pipeline: {{ .Name }}
 spec:
   serviceAccountName: {{ .ServiceAccount }}

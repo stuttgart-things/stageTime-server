@@ -1,8 +1,8 @@
 syntax = "proto3";
- 
+
 package revisionrun;
- 
-option go_package = "codehub.sva.de/Lab/stuttgart-things/yacht/yacht-application-server";
+
+option go_package = "github.com/stuttgart-things/sweatShop-server";
 
 message Pipelinerun {
     string name = 1;

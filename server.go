@@ -13,13 +13,13 @@ import (
 	"os"
 
 	sthingsBase "github.com/stuttgart-things/sthingsBase"
-	server "github.com/stuttgart-things/yacht-application-server/server"
+	server "github.com/stuttgart-things/sweatShop-server/server"
 
 	"google.golang.org/grpc/reflection"
 
-	"github.com/fatih/color"
-	revisionrun "github.com/stuttgart-things/yacht-application-server/revisionrun"
-	goVersion "go.hein.dev/go-version"
+	"github.com/stuttgart-things/sweatShop-server/internal"
+
+	revisionrun "github.com/stuttgart-things/sweatShop-server/revisionrun"
 
 	"google.golang.org/grpc"
 
@@ -42,21 +42,6 @@ var (
 	logfilePath = "yas.log"
 	log         = sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
 )
-
-// https://patorjk.com/software/taag/#p=testall&h=3&f=Graffiti&t=YAS
-// 3D-ASCII
-const banner = `
-___    ___ ________  ________
-|\  \  /  /|\   __  \|\   ____\
-\ \  \/  / | \  \|\  \ \  \___|_
- \ \    / / \ \   __  \ \_____  \
-  \/  /  /   \ \  \ \  \|____|\  \
-__/  / /      \ \__\ \__\____\_\  \
-|\___/ /        \|__|\|__|\_________\
-\|___|/                  \|_________|
-
-
-`
 
 type Server struct {
 	revisionrun.UnimplementedYachtApplicationServiceServer
@@ -113,6 +98,9 @@ func (s Server) CreateRevisionRun(ctx context.Context, req *revisionrun.CreateRe
 
 func main() {
 
+	// PRINT BANNER + VERSION INFO
+	internal.PrintBanner()
+
 	if os.Getenv("SERVER_PORT") != "" {
 		serverPort = ":" + os.Getenv("SERVER_PORT")
 	}
@@ -120,18 +108,16 @@ func main() {
 	log.Info("gRPC server running on port " + serverPort)
 
 	// Output banner + version output
-	color.Cyan(banner)
 
-	color.Cyan("YACHT APPLICATION SERVER")
-	resp := goVersion.FuncWithOutput(shortened, version, commit, date, output)
-	color.Cyan(resp + "\n")
+	// resp := goVersion.FuncWithOutput(shortened, version, commit, date, output)
+	// color.Cyan(resp + "\n")
 
 	listener, err := net.Listen("tcp", "0.0.0.0"+serverPort)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	log.Info("YAS running at ", listener.Addr(), serverPort)
+	log.Info("sweatShop-server running at ", listener.Addr(), serverPort)
 
 	grpcServer := grpc.NewServer()
 	reflection.Register(grpcServer)

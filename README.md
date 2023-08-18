@@ -1,4 +1,5 @@
-# sweatShop-server
+# stuttgart-things/sweatShop-server
+
 gRPC Server for validating &amp; producing revisionRuns
 
 Author Information

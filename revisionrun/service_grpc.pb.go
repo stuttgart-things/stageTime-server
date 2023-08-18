@@ -4,7 +4,7 @@
 // - protoc             v3.21.12
 // source: revisionrun/service.proto
 
-package yacht_application_server
+package sweatShop_server
 
 import (
 	context "context"

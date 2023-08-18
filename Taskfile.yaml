@@ -1,12 +1,12 @@
 ---
 version: 3
 vars:
-  MODULE: github.com/stuttgart-things/yacht-application-server
+  MODULE: github.com/stuttgart-things/sweatShop-server
   REGISTRY: eu.gcr.io
   REPOSITORY_NAME: stuttgart-things
   LOCAL_BIN_SERVER_PORT: 50051
   LOCAL_CONTAINER_SERVER_PORT: 8011
-  INGRESS_URL: yas.teasle.sthings.tiab.ssc.sva.de:443
+  INGRESS_URL: sweatshop.teasle.sthings.tiab.ssc.sva.de:443
   PROJECT_NAME:
     sh: echo ${PWD##*/}
   DATE:
@@ -41,7 +41,27 @@ tasks:
       - go mod tidy
       - CGO_ENABLED=0
       - GOOS=linux
-      - go install -ldflags="-X main.version=v{{ .MAJOR }}.{{ .MINOR }}.{{ .PATCH }} -X main.date={{ .DATE }} -X main.commit={{ .GIT_COMMIT }}"
+      - go install -ldflags="-X internal.version=v{{ .MAJOR }}.{{ .MINOR }}.{{ .PATCH }} -X internal.date={{ .DATE }} -X internal.commit={{ .GIT_COMMIT }}"
+
+  git-push:
+    desc: Commit & push the module
+    cmds:
+      - go mod tidy
+      - git pull
+      - git config advice.addIgnoredFile false
+      - git add *
+      - git commit -am 'updated {{ .PROJECT_NAME }} {{ .DATE }} for tag version {{ .UPDATED_TAG_VERSION }}{{ .BRANCH }}'
+      - git push
+
+  build:
+    desc: Build the app
+    deps: [lint, proto]
+    cmds:
+      - go mod tidy
+      - CGO_ENABLED=0
+      - GOOS=linux
+      - go install -ldflags="-X {{ .MODULE }}/internal.date={{ .DATE }} -X {{ .MODULE }}/internal.version={{ .UPDATED_TAG_VERSION }} -X {{ .MODULE }}/internal.commit={{ .GIT_COMMIT }}"
+      - "{{ .PROJECT_NAME }}"
 
   proto:
     desc: Generate Go code from proto

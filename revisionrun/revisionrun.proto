@@ -1,11 +1,11 @@
 syntax = "proto3";
- 
+
 package revisionrun;
- 
-option go_package = "codehub.sva.de/Lab/stuttgart-things/yacht/yacht-application-server";
- 
+
+option go_package = "github.com/stuttgart-things/sweatShop-server";
+
 import "revisionrun/pipelinerun.proto";
- 
+
 message CreateRevisionRunRequest {
     string repo_name = 1;
     string pushed_at = 2;
@@ -14,8 +14,7 @@ message CreateRevisionRunRequest {
     string commit_id = 5;
     repeated Pipelinerun pipelineruns = 6;
 }
- 
+
 //message UpdateRevisionRun {}
 //message FindRevisionRun {}
 //message DeleteRevisionRun {}
-

@@ -10,10 +10,10 @@ WORKDIR /src/
 COPY . .
 
 RUN go mod tidy
-RUN CGO_ENABLED=0 go build -buildvcs=false -o /bin/yacht-application-server \
+RUN CGO_ENABLED=0 go build -buildvcs=false -o /bin/sweatShop-server \
     -ldflags="-X main.version=v${VERSION} -X main.date=${BUILD_DATE} -X main.commit=${COMMIT}"
 
 FROM alpine:3.17.0
-COPY --from=builder /bin/yacht-application-server /bin/yacht-application-server
+COPY --from=builder /bin/sweatShop-server /bin/sweatShop-server
 
-ENTRYPOINT ["yacht-application-server"]
+ENTRYPOINT ["sweatShop-server"]

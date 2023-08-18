@@ -8,7 +8,7 @@ import "revisionrun/response.proto";
 import "revisionrun/revisionrun.proto";
 
 
-service YachtApplicationService {
+service SweatShopApplicationService {
     rpc CreateRevisionRun(CreateRevisionRunRequest) returns (Response) {}
 
 //    rpc UpdateLeague(UpdateRevisionRunRequest) returns (Response) {}

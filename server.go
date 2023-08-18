@@ -44,7 +44,7 @@ var (
 )
 
 type Server struct {
-	revisionrun.UnimplementedYachtApplicationServiceServer
+	revisionrun.UnimplementedSweatShopApplicationServiceServer
 }
 
 func NewServer() Server {
@@ -124,7 +124,7 @@ func main() {
 
 	yachtApplicationServer := NewServer()
 
-	revisionrun.RegisterYachtApplicationServiceServer(grpcServer, yachtApplicationServer)
+	revisionrun.RegisterSweatShopApplicationServiceServer(grpcServer, yachtApplicationServer)
 
 	log.Fatalln(grpcServer.Serve(listener))
 }

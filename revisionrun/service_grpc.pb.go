@@ -18,87 +18,87 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// YachtApplicationServiceClient is the client API for YachtApplicationService service.
+// SweatShopApplicationServiceClient is the client API for SweatShopApplicationService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type YachtApplicationServiceClient interface {
+type SweatShopApplicationServiceClient interface {
 	CreateRevisionRun(ctx context.Context, in *CreateRevisionRunRequest, opts ...grpc.CallOption) (*Response, error)
 }
 
-type yachtApplicationServiceClient struct {
+type sweatShopApplicationServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewYachtApplicationServiceClient(cc grpc.ClientConnInterface) YachtApplicationServiceClient {
-	return &yachtApplicationServiceClient{cc}
+func NewSweatShopApplicationServiceClient(cc grpc.ClientConnInterface) SweatShopApplicationServiceClient {
+	return &sweatShopApplicationServiceClient{cc}
 }
 
-func (c *yachtApplicationServiceClient) CreateRevisionRun(ctx context.Context, in *CreateRevisionRunRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *sweatShopApplicationServiceClient) CreateRevisionRun(ctx context.Context, in *CreateRevisionRunRequest, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/revisionrun.YachtApplicationService/CreateRevisionRun", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/revisionrun.SweatShopApplicationService/CreateRevisionRun", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// YachtApplicationServiceServer is the server API for YachtApplicationService service.
-// All implementations must embed UnimplementedYachtApplicationServiceServer
+// SweatShopApplicationServiceServer is the server API for SweatShopApplicationService service.
+// All implementations must embed UnimplementedSweatShopApplicationServiceServer
 // for forward compatibility
-type YachtApplicationServiceServer interface {
+type SweatShopApplicationServiceServer interface {
 	CreateRevisionRun(context.Context, *CreateRevisionRunRequest) (*Response, error)
-	mustEmbedUnimplementedYachtApplicationServiceServer()
+	mustEmbedUnimplementedSweatShopApplicationServiceServer()
 }
 
-// UnimplementedYachtApplicationServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedYachtApplicationServiceServer struct {
+// UnimplementedSweatShopApplicationServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedSweatShopApplicationServiceServer struct {
 }
 
-func (UnimplementedYachtApplicationServiceServer) CreateRevisionRun(context.Context, *CreateRevisionRunRequest) (*Response, error) {
+func (UnimplementedSweatShopApplicationServiceServer) CreateRevisionRun(context.Context, *CreateRevisionRunRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRevisionRun not implemented")
 }
-func (UnimplementedYachtApplicationServiceServer) mustEmbedUnimplementedYachtApplicationServiceServer() {
+func (UnimplementedSweatShopApplicationServiceServer) mustEmbedUnimplementedSweatShopApplicationServiceServer() {
 }
 
-// UnsafeYachtApplicationServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to YachtApplicationServiceServer will
+// UnsafeSweatShopApplicationServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to SweatShopApplicationServiceServer will
 // result in compilation errors.
-type UnsafeYachtApplicationServiceServer interface {
-	mustEmbedUnimplementedYachtApplicationServiceServer()
+type UnsafeSweatShopApplicationServiceServer interface {
+	mustEmbedUnimplementedSweatShopApplicationServiceServer()
 }
 
-func RegisterYachtApplicationServiceServer(s grpc.ServiceRegistrar, srv YachtApplicationServiceServer) {
-	s.RegisterService(&YachtApplicationService_ServiceDesc, srv)
+func RegisterSweatShopApplicationServiceServer(s grpc.ServiceRegistrar, srv SweatShopApplicationServiceServer) {
+	s.RegisterService(&SweatShopApplicationService_ServiceDesc, srv)
 }
 
-func _YachtApplicationService_CreateRevisionRun_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _SweatShopApplicationService_CreateRevisionRun_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateRevisionRunRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(YachtApplicationServiceServer).CreateRevisionRun(ctx, in)
+		return srv.(SweatShopApplicationServiceServer).CreateRevisionRun(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/revisionrun.YachtApplicationService/CreateRevisionRun",
+		FullMethod: "/revisionrun.SweatShopApplicationService/CreateRevisionRun",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(YachtApplicationServiceServer).CreateRevisionRun(ctx, req.(*CreateRevisionRunRequest))
+		return srv.(SweatShopApplicationServiceServer).CreateRevisionRun(ctx, req.(*CreateRevisionRunRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// YachtApplicationService_ServiceDesc is the grpc.ServiceDesc for YachtApplicationService service.
+// SweatShopApplicationService_ServiceDesc is the grpc.ServiceDesc for SweatShopApplicationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var YachtApplicationService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "revisionrun.YachtApplicationService",
-	HandlerType: (*YachtApplicationServiceServer)(nil),
+var SweatShopApplicationService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "revisionrun.SweatShopApplicationService",
+	HandlerType: (*SweatShopApplicationServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "CreateRevisionRun",
-			Handler:    _YachtApplicationService_CreateRevisionRun_Handler,
+			Handler:    _SweatShopApplicationService_CreateRevisionRun_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

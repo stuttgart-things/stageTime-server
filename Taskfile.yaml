@@ -27,13 +27,11 @@ vars:
     sh: t1=$(git describe --tags --abbrev=0 | cut -f1 -d'.'); t2=$(git describe --tags --abbrev=0 | cut -f2 -d'.'); echo $t1.$t2.{{ .UPDATED_TAG }}
 
 tasks:
-
   lint:
     desc: Lint code
     cmds:
       - cmd: golangci-lint run
         ignore_error: true
-
   build-server:
     desc: Build server
     deps: [lint, proto]

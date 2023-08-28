@@ -34,6 +34,7 @@ type PipelineRun struct {
 	ServiceAccount      string
 	Timeout             string
 	Params              map[string]string
+	ListParams          map[string]string
 	Workspaces          []Workspace
 	NamePrefix          string
 	NameSuffix          string
@@ -64,14 +65,13 @@ spec:
   timeout: {{ .Timeout }}
   pipelineRef:
     name: {{ .PipelineRef }}
-  podTemplate:
-    hostAliases:
-      - ip: 10.10.210.114
-        hostnames:
-          - codehub.sva.de
+  podTemplate: {}
   params:{{ range $name, $value := .Params }}
   - name: {{ $name }}
     value: {{ $value }}{{ end }}
+  {{ if .ListParams }}{{ range $name, $value := .ListParams }}
+  - name: {{ $name }}
+    value: {{ $value }}{{ end }}{{ end }}
   workspaces:{{ range .Workspaces }}
   - name: {{ .Name }}
     {{ .WorkspaceKind }}:
@@ -96,7 +96,7 @@ func RenderPipelineRuns(req *revisionrun.CreateRevisionRunRequest) (renderedPipe
 	renderedPipelineruns = make(map[int][]string)
 
 	for _, pipelinerun := range req.Pipelineruns {
-
+		listPipelineParams := make(map[string]string)
 		pipelineParams := make(map[string]string)
 		var pipelineWorkspaces []Workspace
 
@@ -139,6 +139,7 @@ func RenderPipelineRuns(req *revisionrun.CreateRevisionRunRequest) (renderedPipe
 			ServiceAccount:      "default",
 			Timeout:             "1h",
 			Params:              pipelineParams,
+			ListParams:          listPipelineParams,
 			Stage:               fmt.Sprintf("%f", math.RoundToEven(pipelinerun.Stage)),
 			Workspaces:          pipelineWorkspaces,
 			NamePrefix:          "y",

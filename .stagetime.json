@@ -1,0 +1,15 @@
+{
+    "repo_name": "stagetime-server",
+    "pushed_at": "2023-02-200T22:40:36Z",
+    "author": "patrick-hermann-sva",
+    "repo_url": "https://github.com/stuttgart-things/stagetime-server.git",
+    "commit_id": "03eee7226418",
+    "pipelineruns": [
+      {
+        "name": "build-kaniko-image",
+        "stage": 0,
+        "params": "context=/kaniko/stagetime-server, dockerfile=./Dockerfile, git-revision=main, gitRepoUrl=https://github.com/stuttgart-things/stagetime-server.git, gitWorkspaceSubdirectory=/kaniko/stagetime-server, image=scr.tiab.labda.sva.de/stagetime-server/stagetime-server, registry=scr.tiab.labda.sva.de, tag=0.0.90",
+        "workspaces": "ssh-credentials=secret;codehub-ssh;secretName,shared-workspace=persistentVolumeClaim;sthings-kaniko-workspace;claimName, dockerconfig=secret;scr-labda;secretName"
+      }
+    ]
+  }

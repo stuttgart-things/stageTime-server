@@ -1,13 +1,13 @@
-namespace: yacht
+namespace: stagetime
 configmaps:
   yas-configuration:
-    PIPELINE_WORKSPACE: yacht-tekton
+    PIPELINE_WORKSPACE: stagetime-tekton
 deployment:
-  name: yacht-application-server
+  name: stagetime-server
   labels:
-    app: yacht-application-server
+    app: stagetime-server
   selectorLabels:
-    app: yacht-application-server
+    app: stagetime-server
   ports:
     app-port:
       containerPort: 50051
@@ -16,7 +16,7 @@ deployment:
   privileged: "false"
   runAsNonRoot: "false"
   readOnlyRootFilesystem: "true"
-  serviceAccount: yacht-application-server
+  serviceAccount: stagetime-server
   resources:
     requests:
       cpu: 50m
@@ -25,8 +25,8 @@ deployment:
       cpu: 100m
       memory: 128Mi
   containers:
-    yacht-application-server:
-      image: eu.gcr.io/stuttgart-things/yacht-application-server
+    stagetime-server:
+      image: eu.gcr.io/stuttgart-things/stagetime-server
       replicaCount: 1
       imagePullPolicy: Always
       tag: 23.0622.1132-0.3.11
@@ -36,7 +36,7 @@ secrets:
   redis-connection:
     name: redis-connection
     labels:
-      app: yacht-application-server
+      app: stagetime-server
     dataType: data
     secretKVs:
       REDIS_SERVER: MTAuMzEuMTAxLjEzOA==
@@ -44,9 +44,9 @@ secrets:
       REDIS_PASSWORD: QXRsYW43aXM=
       REDIS_QUEUE: cmVkaXNxdWV1ZTp5YWNodC1yZXZpc2lvbnJ1bnM=
 services:
-  yacht-application-server:
+  stagetime-server:
     labels:
-      app: yacht-application-server
+      app: stagetime-server
     ports:
       - name: yas-port
         protocol: TCP
@@ -56,15 +56,15 @@ services:
             type: ClusterIP
             port: 80
     selectorLabels:
-      app: yacht-application-server
+      app: stagetime-server
 customresources:
   yas-ingress-certificate:
     apiVersion: cert-manager.io/v1
     kind: Certificate
     metadata:
-      name: yacht-application-server-ingress
+      name: stagetime-server-ingress
       labels:
-        app: yacht-application-server
+        app: stagetime-server
     spec:
       commonName: yas.app.sthings.tiab.ssc.sva.de
       dnsNames:
@@ -72,18 +72,18 @@ customresources:
       issuerRef:
         name: cluster-issuer-ssc #cluster-issuer-approle
         kind: ClusterIssuer
-      secretName: yacht-application-server-ingress-tls
+      secretName: stagetime-server-ingress-tls
 ingress:
-  yacht-application-server:
+  stagetime-server:
     labels:
-      app: yacht-application-server
-    name: yacht-application-server
+      app: stagetime-server
+    name: stagetime-server
     ingressClassName: nginx
     annotations:
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
     service:
-      name: yacht-application-server-service
+      name: stagetime-server-service
       port: 80
       path: /
       pathType: Prefix
@@ -91,17 +91,17 @@ ingress:
     # clusterName: dev
     domain: app.sthings.tiab.ssc.sva.de
     tls:
-      secretName: yacht-application-server-ingress-tls
+      secretName: stagetime-server-ingress-tls
       host: yas.app.sthings.tiab.ssc.sva.de
 # RBAC
 serviceAccounts:
-  yacht-application-server:
+  stagetime-server:
     labels:
-      app: yacht-application-server
+      app: stagetime-server
 roles:
-  yacht-application-server:
+  stagetime-server:
     labels:
-      app: yacht-application-server
+      app: stagetime-server
     rules:
       - apiGroups:
           - ""
@@ -113,21 +113,21 @@ roles:
           - watch
           - create
 roleBindings:
-  yacht-application-server:
+  stagetime-server:
     labels:
-      app: yacht-application-server
+      app: stagetime-server
     roleRef:
       kind: Role
-      name: yacht-application-server
+      name: stagetime-server
       apiGroup: rbac.authorization.k8s.io
     subjects:
       - kind: ServiceAccount
-        name: yacht-application-server
-        namespace: yacht
+        name: stagetime-server
+        namespace: stagetime
 clusterRoles:
   list-all-namespaces:
     labels:
-      app: yacht-application-server
+      app: stagetime-server
     rules:
       - apiGroups:
           - ""
@@ -144,5 +144,5 @@ clusterRoleBindings:
       apiGroup: rbac.authorization.k8s.io
     subjects:
       - kind: ServiceAccount
-        name: yacht-application-server
-        namespace: yacht
+        name: stagetime-server
+        namespace: stagetime

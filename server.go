@@ -122,9 +122,9 @@ func main() {
 	grpcServer := grpc.NewServer()
 	reflection.Register(grpcServer)
 
-	yachtApplicationServer := NewServer()
+	stageTimeServer := NewServer()
 
-	revisionrun.RegisterStageTimeApplicationServiceServer(grpcServer, yachtApplicationServer)
+	revisionrun.RegisterStageTimeApplicationServiceServer(grpcServer, stageTimeServer)
 
 	log.Fatalln(grpcServer.Serve(listener))
 }

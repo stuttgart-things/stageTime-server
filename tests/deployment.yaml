@@ -3,21 +3,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: yacht-application-server
-  name: yacht-application-server
+    app: stagetime-server
+  name: stagetime-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: yacht-application-server
+      app: stagetime-server
   template:
     metadata:
       labels:
-        app: yacht-application-server
+        app: stagetime-server
     spec:
-      serviceAccountName: yacht-application-server
+      serviceAccountName: stagetime-server
       containers:
-      - image: eu.gcr.io/stuttgart-things/yacht-application-server:23.0409.0739
+      - image: eu.gcr.io/stuttgart-things/stagetime-server:23.0409.0739
         envFrom:
         - secretRef:
             name: redis-connection
@@ -30,7 +30,7 @@ spec:
           requests:
             cpu: 50m
             memory: 50Mi
-        name: yacht-application-server
+        name: stagetime-server
         ports:
         - containerPort: 50051
 ---
@@ -38,22 +38,22 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: yacht-application-server
-  name: yacht-application-server
+    app: stagetime-server
+  name: stagetime-server
 spec:
   ports:
   - port: 80
     protocol: TCP
     targetPort: 50051
   selector:
-    app: yacht-application-server
+    app: stagetime-server
   type: ClusterIP
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: yacht-application-server-ingress
-  namespace: yacht
+  name: stagetime-server-ingress
+  namespace: stagetime
 spec:
   commonName: yas.dev.sthings-pve.labul.sva.de
   dnsNames:
@@ -61,7 +61,7 @@ spec:
   issuerRef:
     name: cluster-issuer-ssc
     kind: ClusterIssuer
-  secretName: yacht-application-server-ingress-tls
+  secretName: stagetime-server-ingress-tls
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -69,8 +69,8 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
-  name: yacht-application-server-ingress
-  namespace: yacht
+  name: stagetime-server-ingress
+  namespace: stagetime
 spec:
   ingressClassName: nginx
   rules:
@@ -81,11 +81,11 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: yacht-application-server
+            name: stagetime-server
             port:
               number: 80
   tls:
-  - secretName: yacht-application-server-ingress-tls
+  - secretName: stagetime-server-ingress-tls
     hosts:
       - yas.dev.sthings-pve.labul.sva.de
 ---
@@ -104,4 +104,4 @@ kind: ConfigMap
 metadata:
   name: yas-configuration
 data:
-  PIPELINE_WORKSPACE: yacht-tekton
+  PIPELINE_WORKSPACE: stagetime-tekton

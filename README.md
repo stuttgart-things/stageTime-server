@@ -1,6 +1,6 @@
 # stuttgart-things/stageTime-server
 
-gRPC Server for validating &amp; producing revisionRuns
+gRPC Server for validating & producing revisionRuns (a collection of tekton pipelineRuns/stages)
 
 Author Information
 ------------------

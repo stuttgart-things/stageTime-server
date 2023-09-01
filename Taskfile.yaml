@@ -1,12 +1,12 @@
 ---
 version: 3
 vars:
-  MODULE: github.com/stuttgart-things/sweatShop-server
+  MODULE: github.com/stuttgart-things/stageTime-server
   REGISTRY: eu.gcr.io
   REPOSITORY_NAME: stuttgart-things
   LOCAL_BIN_SERVER_PORT: 50051
   LOCAL_CONTAINER_SERVER_PORT: 8011
-  INGRESS_URL: sweatshop.teasle.sthings.tiab.ssc.sva.de:443
+  INGRESS_URL: stagetime.teasle.sthings.tiab.ssc.sva.de:443
   PROJECT_NAME:
     sh: echo ${PWD##*/}
   DATE:
@@ -32,6 +32,7 @@ tasks:
     cmds:
       - cmd: golangci-lint run
         ignore_error: true
+
   build-server:
     desc: Build server
     deps: [lint, proto]

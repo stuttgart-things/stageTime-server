@@ -1,4 +1,4 @@
-# stuttgart-things/sweatShop-server
+# stuttgart-things/stageTime-server
 
 gRPC Server for validating &amp; producing revisionRuns
 

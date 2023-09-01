@@ -12,14 +12,14 @@ import (
 	"net"
 	"os"
 
+	server "github.com/stuttgart-things/stageTime-server/server"
 	sthingsBase "github.com/stuttgart-things/sthingsBase"
-	server "github.com/stuttgart-things/sweatShop-server/server"
 
 	"google.golang.org/grpc/reflection"
 
-	"github.com/stuttgart-things/sweatShop-server/internal"
+	"github.com/stuttgart-things/stageTime-server/internal"
 
-	revisionrun "github.com/stuttgart-things/sweatShop-server/revisionrun"
+	revisionrun "github.com/stuttgart-things/stageTime-server/revisionrun"
 
 	"google.golang.org/grpc"
 
@@ -44,7 +44,7 @@ var (
 )
 
 type Server struct {
-	revisionrun.UnimplementedSweatShopApplicationServiceServer
+	revisionrun.UnimplementedStageTimeApplicationServiceServer
 }
 
 func NewServer() Server {
@@ -117,14 +117,14 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	log.Info("sweatShop-server running at ", listener.Addr(), serverPort)
+	log.Info("stageTime-server running at ", listener.Addr(), serverPort)
 
 	grpcServer := grpc.NewServer()
 	reflection.Register(grpcServer)
 
 	yachtApplicationServer := NewServer()
 
-	revisionrun.RegisterSweatShopApplicationServiceServer(grpcServer, yachtApplicationServer)
+	revisionrun.RegisterStageTimeApplicationServiceServer(grpcServer, yachtApplicationServer)
 
 	log.Fatalln(grpcServer.Serve(listener))
 }

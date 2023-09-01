@@ -14,8 +14,8 @@ import (
 	"text/template"
 	"time"
 
+	revisionrun "github.com/stuttgart-things/stageTime-server/revisionrun"
 	sthingsBase "github.com/stuttgart-things/sthingsBase"
-	revisionrun "github.com/stuttgart-things/sweatShop-server/revisionrun"
 )
 
 var (
@@ -56,9 +56,9 @@ metadata:
   namespace: {{ .Namespace }}
   labels:
     argocd.argoproj.io/instance: tekton-runs
-    sweatShop/commit: "{{ .RevisionRunCommitId }}"
-    sweatShop/repo: {{ .RevisionRunRepoName }}
-    sweatShop/author: {{ .RevisionRunAuthor }}
+    StageTime/commit: "{{ .RevisionRunCommitId }}"
+    StageTime/repo: {{ .RevisionRunRepoName }}
+    StageTime/author: {{ .RevisionRunAuthor }}
     tekton.dev/pipeline: {{ .Name }}
 spec:
   serviceAccountName: {{ .ServiceAccount }}

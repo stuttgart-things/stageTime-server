@@ -1,4 +1,4 @@
-module github.com/stuttgart-things/sweatShop-server
+module github.com/stuttgart-things/stageTime-server
 
 require (
 	github.com/fatih/color v1.7.0

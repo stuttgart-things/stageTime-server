@@ -2,13 +2,13 @@ syntax = "proto3";
 
 package revisionrun;
 
-option go_package = "github.com/stuttgart-things/sweatShop-server";
+option go_package = "github.com/stuttgart-things/stageTime-server";
 
 import "revisionrun/response.proto";
 import "revisionrun/revisionrun.proto";
 
 
-service SweatShopApplicationService {
+service StageTimeApplicationService {
     rpc CreateRevisionRun(CreateRevisionRunRequest) returns (Response) {}
 
 //    rpc UpdateLeague(UpdateRevisionRunRequest) returns (Response) {}

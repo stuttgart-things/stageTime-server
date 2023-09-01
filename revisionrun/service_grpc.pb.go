@@ -4,7 +4,7 @@
 // - protoc             v3.21.12
 // source: revisionrun/service.proto
 
-package sweatShop_server
+package stageTime_server
 
 import (
 	context "context"
@@ -18,87 +18,87 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// SweatShopApplicationServiceClient is the client API for SweatShopApplicationService service.
+// StageTimeApplicationServiceClient is the client API for StageTimeApplicationService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type SweatShopApplicationServiceClient interface {
+type StageTimeApplicationServiceClient interface {
 	CreateRevisionRun(ctx context.Context, in *CreateRevisionRunRequest, opts ...grpc.CallOption) (*Response, error)
 }
 
-type sweatShopApplicationServiceClient struct {
+type stageTimeApplicationServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewSweatShopApplicationServiceClient(cc grpc.ClientConnInterface) SweatShopApplicationServiceClient {
-	return &sweatShopApplicationServiceClient{cc}
+func NewStageTimeApplicationServiceClient(cc grpc.ClientConnInterface) StageTimeApplicationServiceClient {
+	return &stageTimeApplicationServiceClient{cc}
 }
 
-func (c *sweatShopApplicationServiceClient) CreateRevisionRun(ctx context.Context, in *CreateRevisionRunRequest, opts ...grpc.CallOption) (*Response, error) {
+func (c *stageTimeApplicationServiceClient) CreateRevisionRun(ctx context.Context, in *CreateRevisionRunRequest, opts ...grpc.CallOption) (*Response, error) {
 	out := new(Response)
-	err := c.cc.Invoke(ctx, "/revisionrun.SweatShopApplicationService/CreateRevisionRun", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/revisionrun.StageTimeApplicationService/CreateRevisionRun", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// SweatShopApplicationServiceServer is the server API for SweatShopApplicationService service.
-// All implementations must embed UnimplementedSweatShopApplicationServiceServer
+// StageTimeApplicationServiceServer is the server API for StageTimeApplicationService service.
+// All implementations must embed UnimplementedStageTimeApplicationServiceServer
 // for forward compatibility
-type SweatShopApplicationServiceServer interface {
+type StageTimeApplicationServiceServer interface {
 	CreateRevisionRun(context.Context, *CreateRevisionRunRequest) (*Response, error)
-	mustEmbedUnimplementedSweatShopApplicationServiceServer()
+	mustEmbedUnimplementedStageTimeApplicationServiceServer()
 }
 
-// UnimplementedSweatShopApplicationServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedSweatShopApplicationServiceServer struct {
+// UnimplementedStageTimeApplicationServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedStageTimeApplicationServiceServer struct {
 }
 
-func (UnimplementedSweatShopApplicationServiceServer) CreateRevisionRun(context.Context, *CreateRevisionRunRequest) (*Response, error) {
+func (UnimplementedStageTimeApplicationServiceServer) CreateRevisionRun(context.Context, *CreateRevisionRunRequest) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRevisionRun not implemented")
 }
-func (UnimplementedSweatShopApplicationServiceServer) mustEmbedUnimplementedSweatShopApplicationServiceServer() {
+func (UnimplementedStageTimeApplicationServiceServer) mustEmbedUnimplementedStageTimeApplicationServiceServer() {
 }
 
-// UnsafeSweatShopApplicationServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to SweatShopApplicationServiceServer will
+// UnsafeStageTimeApplicationServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to StageTimeApplicationServiceServer will
 // result in compilation errors.
-type UnsafeSweatShopApplicationServiceServer interface {
-	mustEmbedUnimplementedSweatShopApplicationServiceServer()
+type UnsafeStageTimeApplicationServiceServer interface {
+	mustEmbedUnimplementedStageTimeApplicationServiceServer()
 }
 
-func RegisterSweatShopApplicationServiceServer(s grpc.ServiceRegistrar, srv SweatShopApplicationServiceServer) {
-	s.RegisterService(&SweatShopApplicationService_ServiceDesc, srv)
+func RegisterStageTimeApplicationServiceServer(s grpc.ServiceRegistrar, srv StageTimeApplicationServiceServer) {
+	s.RegisterService(&StageTimeApplicationService_ServiceDesc, srv)
 }
 
-func _SweatShopApplicationService_CreateRevisionRun_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _StageTimeApplicationService_CreateRevisionRun_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateRevisionRunRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SweatShopApplicationServiceServer).CreateRevisionRun(ctx, in)
+		return srv.(StageTimeApplicationServiceServer).CreateRevisionRun(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/revisionrun.SweatShopApplicationService/CreateRevisionRun",
+		FullMethod: "/revisionrun.StageTimeApplicationService/CreateRevisionRun",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SweatShopApplicationServiceServer).CreateRevisionRun(ctx, req.(*CreateRevisionRunRequest))
+		return srv.(StageTimeApplicationServiceServer).CreateRevisionRun(ctx, req.(*CreateRevisionRunRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// SweatShopApplicationService_ServiceDesc is the grpc.ServiceDesc for SweatShopApplicationService service.
+// StageTimeApplicationService_ServiceDesc is the grpc.ServiceDesc for StageTimeApplicationService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var SweatShopApplicationService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "revisionrun.SweatShopApplicationService",
-	HandlerType: (*SweatShopApplicationServiceServer)(nil),
+var StageTimeApplicationService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "revisionrun.StageTimeApplicationService",
+	HandlerType: (*StageTimeApplicationServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "CreateRevisionRun",
-			Handler:    _SweatShopApplicationService_CreateRevisionRun_Handler,
+			Handler:    _StageTimeApplicationService_CreateRevisionRun_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package revisionrun;
 
-option go_package = "github.com/stuttgart-things/sweatShop-server";
+option go_package = "github.com/stuttgart-things/stageTime-server";
 
 import "revisionrun/pipelinerun.proto";
 

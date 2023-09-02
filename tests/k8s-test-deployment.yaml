@@ -105,3 +105,68 @@ metadata:
   name: yas-configuration
 data:
   PIPELINE_WORKSPACE: stagetime-tekton
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: stagetime-server
+  namespace: stagetime
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: stagetime
+  name: stagetime-server
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["create", "get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: stagetime-server
+  namespace: stagetime
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: stagetime-server
+subjects:
+- kind: ServiceAccount
+  name: stagetime-server
+  namespace: stagetime
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: list-all-namespaces
+rules:
+- apiGroups: [""]
+  resources: ["namespaces"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: list-all-namespaces-yas
+subjects:
+- kind: ServiceAccount
+  name: stagetime-server
+  namespace: stagetime
+roleRef:
+  kind: ClusterRole
+  name: list-all-namespaces
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tekton-pipelines-controller-cluster-access-yas
+subjects:
+- kind: ServiceAccount
+  name: stagetime-server
+  namespace: stagetime
+roleRef:
+  kind: ClusterRole
+  name: tekton-pipelines-controller-cluster-access
+  apiGroup: rbac.authorization.k8s.io

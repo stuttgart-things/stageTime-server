@@ -33,13 +33,8 @@ const (
 )
 
 var (
-	shortened   = false
-	version     = "unset"
-	date        = "unknown"
-	commit      = "unknown"
-	output      = "yaml"
 	serverPort  = port
-	logfilePath = "yas.log"
+	logfilePath = "stageTime-server.log"
 	log         = sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
 )
 
@@ -106,11 +101,6 @@ func main() {
 	}
 
 	log.Info("gRPC server running on port " + serverPort)
-
-	// Output banner + version output
-
-	// resp := goVersion.FuncWithOutput(shortened, version, commit, date, output)
-	// color.Cyan(resp + "\n")
 
 	listener, err := net.Listen("tcp", "0.0.0.0"+serverPort)
 	if err != nil {

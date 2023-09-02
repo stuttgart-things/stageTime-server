@@ -37,7 +37,7 @@ type PipelineRun struct {
 	ServiceAccount      string
 	Timeout             string
 	Params              map[string]string
-	ListParams          map[string]string
+	ListParams          map[string][]string
 	Workspaces          []Workspace
 	NamePrefix          string
 	NameSuffix          string
@@ -71,10 +71,10 @@ spec:
   podTemplate: {}
   params:{{ range $name, $value := .Params }}
   - name: {{ $name }}
-    value: {{ $value }}{{ end }}
-  {{ if .ListParams }}{{ range $name, $value := .ListParams }}
+    value: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}
   - name: {{ $name }}
-    value: {{ $value }}{{ end }}{{ end }}
+    value: {{ range $values }}
+      - {{ . }}{{ end }}{{ end }}{{ end }}
   workspaces:{{ range .Workspaces }}
   - name: {{ .Name }}
     {{ .WorkspaceKind }}:
@@ -107,7 +107,7 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 	renderedPipelineruns = make(map[int][]string)
 
 	for _, pipelinerun := range gRPCRequest.Pipelineruns {
-		listPipelineParams := make(map[string]string)
+		listPipelineParams := make(map[string][]string)
 		pipelineParams := make(map[string]string)
 		var pipelineWorkspaces []Workspace
 
@@ -126,15 +126,17 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 
 		}
 
-		paramListValues := strings.Split(pipelinerun.Listparams, ",")
+		for _, v := range strings.Split(pipelinerun.Listparams, ",") {
 
-		for i, v := range paramListValues {
-			values := strings.Split(v, "=")
+			keyValues := strings.Split(v, "=")
+			var values []string
 
-			listPipelineParams[strings.TrimSpace(values[0])] = strings.TrimSpace(values[1])
-			fmt.Println(i)
-			fmt.Println(strings.TrimSpace(values[0]))
-			fmt.Println(strings.TrimSpace(values[1]))
+			for _, v := range strings.Split(strings.TrimSpace(keyValues[1]), ";") {
+				values = append(values, v)
+				fmt.Println(v)
+			}
+
+			listPipelineParams[strings.TrimSpace(keyValues[0])] = values
 
 		}
 

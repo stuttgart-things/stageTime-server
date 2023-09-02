@@ -22,19 +22,20 @@ import (
 )
 
 var (
-	//address = "localhost:50051"
-	address = "yas.dev.sthings.tiab.ssc.sva.de:443"
+	address = "localhost:50051"
+	// address = "yas.dev.sthings.tiab.ssc.sva.de:443"
 	//address = "sleeveless-dev.labul.sva.de:8011"
+	testFilePath = "tests/prs.json"
 )
 
 type Client struct {
-	yasClient revisionrun.YachtApplicationServiceClient
+	yasClient revisionrun.StageTimeApplicationServiceClient
 	timeout   time.Duration
 }
 
 func NewClient(conn grpc.ClientConnInterface, timeout time.Duration) Client {
 	return Client{
-		yasClient: revisionrun.NewYachtApplicationServiceClient(conn),
+		yasClient: revisionrun.NewStageTimeApplicationServiceClient(conn),
 		timeout:   timeout,
 	}
 }
@@ -97,7 +98,7 @@ func ConnectSecure(address string) {
 	}
 	defer conn.Close()
 
-	json, err := ioutil.ReadFile("client/kaniko.json")
+	json, err := ioutil.ReadFile(testFilePath)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -120,7 +121,7 @@ func ConnectInsecure(address string) {
 	}
 	defer conn.Close()
 
-	json, err := ioutil.ReadFile("client/request.json")
+	json, err := ioutil.ReadFile(testFilePath)
 	if err != nil {
 		log.Fatalln(err)
 	}

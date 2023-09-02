@@ -14,6 +14,9 @@ import (
 	"text/template"
 	"time"
 
+	rejson "github.com/nitishm/go-rejson/v4"
+	sthingsCli "github.com/stuttgart-things/sthingsCli"
+
 	revisionrun "github.com/stuttgart-things/stageTime-server/revisionrun"
 	sthingsBase "github.com/stuttgart-things/sthingsBase"
 )
@@ -89,13 +92,21 @@ var Patterns = map[string]VariableDelimiter{
 	"square": VariableDelimiter{"[[", "]]", `\[\[(.*?)\]\]`},
 }
 
-func RenderPipelineRuns(req *revisionrun.CreateRevisionRunRequest) (renderedPipelineruns map[int][]string) {
+func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (renderedPipelineruns map[int][]string) {
 
+	// ADDED BLOCK
+	redisClient := sthingsCli.CreateRedisClient(redisAddress+":"+redisPort, redisPassword)
+	redisJSONHandler := rejson.NewReJSONHandler()
+	redisJSONHandler.SetGoRedisClient(redisClient)
+	sthingsCli.SetObjectToRedisJSON(redisJSONHandler, gRPCRequest, "stageTime-server-test")
+	// ADDED BLOCK
+
+	// GET CURRENT TIME
 	dt := time.Now()
 
 	renderedPipelineruns = make(map[int][]string)
 
-	for _, pipelinerun := range req.Pipelineruns {
+	for _, pipelinerun := range gRPCRequest.Pipelineruns {
 		listPipelineParams := make(map[string]string)
 		pipelineParams := make(map[string]string)
 		var pipelineWorkspaces []Workspace
@@ -129,11 +140,11 @@ func RenderPipelineRuns(req *revisionrun.CreateRevisionRunRequest) (renderedPipe
 
 		pr := PipelineRun{
 			Name:                pipelinerun.Name,
-			RevisionRunAuthor:   req.Author,
-			RevisionRunCreation: req.PushedAt,
-			RevisionRunCommitId: req.CommitId,
-			RevisionRunRepoUrl:  req.RepoUrl,
-			RevisionRunRepoName: req.RepoName,
+			RevisionRunAuthor:   gRPCRequest.Author,
+			RevisionRunCreation: gRPCRequest.PushedAt,
+			RevisionRunCommitId: gRPCRequest.CommitId,
+			RevisionRunRepoUrl:  gRPCRequest.RepoUrl,
+			RevisionRunRepoName: gRPCRequest.RepoName,
 			Namespace:           pipelineNamespace,
 			PipelineRef:         pipelinerun.Name,
 			ServiceAccount:      "default",
@@ -143,7 +154,7 @@ func RenderPipelineRuns(req *revisionrun.CreateRevisionRunRequest) (renderedPipe
 			Stage:               fmt.Sprintf("%f", math.RoundToEven(pipelinerun.Stage)),
 			Workspaces:          pipelineWorkspaces,
 			NamePrefix:          "y",
-			NameSuffix:          dt.Format("020405") + req.CommitId[0:4],
+			NameSuffix:          dt.Format("020405") + gRPCRequest.CommitId[0:4],
 		}
 
 		tmpl, err := template.New("pipelinerun").Parse(PipelineRunTemplate)

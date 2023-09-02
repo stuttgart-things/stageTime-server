@@ -46,33 +46,33 @@ func NewServer() Server {
 	return Server{}
 }
 
-func (s Server) CreateRevisionRun(ctx context.Context, req *revisionrun.CreateRevisionRunRequest) (*revisionrun.Response, error) {
+func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.CreateRevisionRunRequest) (*revisionrun.Response, error) {
 
 	log := sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
 
-	server.RenderPipelineRuns(req)
+	server.RenderPipelineRuns(gRPCRequest)
 
 	receivedRevisionRun := bytes.Buffer{}
 
 	mars := jsonpb.Marshaler{OrigName: true, EmitDefaults: true}
-	if err := mars.Marshal(&receivedRevisionRun, req); err != nil {
+	if err := mars.Marshal(&receivedRevisionRun, gRPCRequest); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "server create revisionrun: marshal: %v", err)
 	}
 
 	log.Println("REQUEST:", receivedRevisionRun.String())
 
-	if err := json.Unmarshal([]byte(receivedRevisionRun.Bytes()), &req); err != nil {
+	if err := json.Unmarshal([]byte(receivedRevisionRun.Bytes()), &gRPCRequest); err != nil {
 		log.Fatal(err)
 	}
 
 	// STATUS OUTPUT GRPC DATA
-	fmt.Println(req.Author + " created RevisionRun " + req.CommitId + " at " + req.PushedAt)
-	fmt.Println("Repository:", req.RepoName)
-	fmt.Println("RepositoryUrl:", req.RepoUrl)
-	fmt.Println("PipelineRuns:", len(req.Pipelineruns))
+	fmt.Println(gRPCRequest.Author + " created RevisionRun " + gRPCRequest.CommitId + " at " + gRPCRequest.PushedAt)
+	fmt.Println("Repository:", gRPCRequest.RepoName)
+	fmt.Println("RepositoryUrl:", gRPCRequest.RepoUrl)
+	fmt.Println("PipelineRuns:", len(gRPCRequest.Pipelineruns))
 
 	// TEST RENDERING
-	renderedPipelineruns := server.RenderPipelineRuns(req)
+	renderedPipelineruns := server.RenderPipelineRuns(gRPCRequest)
 	fmt.Println(renderedPipelineruns)
 	log.Info("all pipelineRuns can be rendered")
 

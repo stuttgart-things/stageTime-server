@@ -126,6 +126,18 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 
 		}
 
+		paramListValues := strings.Split(pipelinerun.Listparams, ",")
+
+		for i, v := range paramListValues {
+			values := strings.Split(v, "=")
+
+			listPipelineParams[strings.TrimSpace(values[0])] = strings.TrimSpace(values[1])
+			fmt.Println(i)
+			fmt.Println(strings.TrimSpace(values[0]))
+			fmt.Println(strings.TrimSpace(values[1]))
+
+		}
+
 		workspaces := strings.Split(pipelinerun.Workspaces, ",")
 
 		for _, v := range workspaces {

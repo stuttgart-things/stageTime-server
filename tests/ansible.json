@@ -1,0 +1,16 @@
+{
+    "repo_name": "stuttgart-things",
+    "pushed_at": "1995-02-200T22:40:36Z",
+    "author": "patrick-hermann-sva",
+    "repo_url": "https://github.com/stuttgart-things/stuttgart-things",
+    "commit_id": "3c5ac44c6fec00989c7e27b36630a82cdfd26e3b0",
+    "pipelineruns": [
+      {
+        "name": "execute-ansible-smt40-rke2-15",
+        "stage": 0,
+        "params": "ansibleWorkingImage=eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-8, createInventory='true', gitRepoUrl='git@github.com:stuttgart-things/stuttgart-things.git', gitRevision=main, gitWorkspaceSubdirectory=/ansible/base-os, installExtraRoles='true'",
+        "listparams": "ansiblePlaybooks=ansible/playbooks/prepare-env.yaml;ansible/playbooks/base-os.yaml",
+        "workspaces": "ssh-credentials=secret;codehub-ssh;secretName, shared-workspace=persistentVolumeClaim;ansible-tekton;claimName, dockerconfig=secret;scr-labda;secretName"
+      }
+    ]
+  }

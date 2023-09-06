@@ -8,7 +8,6 @@ import (
 	"bytes"
 	"fmt"
 	"log"
-	"math"
 	"os"
 	"strings"
 	"text/template"
@@ -99,6 +98,7 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 	redisJSONHandler := rejson.NewReJSONHandler()
 	redisJSONHandler.SetGoRedisClient(redisClient)
 	sthingsCli.SetObjectToRedisJSON(redisJSONHandler, gRPCRequest, "stageTime-server-test")
+	// https://github.com/kubernetes-sigs/yaml
 	// ADDED BLOCK
 
 	// GET CURRENT TIME
@@ -165,10 +165,10 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			Timeout:             "1h",
 			Params:              pipelineParams,
 			ListParams:          listPipelineParams,
-			Stage:               fmt.Sprintf("%f", math.RoundToEven(pipelinerun.Stage)),
-			Workspaces:          pipelineWorkspaces,
-			NamePrefix:          "y",
+			Stage:               fmt.Sprintf("%v", pipelinerun.Stage),
+			NamePrefix:          "stageTime",
 			NameSuffix:          dt.Format("020405") + gRPCRequest.CommitId[0:4],
+			Workspaces:          pipelineWorkspaces,
 		}
 
 		tmpl, err := template.New("pipelinerun").Parse(PipelineRunTemplate)

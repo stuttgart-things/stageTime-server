@@ -58,16 +58,15 @@ metadata:
   namespace: {{ .Namespace }}
   labels:
     argocd.argoproj.io/instance: tekton-runs
-    StageTime/commit: "{{ .RevisionRunCommitId }}"
-    StageTime/repo: {{ .RevisionRunRepoName }}
-    StageTime/author: {{ .RevisionRunAuthor }}
-    tekton.dev/pipeline: {{ .Name }}
+    stagetime/commit: "{{ .RevisionRunCommitId }}"
+    stagetime/repo: {{ .RevisionRunRepoName }}
+    stagetime/author: {{ .RevisionRunAuthor }}
+    tekton.dev/pipeline: {{ .PipelineRef }}
 spec:
   serviceAccountName: {{ .ServiceAccount }}
   timeout: {{ .Timeout }}
   pipelineRef:
     name: {{ .PipelineRef }}
-  podTemplate: {}
   params:{{ range $name, $value := .Params }}
   - name: {{ $name }}
     value: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}
@@ -93,20 +92,13 @@ var Patterns = map[string]VariableDelimiter{
 
 func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (renderedPipelineruns map[int][]string) {
 
-	// ADDED BLOCK
-	redisClient := sthingsCli.CreateRedisClient(redisAddress+":"+redisPort, redisPassword)
-	redisJSONHandler := rejson.NewReJSONHandler()
-	redisJSONHandler.SetGoRedisClient(redisClient)
-	sthingsCli.SetObjectToRedisJSON(redisJSONHandler, gRPCRequest, "stageTime-server-test")
-	// https://github.com/kubernetes-sigs/yaml
-	// ADDED BLOCK
-
 	// GET CURRENT TIME
 	dt := time.Now()
 
 	renderedPipelineruns = make(map[int][]string)
 
 	for _, pipelinerun := range gRPCRequest.Pipelineruns {
+
 		listPipelineParams := make(map[string][]string)
 		pipelineParams := make(map[string]string)
 		var pipelineWorkspaces []Workspace
@@ -123,7 +115,6 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			fmt.Println(i)
 			fmt.Println(strings.TrimSpace(values[0]))
 			fmt.Println(strings.TrimSpace(values[1]))
-
 		}
 
 		for _, v := range strings.Split(pipelinerun.Listparams, ",") {
@@ -137,7 +128,6 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			}
 
 			listPipelineParams[strings.TrimSpace(keyValues[0])] = values
-
 		}
 
 		workspaces := strings.Split(pipelinerun.Workspaces, ",")
@@ -145,9 +135,7 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 		for _, v := range workspaces {
 			values := strings.Split(v, "=")
 			workspaces := strings.Split(values[1], ";")
-
 			pipelineWorkspaces = append(pipelineWorkspaces, Workspace{strings.TrimSpace(values[0]), strings.TrimSpace(workspaces[0]), strings.TrimSpace(workspaces[1]), strings.TrimSpace(workspaces[2])})
-
 		}
 
 		fmt.Println(pipelineWorkspaces)
@@ -166,25 +154,35 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			Params:              pipelineParams,
 			ListParams:          listPipelineParams,
 			Stage:               fmt.Sprintf("%v", pipelinerun.Stage),
-			NamePrefix:          "stageTime",
+			NamePrefix:          "st",
 			NameSuffix:          dt.Format("020405") + gRPCRequest.CommitId[0:4],
 			Workspaces:          pipelineWorkspaces,
 		}
 
+		// RENDERING
+		var buf bytes.Buffer
 		tmpl, err := template.New("pipelinerun").Parse(PipelineRunTemplate)
 		if err != nil {
 			panic(err)
 		}
-
-		var buf bytes.Buffer
-
 		err = tmpl.Execute(&buf, pr)
-
 		if err != nil {
 			log.Fatalf("execution: %s", err)
 		}
 
+		// TEST-OUTPUT
 		fmt.Println(buf.String())
+
+		// SET PR TO REDIS JSON
+		redisClient := sthingsCli.CreateRedisClient(redisAddress+":"+redisPort, redisPassword)
+		redisJSONHandler := rejson.NewReJSONHandler()
+		redisJSONHandler.SetGoRedisClient(redisClient)
+		// sthingsCli.SetObjectToRedisJSON(redisJSONHandler, gRPCRequest, "stageTime-server-test")
+		prJSON := sthingsCli.ConvertYAMLToJSON(buf.String())
+		fmt.Println(string(prJSON))
+		// sthingsCli.SetObjectToRedisJSON(redisJSONHandler, prJSON, "stageTime-server-test2")
+
+		// ADD RENDERED PRS TO REVISIONRUN
 		renderedPipelineruns[int(pipelinerun.Stage)] = append(renderedPipelineruns[int(pipelinerun.Stage)], buf.String())
 
 	}

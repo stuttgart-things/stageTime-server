@@ -443,10 +443,10 @@ github.com/stretchr/testify v1.8.3/go.mod h1:sz/lmYIOXD/1dqDmKjjqLyZ2RngseejIcXl
 github.com/stretchr/testify v1.8.4 h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=
 github.com/stuttgart-things/redisqueue v0.0.0-20230628084515-1d31f7874df7 h1:nVooDvBYhBPQysVjbvWP3S1CQgmNG/Vovt+ahmv9Cas=
 github.com/stuttgart-things/redisqueue v0.0.0-20230628084515-1d31f7874df7/go.mod h1:RhH+7myjNLGs/BFeYO5U7ekmM7OsymsIOUN/DkewR3g=
-github.com/stuttgart-things/sthingsBase v0.1.8 h1:Vi4YHR2YLRjiCxYrrA2QWhNdlSX7N/i9XlHsTnwwkAY=
-github.com/stuttgart-things/sthingsBase v0.1.8/go.mod h1:m8KEQVzuV5wwxg+G8OWb+YXOVp0ZRq3MeVUT3p5N8zc=
-github.com/stuttgart-things/sthingsCli v0.1.28 h1:RelVy47faRkX0p0KZqCn+fXXJGo4bIuTfdNXFTnf3l8=
-github.com/stuttgart-things/sthingsCli v0.1.28/go.mod h1:b4NrA8L2SFi+Qtn+1WX4gI1Bu2N/K9OQ4pPQLaaBe2g=
+github.com/stuttgart-things/sthingsBase v0.1.23 h1:i2/ufFsj5bAPhn3gq3vToCKl+27GSQZ6uOpzosUPiyY=
+github.com/stuttgart-things/sthingsBase v0.1.23/go.mod h1:W5FmSsDZBfm1wfD/RO91N/nbB8ACGbC4eBBd1ALqIx8=
+github.com/stuttgart-things/sthingsCli v0.1.32 h1:vw7VSDHHXLkd3mVZWBY48c6PDNIPgDn2G7gUpQ27odI=
+github.com/stuttgart-things/sthingsCli v0.1.32/go.mod h1:qWJKmvaTOr4mpRZIF4YQNVWtB/Kffm2VfxezMRRvx/k=
 github.com/subosito/gotenv v1.4.2 h1:X1TuBLAMDFbaTAChgCBLu3DU3UPyELpnF2jjJ2cz/S8=
 github.com/subosito/gotenv v1.4.2/go.mod h1:ayKnFf/c6rvx/2iiLrJUk1e6plDbT3edrFNGqEflhK0=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
@@ -892,5 +892,6 @@ honnef.co/go/tools v0.0.1-2020.1.4/go.mod h1:X/FiERA/W4tHapMX5mGpAtMSVEeEUOyHaw9
 rsc.io/binaryregexp v0.2.0/go.mod h1:qTv7/COck+e2FymRvadv62gMdZztPaShugOCi3I+8D8=
 rsc.io/quote/v3 v3.1.0/go.mod h1:yEA65RcK8LyAZtP9Kv3t0HmxON59tX3rD+tICJqUlj0=
 rsc.io/sampler v1.3.0/go.mod h1:T1hPZKmBbMNahiBKFy5HrXp6adAjACjK9JXDnKaTXpA=
-sigs.k8s.io/yaml v1.1.0 h1:4A07+ZFc2wgJwo8YNlQpr1rVlgUDlxXHhPJciaPY5gs=
 sigs.k8s.io/yaml v1.1.0/go.mod h1:UJmg0vDUVViEyp3mgSv9WPwZCDxu4rQW1olrI1uml+o=
+sigs.k8s.io/yaml v1.3.0 h1:a2VclLzOGrwOHDiV8EfBGhvjHvP46CtW5j6POvhYGGo=
+sigs.k8s.io/yaml v1.3.0/go.mod h1:GeOyir5tyXNByN85N/dRIT9es5UQNerPYEKK56eTBm8=

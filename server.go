@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"strings"
 
 	server "github.com/stuttgart-things/stageTime-server/server"
 	sthingsBase "github.com/stuttgart-things/sthingsBase"
@@ -76,8 +77,26 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	fmt.Println(renderedPipelineruns)
 	log.Info("all pipelineRuns can be rendered")
 
-	// TEST RENDERING
+	// SEND STATS TO REDIS
 	server.SendStatsToRedis(renderedPipelineruns)
+
+	// TEST LOOPING
+	for i := 0; i < (len(renderedPipelineruns)); i++ {
+
+		for j, pr := range renderedPipelineruns[i] {
+
+			fmt.Println(j)
+			fmt.Println(pr)
+
+			resourceName, _ := sthingsBase.GetRegexSubMatch(pr, `name: "(.*?)"`)
+			prIdentifier := strings.Split(resourceName, "-")
+
+			fmt.Println("PR", i)
+			fmt.Println("RESOURCE-NAME", resourceName)
+			fmt.Println("IDENTIFIER", prIdentifier)
+
+		}
+	}
 
 	// SEND PIPELINERUN TO REDIS MessageQueue
 	server.SendPipelineRunToMessageQueue(renderedPipelineruns)

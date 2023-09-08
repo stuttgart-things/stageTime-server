@@ -7,11 +7,12 @@ require (
 	github.com/gomodule/redigo v1.8.3
 	github.com/nitishm/go-rejson/v4 v4.1.1-0.20230331060235-d2aa875760e4
 	github.com/robinjoseph08/redisqueue/v2 v2.1.0
-	github.com/stuttgart-things/sthingsBase v0.1.8
-	github.com/stuttgart-things/sthingsCli v0.1.28
+	github.com/stuttgart-things/sthingsBase v0.1.23
+	github.com/stuttgart-things/sthingsCli v0.1.32
 	go.hein.dev/go-version v0.1.0
 	google.golang.org/grpc v1.55.0
 	google.golang.org/protobuf v1.30.0
+	sigs.k8s.io/yaml v1.3.0
 )
 
 require (
@@ -110,7 +111,6 @@ require (
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	sigs.k8s.io/yaml v1.1.0 // indirect
 )
 
 go 1.20

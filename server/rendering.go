@@ -13,9 +13,6 @@ import (
 	"text/template"
 	"time"
 
-	rejson "github.com/nitishm/go-rejson/v4"
-	sthingsCli "github.com/stuttgart-things/sthingsCli"
-
 	revisionrun "github.com/stuttgart-things/stageTime-server/revisionrun"
 	sthingsBase "github.com/stuttgart-things/sthingsBase"
 )
@@ -61,6 +58,7 @@ metadata:
     stagetime/commit: "{{ .RevisionRunCommitId }}"
     stagetime/repo: {{ .RevisionRunRepoName }}
     stagetime/author: {{ .RevisionRunAuthor }}
+    stagetime/stage: "{{ .Stage }}"
     tekton.dev/pipeline: {{ .PipelineRef }}
 spec:
   serviceAccountName: {{ .ServiceAccount }}
@@ -172,15 +170,6 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 
 		// TEST-OUTPUT
 		fmt.Println(buf.String())
-
-		// SET PR TO REDIS JSON
-		redisClient := sthingsCli.CreateRedisClient(redisAddress+":"+redisPort, redisPassword)
-		redisJSONHandler := rejson.NewReJSONHandler()
-		redisJSONHandler.SetGoRedisClient(redisClient)
-		// sthingsCli.SetObjectToRedisJSON(redisJSONHandler, gRPCRequest, "stageTime-server-test")
-		prJSON := sthingsCli.ConvertYAMLToJSON(buf.String())
-		fmt.Println(string(prJSON))
-		// sthingsCli.SetObjectToRedisJSON(redisJSONHandler, prJSON, "stageTime-server-test2")
 
 		// ADD RENDERED PRS TO REVISIONRUN
 		renderedPipelineruns[int(pipelinerun.Stage)] = append(renderedPipelineruns[int(pipelinerun.Stage)], buf.String())

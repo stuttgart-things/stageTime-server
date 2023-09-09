@@ -8,7 +8,7 @@ require (
 	github.com/nitishm/go-rejson/v4 v4.1.1-0.20230331060235-d2aa875760e4
 	github.com/robinjoseph08/redisqueue/v2 v2.1.0
 	github.com/stuttgart-things/sthingsBase v0.1.23
-	github.com/stuttgart-things/sthingsCli v0.1.32
+	github.com/stuttgart-things/sthingsCli v0.1.36
 	go.hein.dev/go-version v0.1.0
 	google.golang.org/grpc v1.55.0
 	google.golang.org/protobuf v1.30.0

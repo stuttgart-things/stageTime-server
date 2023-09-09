@@ -16,9 +16,10 @@ import (
 	server "github.com/stuttgart-things/stageTime-server/server"
 	sthingsBase "github.com/stuttgart-things/sthingsBase"
 
-	"google.golang.org/grpc/reflection"
-
+	rejson "github.com/nitishm/go-rejson/v4"
 	"github.com/stuttgart-things/stageTime-server/internal"
+	sthingsCli "github.com/stuttgart-things/sthingsCli"
+	"google.golang.org/grpc/reflection"
 
 	revisionrun "github.com/stuttgart-things/stageTime-server/revisionrun"
 
@@ -37,6 +38,13 @@ var (
 	serverPort  = port
 	logfilePath = "stageTime-server.log"
 	log         = sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
+)
+
+var (
+	redisAddress  = os.Getenv("REDIS_SERVER")
+	redisPort     = os.Getenv("REDIS_PORT")
+	redisPassword = os.Getenv("REDIS_PASSWORD")
+	redisQueue    = os.Getenv("REDIS_QUEUE")
 )
 
 type Server struct {
@@ -89,12 +97,29 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			fmt.Println(pr)
 
 			resourceName, _ := sthingsBase.GetRegexSubMatch(pr, `name: "(.*?)"`)
+			revisionRunID, _ := sthingsBase.GetRegexSubMatch(pr, `commit: "(.*?)"`)
+			stage, _ := sthingsBase.GetRegexSubMatch(pr, `stage: "(.*?)"`)
+
 			prIdentifier := strings.Split(resourceName, "-")
 
 			fmt.Println("PR", i)
 			fmt.Println("RESOURCE-NAME", resourceName)
 			fmt.Println("IDENTIFIER", prIdentifier)
+			fmt.Println("REVISIONRUN-ID", revisionRunID)
+			fmt.Println("STAGE", stage)
 
+			// CREATE REDIS CLIENT / JSON HANDLER
+			redisClient := sthingsCli.CreateRedisClient(redisAddress+":"+redisPort, redisPassword)
+			redisJSONHandler := rejson.NewReJSONHandler()
+			redisJSONHandler.SetGoRedisClient(redisClient)
+
+			// SET PR ON LIST
+			sthingsCli.AddValueToRedisSet(redisClient, revisionRunID, resourceName)
+
+			// CONVERT PR TO JSON + ADD TO REDIS
+			prJSON := sthingsCli.ConvertYAMLToJSON(pr)
+			fmt.Println(string(prJSON))
+			sthingsCli.SetRedisJSON(redisJSONHandler, prJSON, resourceName)
 		}
 	}
 

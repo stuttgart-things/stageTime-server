@@ -5,32 +5,59 @@ gRPC Server for validating & producing revisionRuns (a collection of tekton pipe
 ## EXAMPLE DEPLOYMENT (DRAFT)
 
 <details><summary>values</summary>
-  
+
 ```
 cat <<EOF > stageTime-server.yaml
 ---
-configmaps:
-  yas-configuration:
-    PIPELINE_WORKSPACE: tekton-cd
-ingress:
-  yacht-application-server:
-    hostname: yas
-    clusterName: dev11
-    domain: 4sthings.tiab.ssc.sva.de
-    tls:
-      host: yas.dev11.4sthings.tiab.ssc.sva.de
-customresources:
-  yas-ingress-certificate:
-    spec:
-      commonName: yas.dev11.4sthings.tiab.ssc.sva.de
-      dnsNames:
-      - yas.dev11.4sthings.tiab.ssc.sva.de
-      issuerRef:
-        name: cluster-issuer-approle
 secrets:
   redis-connection:
+    name: redis-connection
+    labels:
+      app: stagetime-server
+    dataType: data
     secretKVs:
-      REDIS_SERVER: cmVkaXMtZGVwbG95bWVudC1oZWFkbGVzcy55YWNodC5zdmMuY2x1c3Rlci5sb2NhbA==
+      REDIS_SERVER: MTAuMzEuMTAxLjEzOA==
+      REDIS_PORT: NjM3OQ==
+      REDIS_PASSWORD: QXRsYW43aXM=
+      REDIS_QUEUE: cmVkaXNxdWV1ZTp5YWNodC1yZXZpc2lvbnJ1bnM=
+
+customresources:
+  yas-ingress-certificate:
+    apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: stagetime-server-ingress
+      labels:
+        app: stagetime-server
+    spec:
+      commonName: yas.app.sthings.tiab.ssc.sva.de
+      dnsNames:
+        - yas.app.sthings.tiab.ssc.sva.de
+      issuerRef:
+        name: cluster-issuer-ssc #cluster-issuer-approle
+        kind: ClusterIssuer
+      secretName: stagetime-server-ingress-tls
+
+ingress:
+  stagetime-server:
+    labels:
+      app: stagetime-server
+    name: stagetime-server
+    ingressClassName: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+    service:
+      name: stagetime-server-service
+      port: 80
+      path: /
+      pathType: Prefix
+    hostname: yas
+    # clusterName: dev
+    domain: app.sthings.tiab.ssc.sva.de
+    tls:
+      secretName: stagetime-server-ingress-tls
+      host: yas.app.sthings.tiab.ssc.sva.de
 ```
 EOF
 
@@ -59,4 +86,3 @@ limitations under the License.
 Author Information
 ------------------
 Patrick Hermann, stuttgart-things 04/2023
-

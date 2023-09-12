@@ -1,7 +1,10 @@
+---
 namespace: stagetime
+
 configmaps:
   yas-configuration:
     PIPELINE_WORKSPACE: stagetime-tekton
+
 deployment:
   name: stagetime-server
   labels:
@@ -32,6 +35,7 @@ deployment:
       tag: 23.0622.1132-0.3.11
       securityContext:
         capabilities: {}
+
 secrets:
   redis-connection:
     name: redis-connection
@@ -43,6 +47,7 @@ secrets:
       REDIS_PORT: NjM3OQ==
       REDIS_PASSWORD: QXRsYW43aXM=
       REDIS_QUEUE: cmVkaXNxdWV1ZTp5YWNodC1yZXZpc2lvbnJ1bnM=
+
 services:
   stagetime-server:
     labels:
@@ -57,6 +62,7 @@ services:
             port: 80
     selectorLabels:
       app: stagetime-server
+
 customresources:
   yas-ingress-certificate:
     apiVersion: cert-manager.io/v1
@@ -73,6 +79,7 @@ customresources:
         name: cluster-issuer-ssc #cluster-issuer-approle
         kind: ClusterIssuer
       secretName: stagetime-server-ingress-tls
+
 ingress:
   stagetime-server:
     labels:
@@ -93,6 +100,7 @@ ingress:
     tls:
       secretName: stagetime-server-ingress-tls
       host: yas.app.sthings.tiab.ssc.sva.de
+
 # RBAC
 serviceAccounts:
   stagetime-server:
@@ -124,6 +132,7 @@ roleBindings:
       - kind: ServiceAccount
         name: stagetime-server
         namespace: stagetime
+
 clusterRoles:
   list-all-namespaces:
     labels:
@@ -136,6 +145,7 @@ clusterRoles:
         verbs:
           - get
           - list
+
 clusterRoleBindings:
   list-all-namespaces-yas:
     roleRef:

@@ -129,11 +129,11 @@ tasks:
   package:
     desc: Update Chart.yaml and package archive
     cmds:
-      - cd ./helm/{{ .PROJECT_NAME }} && helm dep update
+      - cd ./helm/{{ lower (.PROJECT_NAME) }} && helm dep update
       - git add ./helm/*/*
       - yq e -i '.version = "{{ .UPDATED_TAG_VERSION }}"' ./helm/*/Chart.yaml
       - "sed -i 's/appVersion: .*/appVersion: {{ .UPDATED_TAG_VERSION }}/g' ./helm/*/Chart.yaml"
-      - yq e -i '.deployment.containers.{{ .PROJECT_NAME }}.tag = "{{ .DATE }}-{{ .UPDATED_TAG_VERSION }}"' ./helm/*/values.yaml
+      - yq e -i '.deployment.containers.{{ lower (.PROJECT_NAME) }}.tag = "{{ .DATE }}-{{ .UPDATED_TAG_VERSION }}"' ./helm/*/values.yaml
       - helm package ./helm/*/
 
   push:

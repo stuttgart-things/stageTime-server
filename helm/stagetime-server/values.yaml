@@ -1,10 +1,7 @@
----
 namespace: stagetime
-
 configmaps:
-  yas-configuration:
+  stagetime-configuration:
     PIPELINE_WORKSPACE: stagetime-tekton
-
 deployment:
   name: stagetime-server
   labels:
@@ -32,22 +29,9 @@ deployment:
       image: eu.gcr.io/stuttgart-things/stagetime-server
       replicaCount: 1
       imagePullPolicy: Always
-      tag: 23.0622.1132-0.3.11
+      tag: 23.0916.2131-0.3.15
       securityContext:
         capabilities: {}
-
-secrets:
-  redis-connection:
-    name: redis-connection
-    labels:
-      app: stagetime-server
-    dataType: data
-    secretKVs:
-      REDIS_SERVER: MTAuMzEuMTAxLjEzOA==
-      REDIS_PORT: NjM3OQ==
-      REDIS_PASSWORD: QXRsYW43aXM=
-      REDIS_QUEUE: cmVkaXNxdWV1ZTp5YWNodC1yZXZpc2lvbnJ1bnM=
-
 services:
   stagetime-server:
     labels:
@@ -62,45 +46,6 @@ services:
             port: 80
     selectorLabels:
       app: stagetime-server
-
-customresources:
-  yas-ingress-certificate:
-    apiVersion: cert-manager.io/v1
-    kind: Certificate
-    metadata:
-      name: stagetime-server-ingress
-      labels:
-        app: stagetime-server
-    spec:
-      commonName: yas.app.sthings.tiab.ssc.sva.de
-      dnsNames:
-        - yas.app.sthings.tiab.ssc.sva.de
-      issuerRef:
-        name: cluster-issuer-ssc #cluster-issuer-approle
-        kind: ClusterIssuer
-      secretName: stagetime-server-ingress-tls
-
-ingress:
-  stagetime-server:
-    labels:
-      app: stagetime-server
-    name: stagetime-server
-    ingressClassName: nginx
-    annotations:
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
-    service:
-      name: stagetime-server-service
-      port: 80
-      path: /
-      pathType: Prefix
-    hostname: yas
-    # clusterName: dev
-    domain: app.sthings.tiab.ssc.sva.de
-    tls:
-      secretName: stagetime-server-ingress-tls
-      host: yas.app.sthings.tiab.ssc.sva.de
-
 # RBAC
 serviceAccounts:
   stagetime-server:
@@ -132,7 +77,6 @@ roleBindings:
       - kind: ServiceAccount
         name: stagetime-server
         namespace: stagetime
-
 clusterRoles:
   list-all-namespaces:
     labels:
@@ -145,7 +89,6 @@ clusterRoles:
         verbs:
           - get
           - list
-
 clusterRoleBindings:
   list-all-namespaces-yas:
     roleRef:

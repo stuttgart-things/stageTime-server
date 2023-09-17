@@ -2,11 +2,18 @@
 
 gRPC Server for validating & producing revisionRuns (a collection of tekton pipelineRuns/stages)
 
+## TASKS
+
+```
+task push # build image + chart
+```
+
+
 ## EXAMPLE DEPLOYMENT (DRAFT)
 
 <details><summary>values</summary>
 
-```
+```yaml
 cat <<EOF > stageTime-server.yaml
 ---
 secrets:
@@ -16,10 +23,9 @@ secrets:
       app: stagetime-server
     dataType: data
     secretKVs:
-      REDIS_SERVER: MTAuMzEuMTAxLjEzOA==
+      REDIS_SERVER: cmVkaXMtc3RhY2stZGVwbG95bWVudC1oZWFkbGVzcy5yZWRpcy1zdGFjay5zdmMuY2x1c3Rlci5sb2NhbAo=
       REDIS_PORT: NjM3OQ==
-      REDIS_PASSWORD: QXRsYW43aXM=
-      REDIS_QUEUE: cmVkaXNxdWV1ZTp5YWNodC1yZXZpc2lvbnJ1bnM=
+      REDIS_PASSWORD: d2Vhaw==
 
 customresources:
   stagetime-ingress-certificate:
@@ -56,9 +62,14 @@ ingress:
     domain: dev21.sthings-vsphere.labul.sva.de
     tls:
       secretName: stagetime-server-ingress-tls
-      host: yas.app.sthings.tiab.ssc.sva.de
-```
+      host: stagetime.dev21.sthings-vsphere.labul.sva.de
 EOF
+```
+
+```bash
+helm upgrade --install server helm/
+stagetime-server/ -n stagetime --create-namespace --values stageTime-server.yaml
+```
 
 </details>
 

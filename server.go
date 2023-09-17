@@ -44,7 +44,6 @@ var (
 	redisAddress  = os.Getenv("REDIS_SERVER")
 	redisPort     = os.Getenv("REDIS_PORT")
 	redisPassword = os.Getenv("REDIS_PASSWORD")
-	redisQueue    = os.Getenv("REDIS_QUEUE")
 )
 
 type Server struct {
@@ -57,13 +56,12 @@ func NewServer() Server {
 
 func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.CreateRevisionRunRequest) (*revisionrun.Response, error) {
 
-	log := sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
-
 	server.RenderPipelineRuns(gRPCRequest)
 
 	receivedRevisionRun := bytes.Buffer{}
 
 	mars := jsonpb.Marshaler{OrigName: true, EmitDefaults: true}
+
 	if err := mars.Marshal(&receivedRevisionRun, gRPCRequest); err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "server create revisionrun: marshal: %v", err)
 	}
@@ -86,7 +84,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	log.Info("all pipelineRuns can be rendered")
 
 	// SEND STATS TO REDIS
-	server.SendStatsToRedis(renderedPipelineruns)
+	//server.SendStatsToRedis(renderedPipelineruns)
 
 	// TEST LOOPING
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
@@ -124,7 +122,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	}
 
 	// SEND PIPELINERUN TO REDIS MessageQueue
-	server.SendPipelineRunToMessageQueue(renderedPipelineruns)
+	//server.SendPipelineRunToMessageQueue(renderedPipelineruns)
 	log.Info("revisionRun was stored in MessageQueue")
 
 	return &revisionrun.Response{

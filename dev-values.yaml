@@ -1,3 +1,14 @@
+secrets:
+  redis-connection:
+    name: redis-connection
+    labels:
+      app: stagetime-server
+    dataType: data
+    secretKVs:
+      REDIS_SERVER: cmVkaXMtc3RhY2stZGVwbG95bWVudC5yZWRpcy1zdGFjay5zdmMuY2x1c3Rlci5sb2NhbAo=
+      REDIS_PORT: NjM3OQ==
+      REDIS_PASSWORD: d2Vhaw==
+
 customresources:
   stagetime-ingress-certificate:
     apiVersion: cert-manager.io/v1

@@ -2,6 +2,7 @@ namespace: stagetime
 configmaps:
   stagetime-configuration:
     PIPELINE_WORKSPACE: stagetime-tekton
+    REDIS_QUEUE: redisqueue:stagetime-revisionruns
 deployment:
   name: stagetime-server
   labels:
@@ -29,7 +30,7 @@ deployment:
       image: eu.gcr.io/stuttgart-things/stagetime-server
       replicaCount: 1
       imagePullPolicy: Always
-      tag: 23.0917.0904-0.3.15
+      tag: 23.0917.1004-0.3.15
       securityContext:
         capabilities: {}
 services:

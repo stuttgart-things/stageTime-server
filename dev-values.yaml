@@ -5,8 +5,8 @@ secrets:
       app: stagetime-server
     dataType: data
     secretKVs:
-      REDIS_SERVER: cmVkaXMtc3RhY2stZGVwbG95bWVudC5yZWRpcy1zdGFjay5zdmMuY2x1c3Rlci5sb2NhbAo=
-      REDIS_PORT: NjM3OQ==
+      REDIS_SERVER: MTAuMzEuMTAzLjE2MQo=
+      REDIS_PORT: MzE1MzEK
       REDIS_PASSWORD: d2Vhaw==
 
 customresources:

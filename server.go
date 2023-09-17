@@ -84,7 +84,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	log.Info("all pipelineRuns can be rendered")
 
 	// SEND STATS TO REDIS
-	//server.SendStatsToRedis(renderedPipelineruns)
+	server.SendStatsToRedis(renderedPipelineruns)
 
 	// TEST LOOPING
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
@@ -122,7 +122,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	}
 
 	// SEND PIPELINERUN TO REDIS MessageQueue
-	//server.SendPipelineRunToMessageQueue(renderedPipelineruns)
+	//2805e_server.SendPipelineRunToMessageQueue(renderedPipelineruns)
 	log.Info("revisionRun was stored in MessageQueue")
 
 	return &revisionrun.Response{
@@ -143,6 +143,8 @@ func main() {
 	}
 
 	log.Info("gRPC server running on port " + serverPort)
+	log.Info("redis server " + redisAddress)
+	log.Info("redis port " + redisPort)
 
 	listener, err := net.Listen("tcp", "0.0.0.0"+serverPort)
 	if err != nil {

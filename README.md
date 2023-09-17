@@ -8,6 +8,13 @@ gRPC Server for validating & producing revisionRuns (a collection of tekton pipe
 task push # build image + chart
 ```
 
+## GRPC TEST CALL
+
+```
+kubectl -n redis-stack port-forward redis-stack-deployment-node-0 28015:6379
+redis-cli -h 127.0.0.1 -p 28015 -a <PASSWORD>
+go run tests/grpc-testClient-local.go
+```
 
 ## EXAMPLE DEPLOYMENT (DRAFT)
 
@@ -21,11 +28,11 @@ secrets:
     name: redis-connection
     labels:
       app: stagetime-server
-    dataType: data
+    dataType: stringData
     secretKVs:
-      REDIS_SERVER: cmVkaXMtc3RhY2stZGVwbG95bWVudC1oZWFkbGVzcy5yZWRpcy1zdGFjay5zdmMuY2x1c3Rlci5sb2NhbAo=
-      REDIS_PORT: NjM3OQ==
-      REDIS_PASSWORD: d2Vhaw==
+      REDIS_SERVER: redis-stack-deployment-headless.redis-stack.svc.cluster.local
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: <PASSWORD>
 
 customresources:
   stagetime-ingress-certificate:

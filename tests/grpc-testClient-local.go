@@ -22,8 +22,8 @@ import (
 )
 
 var (
-	address = "localhost:50051"
-	// address = "yas.dev.sthings.tiab.ssc.sva.de:443"
+	//address = "localhost:50051"
+	address = "stagetime.dev21.sthings-vsphere.labul.sva.de:443"
 	//address = "sleeveless-dev.labul.sva.de:8011"
 	// testFilePath = "tests/prs.json"
 	testFilePath = "tests/ansible.json"

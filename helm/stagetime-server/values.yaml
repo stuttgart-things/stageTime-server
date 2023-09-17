@@ -29,7 +29,7 @@ deployment:
       image: eu.gcr.io/stuttgart-things/stagetime-server
       replicaCount: 1
       imagePullPolicy: Always
-      tag: 23.0916.2131-0.3.15
+      tag: 23.0917.0904-0.3.15
       securityContext:
         capabilities: {}
 services:
@@ -90,7 +90,7 @@ clusterRoles:
           - get
           - list
 clusterRoleBindings:
-  list-all-namespaces-yas:
+  list-all-namespaces-stagetime-server:
     roleRef:
       kind: ClusterRole
       name: list-all-namespaces

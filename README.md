@@ -22,7 +22,7 @@ secrets:
       REDIS_QUEUE: cmVkaXNxdWV1ZTp5YWNodC1yZXZpc2lvbnJ1bnM=
 
 customresources:
-  yas-ingress-certificate:
+  stagetime-ingress-certificate:
     apiVersion: cert-manager.io/v1
     kind: Certificate
     metadata:
@@ -30,11 +30,11 @@ customresources:
       labels:
         app: stagetime-server
     spec:
-      commonName: yas.app.sthings.tiab.ssc.sva.de
+      commonName: stagetime.app.sthings.tiab.ssc.sva.de
       dnsNames:
-        - yas.app.sthings.tiab.ssc.sva.de
+        - stagetime.app.sthings.tiab.ssc.sva.de
       issuerRef:
-        name: cluster-issuer-ssc #cluster-issuer-approle
+        name: cluster-issuer-approle
         kind: ClusterIssuer
       secretName: stagetime-server-ingress-tls
 
@@ -52,9 +52,8 @@ ingress:
       port: 80
       path: /
       pathType: Prefix
-    hostname: yas
-    # clusterName: dev
-    domain: app.sthings.tiab.ssc.sva.de
+    hostname: stagetime
+    domain: dev21.sthings-vsphere.labul.sva.de
     tls:
       secretName: stagetime-server-ingress-tls
       host: yas.app.sthings.tiab.ssc.sva.de

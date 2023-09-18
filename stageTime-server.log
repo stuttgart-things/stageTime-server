@@ -21,3 +21,25 @@
 {"level":"info","msg":"redis server 127.0.0.1","time":"17 Sep 23 14:26 UTC"}
 {"level":"info","msg":"redis port 28015","time":"17 Sep 23 14:26 UTC"}
 {"level":"info","msg":"stageTime-server running at [::]:50051:50051","time":"17 Sep 23 14:26 UTC"}
+{"level":"info","msg":"gRPC server running on port :50051","time":"18 Sep 23 04:06 UTC"}
+{"level":"info","msg":"redis server 127.0.0.1","time":"18 Sep 23 04:06 UTC"}
+{"level":"info","msg":"redis port 28015","time":"18 Sep 23 04:06 UTC"}
+{"level":"info","msg":"stageTime-server running at [::]:50051:50051","time":"18 Sep 23 04:06 UTC"}
+{"level":"info","msg":"REQUEST: {\"repo_name\":\"stuttgart-things\",\"pushed_at\":\"1995-02-200T22:40:36Z\",\"author\":\"patrick-hermann-sva\",\"repo_url\":\"https://github.com/stuttgart-things/stuttgart-things\",\"commit_id\":\"3c5ac44c6fec00989c7e27b36630a82cdfd26e3b0\",\"pipelineruns\":[{\"name\":\"execute-ansible-rke2-cluster\",\"stage\":0,\"params\":\"ansibleWorkingImage=eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-8, createInventory='true', gitRepoUrl='git@github.com:stuttgart-things/stuttgart-things.git', gitRevision=main, gitWorkspaceSubdirectory=/ansible/base-os, installExtraRoles='true'\",\"listparams\":\"ansiblePlaybooks=ansible/playbooks/prepare-env.yaml;ansible/playbooks/base-os.yaml\",\"workspaces\":\"ssh-credentials=secret;codehub-ssh;secretName, shared-workspace=persistentVolumeClaim;ansible-tekton;claimName, dockerconfig=secret;scr-labda;secretName\"}]}","time":"18 Sep 23 04:07 UTC"}
+{"level":"info","msg":"all pipelineRuns can be rendered","time":"18 Sep 23 04:07 UTC"}
+{"level":"info","msg":"revisionRun was stored in MessageQueue","time":"18 Sep 23 04:07 UTC"}
+{"level":"info","msg":"gRPC server running on port :50051","time":"18 Sep 23 04:55 UTC"}
+{"level":"info","msg":"redis server 127.0.0.1","time":"18 Sep 23 04:55 UTC"}
+{"level":"info","msg":"redis port 28015","time":"18 Sep 23 04:55 UTC"}
+{"level":"info","msg":"stageTime-server running at [::]:50051:50051","time":"18 Sep 23 04:55 UTC"}
+{"level":"info","msg":"REQUEST: {\"repo_name\":\"stuttgart-things\",\"pushed_at\":\"1995-02-200T22:40:36Z\",\"author\":\"patrick-hermann-sva\",\"repo_url\":\"https://github.com/stuttgart-things/stuttgart-things\",\"commit_id\":\"3c5ac44c6fec00989c7e27b36630a82cdfd26e3b0\",\"pipelineruns\":[{\"name\":\"execute-ansible-rke2-cluster\",\"stage\":0,\"params\":\"ansibleWorkingImage=eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-8, createInventory='true', gitRepoUrl='git@github.com:stuttgart-things/stuttgart-things.git', gitRevision=main, gitWorkspaceSubdirectory=/ansible/base-os, installExtraRoles='true'\",\"listparams\":\"ansiblePlaybooks=ansible/playbooks/prepare-env.yaml;ansible/playbooks/base-os.yaml\",\"workspaces\":\"ssh-credentials=secret;codehub-ssh;secretName, shared-workspace=persistentVolumeClaim;ansible-tekton;claimName, dockerconfig=secret;scr-labda;secretName\"}]}","time":"18 Sep 23 04:55 UTC"}
+{"level":"info","msg":"all pipelineRuns can be rendered","time":"18 Sep 23 04:55 UTC"}
+{"level":"info","msg":"revisionRun was stored in MessageQueue","time":"18 Sep 23 04:55 UTC"}
+{"level":"info","msg":"gRPC server running on port :50051","time":"18 Sep 23 04:58 UTC"}
+{"level":"info","msg":"redis server 127.0.0.1","time":"18 Sep 23 04:58 UTC"}
+{"level":"info","msg":"redis port 28015","time":"18 Sep 23 04:58 UTC"}
+{"level":"info","msg":"redis queue stageTime:stages","time":"18 Sep 23 04:58 UTC"}
+{"level":"info","msg":"stageTime-server running at [::]:50051:50051","time":"18 Sep 23 04:58 UTC"}
+{"level":"info","msg":"REQUEST: {\"repo_name\":\"stuttgart-things\",\"pushed_at\":\"1995-02-200T22:40:36Z\",\"author\":\"patrick-hermann-sva\",\"repo_url\":\"https://github.com/stuttgart-things/stuttgart-things\",\"commit_id\":\"3c5ac44c6fec00989c7e27b36630a82cdfd26e3b0\",\"pipelineruns\":[{\"name\":\"execute-ansible-rke2-cluster\",\"stage\":0,\"params\":\"ansibleWorkingImage=eu.gcr.io/stuttgart-things/sthings-ansible:8.3.0-8, createInventory='true', gitRepoUrl='git@github.com:stuttgart-things/stuttgart-things.git', gitRevision=main, gitWorkspaceSubdirectory=/ansible/base-os, installExtraRoles='true'\",\"listparams\":\"ansiblePlaybooks=ansible/playbooks/prepare-env.yaml;ansible/playbooks/base-os.yaml\",\"workspaces\":\"ssh-credentials=secret;codehub-ssh;secretName, shared-workspace=persistentVolumeClaim;ansible-tekton;claimName, dockerconfig=secret;scr-labda;secretName\"}]}","time":"18 Sep 23 04:58 UTC"}
+{"level":"info","msg":"all pipelineRuns can be rendered","time":"18 Sep 23 04:58 UTC"}
+{"level":"info","msg":"revisionRun was stored in MessageQueue","time":"18 Sep 23 04:58 UTC"}

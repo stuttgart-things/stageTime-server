@@ -28,7 +28,7 @@ func main() {
 	redisJSONHandler := rejson.NewReJSONHandler()
 	redisJSONHandler.SetGoRedisClient(redisClient)
 
-	revisionRun := GetRevisionRunFromRedis("stageTime-server-test", redisJSONHandler)
+	revisionRun := GetRevisionRunFromRedis("st-0-execute-ansible-rke2-cluster-1807283c5a", redisJSONHandler)
 	fmt.Println(revisionRun)
 
 }
@@ -40,6 +40,8 @@ func GetRevisionRunFromRedis(pipelineRunName string, redisJSONHandler *rejson.Ha
 		log.Fatalf("Failed to JSONGet")
 		return
 	}
+
+	fmt.Println(string(revisionRunsJSON))
 
 	err = json.Unmarshal(revisionRunsJSON, &revisionRun)
 

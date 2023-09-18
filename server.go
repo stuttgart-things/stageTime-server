@@ -44,6 +44,7 @@ var (
 	redisAddress  = os.Getenv("REDIS_SERVER")
 	redisPort     = os.Getenv("REDIS_PORT")
 	redisPassword = os.Getenv("REDIS_PASSWORD")
+	redisQueue    = os.Getenv("REDIS_QUEUE")
 )
 
 type Server struct {
@@ -86,7 +87,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	// SEND STATS TO REDIS
 	server.SendStatsToRedis(renderedPipelineruns)
 
-	// TEST LOOPING
+	// LOOP OVER REVISIONRUN
+
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
 
 		for j, pr := range renderedPipelineruns[i] {
@@ -122,7 +124,11 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	}
 
 	// SEND PIPELINERUN TO REDIS MessageQueue
-	//2805e_server.SendPipelineRunToMessageQueue(renderedPipelineruns)
+	streamValues := map[string]interface{}{
+		"stage": "stage0",
+	}
+
+	server.SendPipelineRunToMessageQueue(streamValues)
 	log.Info("revisionRun was stored in MessageQueue")
 
 	return &revisionrun.Response{
@@ -145,6 +151,7 @@ func main() {
 	log.Info("gRPC server running on port " + serverPort)
 	log.Info("redis server " + redisAddress)
 	log.Info("redis port " + redisPort)
+	log.Info("redis queue " + redisQueue)
 
 	listener, err := net.Listen("tcp", "0.0.0.0"+serverPort)
 	if err != nil {

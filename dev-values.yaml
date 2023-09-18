@@ -18,9 +18,9 @@ customresources:
       labels:
         app: stagetime-server
     spec:
-      commonName: stagetime.app.sthings.tiab.ssc.sva.de
+      commonName: stagetime.dev21.sthings.tiab.ssc.sva.de
       dnsNames:
-        - stagetime.app.sthings.tiab.ssc.sva.de
+        - stagetime.dev21.sthings.tiab.ssc.sva.de
       issuerRef:
         name: cluster-issuer-approle
         kind: ClusterIssuer

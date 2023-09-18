@@ -5,15 +5,15 @@ Copyright © 2023 Patrick Hermann patrick.hermann@sva.de
 package server
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
 
+	sthingsCli "github.com/stuttgart-things/sthingsCli"
+
 	sthingsBase "github.com/stuttgart-things/sthingsBase"
 
 	redis "github.com/go-redis/redis/v7"
-	redisqueue "github.com/robinjoseph08/redisqueue/v2"
 )
 
 var (
@@ -23,39 +23,9 @@ var (
 	redisQueue    = os.Getenv("REDIS_QUEUE")
 )
 
-func SendPipelineRunToMessageQueue(renderedPipelineruns map[int][]string) {
+func SendPipelineRunToMessageQueue(streamValues map[string]interface{}) {
 
-	pipelineRuns, err := json.Marshal(renderedPipelineruns)
-
-	if err != nil {
-		fmt.Printf("Error: %s", err.Error())
-	}
-
-	redisClient := redis.NewClient(&redis.Options{
-		Addr:     redisAddress + ":" + redisPort,
-		Password: redisPassword, // no password set
-		DB:       0,             // use default DB
-	})
-
-	p, err := redisqueue.NewProducerWithOptions(&redisqueue.ProducerOptions{
-		StreamMaxLength:      10000,
-		ApproximateMaxLength: true,
-		RedisClient:          redisClient,
-	})
-
-	if err != nil {
-		fmt.Printf("Error: %s", err.Error())
-	}
-
-	err = p.Enqueue(&redisqueue.Message{
-		Stream: redisQueue,
-		Values: map[string]interface{}{
-			"revisionRun": string(pipelineRuns),
-		},
-	})
-	if err != nil {
-		panic(err)
-	}
+	sthingsCli.EnqueueDataInRedisStreams(redisAddress+":"+redisPort, redisPassword, redisQueue, streamValues)
 
 }
 

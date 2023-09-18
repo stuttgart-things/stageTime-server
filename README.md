@@ -5,7 +5,7 @@ gRPC Server for validating & producing revisionRuns (a collection of tekton pipe
 ## TASKS
 
 ```
-task push # build image + chart
+task push # build & push image + chart to registry
 ```
 
 ## GRPC TEST CALL

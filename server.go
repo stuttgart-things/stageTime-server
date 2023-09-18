@@ -57,7 +57,7 @@ func NewServer() Server {
 
 func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.CreateRevisionRunRequest) (*revisionrun.Response, error) {
 
-	server.RenderPipelineRuns(gRPCRequest)
+	// server.RenderPipelineRuns(gRPCRequest)
 
 	receivedRevisionRun := bytes.Buffer{}
 
@@ -80,21 +80,26 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	fmt.Println("PipelineRuns:", len(gRPCRequest.Pipelineruns))
 
 	// TEST RENDERING
-	renderedPipelineruns := server.RenderPipelineRuns(gRPCRequest)
-	fmt.Println(renderedPipelineruns)
-	log.Info("all pipelineRuns can be rendered")
+	renderedPipelineruns, allStages := server.RenderPipelineRuns(gRPCRequest)
+	fmt.Println("ALL STAGES", allStages)
+	log.Info("ALL PIPELINERUNS CAN BE RENDERED")
 
 	// SEND STATS TO REDIS
 	server.SendStatsToRedis(renderedPipelineruns)
 
 	// LOOP OVER REVISIONRUN
 
+	// CREATE REDIS CLIENT / JSON HANDLER
+	redisClient := sthingsCli.CreateRedisClient(redisAddress+":"+redisPort, redisPassword)
+	redisJSONHandler := rejson.NewReJSONHandler()
+	redisJSONHandler.SetGoRedisClient(redisClient)
+
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
 
-		for j, pr := range renderedPipelineruns[i] {
+		for _, pr := range renderedPipelineruns[i] {
 
-			fmt.Println(j)
-			fmt.Println(pr)
+			// fmt.Println(j)
+			// fmt.Println(pr)
 
 			resourceName, _ := sthingsBase.GetRegexSubMatch(pr, `name: "(.*?)"`)
 			revisionRunID, _ := sthingsBase.GetRegexSubMatch(pr, `commit: "(.*?)"`)
@@ -108,13 +113,10 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			fmt.Println("REVISIONRUN-ID", revisionRunID)
 			fmt.Println("STAGE", stage)
 
-			// CREATE REDIS CLIENT / JSON HANDLER
-			redisClient := sthingsCli.CreateRedisClient(redisAddress+":"+redisPort, redisPassword)
-			redisJSONHandler := rejson.NewReJSONHandler()
-			redisJSONHandler.SetGoRedisClient(redisClient)
-
-			// SET PR ON LIST
+			// SET STAGES ON LIST
 			sthingsCli.AddValueToRedisSet(redisClient, revisionRunID, resourceName)
+			sthingsCli.AddValueToRedisSet(redisClient, revisionRunID+"-"+stage, resourceName)
+			sthingsCli.AddValueToRedisSet(redisClient, revisionRunID+"-"+"stages", stage)
 
 			// CONVERT PR TO JSON + ADD TO REDIS
 			prJSON := sthingsCli.ConvertYAMLToJSON(pr)

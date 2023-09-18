@@ -6,7 +6,7 @@ require (
 	github.com/golang/protobuf v1.5.3
 	github.com/gomodule/redigo v1.8.3
 	github.com/nitishm/go-rejson/v4 v4.1.1-0.20230331060235-d2aa875760e4
-	github.com/stuttgart-things/sthingsBase v0.1.23
+	github.com/stuttgart-things/sthingsBase v0.1.30
 	github.com/stuttgart-things/sthingsCli v0.1.39
 	go.hein.dev/go-version v0.1.0
 	google.golang.org/grpc v1.55.0

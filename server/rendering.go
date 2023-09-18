@@ -47,6 +47,14 @@ type Workspace struct {
 	WorkspaceKindShortName string
 }
 
+type RevisionRun struct {
+	Name        string
+	Namespace   string
+	Repository  string
+	Stages      []string
+	PipelinRuns []string
+}
+
 const PipelineRunTemplate = `
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
@@ -77,6 +85,20 @@ spec:
       {{ .WorkspaceKindShortName }}: {{ .WorkspaceRef }}{{ end }}
 `
 
+const RevisionRunTemplate = `
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: revisionrun-{{ .RevisionRunCommitId }}
+  namespace: {{ .Namespace }}
+data:
+  revisionRun: |
+    repository: {{ .Repository }}
+    revision: {{ .RevisionRunCommitId }}
+    stages: {{ range .Stages }}
+	  - {{ . }}{{ end }}
+`
+
 type VariableDelimiter struct {
 	begin        string `mapstructure:"begin"`
 	end          string `mapstructure:"end"`
@@ -88,31 +110,33 @@ var Patterns = map[string]VariableDelimiter{
 	"square": VariableDelimiter{"[[", "]]", `\[\[(.*?)\]\]`},
 }
 
-func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (renderedPipelineruns map[int][]string) {
+func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (renderedPipelineruns map[int][]string, allStages []string) {
 
 	// GET CURRENT TIME
 	dt := time.Now()
 
+	// INIT PR MAP
 	renderedPipelineruns = make(map[int][]string)
 
+	// LOOP OVER PR MAP
 	for _, pipelinerun := range gRPCRequest.Pipelineruns {
+
+		allStages = append(allStages, fmt.Sprintf("%v", pipelinerun.Stage))
 
 		listPipelineParams := make(map[string][]string)
 		pipelineParams := make(map[string]string)
 		var pipelineWorkspaces []Workspace
 
-		fmt.Println(pipelinerun.Name)
-		fmt.Println(pipelinerun.Stage)
+		// fmt.Println(pipelinerun.Name)
+		// fmt.Println(pipelinerun.Stage)
 
 		paramValues := strings.Split(pipelinerun.Params, ",")
-
-		for i, v := range paramValues {
+		for _, v := range paramValues {
 			values := strings.Split(v, "=")
-
 			pipelineParams[strings.TrimSpace(values[0])] = strings.TrimSpace(values[1])
-			fmt.Println(i)
-			fmt.Println(strings.TrimSpace(values[0]))
-			fmt.Println(strings.TrimSpace(values[1]))
+			// fmt.Println(i)
+			// fmt.Println(strings.TrimSpace(values[0]))
+			// fmt.Println(strings.TrimSpace(values[1]))
 		}
 
 		for _, v := range strings.Split(pipelinerun.Listparams, ",") {
@@ -124,7 +148,6 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 				values = append(values, v)
 				fmt.Println(v)
 			}
-
 			listPipelineParams[strings.TrimSpace(keyValues[0])] = values
 		}
 
@@ -136,7 +159,7 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			pipelineWorkspaces = append(pipelineWorkspaces, Workspace{strings.TrimSpace(values[0]), strings.TrimSpace(workspaces[0]), strings.TrimSpace(workspaces[1]), strings.TrimSpace(workspaces[2])})
 		}
 
-		fmt.Println(pipelineWorkspaces)
+		// fmt.Println(pipelineWorkspaces)
 
 		pr := PipelineRun{
 			Name:                pipelinerun.Name,
@@ -169,13 +192,14 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 		}
 
 		// TEST-OUTPUT
-		fmt.Println(buf.String())
+		// fmt.Println(buf.String())
 
 		// ADD RENDERED PRS TO REVISIONRUN
 		renderedPipelineruns[int(pipelinerun.Stage)] = append(renderedPipelineruns[int(pipelinerun.Stage)], buf.String())
 
 	}
 
+	allStages = sthingsBase.UniqueSlice(allStages)
 	return
 }
 

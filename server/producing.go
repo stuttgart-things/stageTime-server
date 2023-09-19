@@ -23,7 +23,11 @@ var (
 	redisQueue    = os.Getenv("REDIS_QUEUE")
 )
 
-func SendPipelineRunToMessageQueue(streamValues map[string]interface{}) {
+func SendPipelineRunToMessageQueue(stageID string) {
+
+	streamValues := map[string]interface{}{
+		"stage": stageID,
+	}
 
 	sthingsCli.EnqueueDataInRedisStreams(redisAddress+":"+redisPort, redisPassword, redisQueue, streamValues)
 

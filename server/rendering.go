@@ -47,14 +47,6 @@ type Workspace struct {
 	WorkspaceKindShortName string
 }
 
-type RevisionRun struct {
-	Name        string
-	Namespace   string
-	Repository  string
-	Stages      []string
-	PipelinRuns []string
-}
-
 const PipelineRunTemplate = `
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
@@ -89,14 +81,16 @@ const RevisionRunTemplate = `
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: revisionrun-{{ .RevisionRunCommitId }}
+  name: {{ .Name }}
   namespace: {{ .Namespace }}
 data:
   revisionRun: |
     repository: {{ .Repository }}
-    revision: {{ .RevisionRunCommitId }}
+    revision: {{ .Repository }}
     stages: {{ range .Stages }}
-	  - {{ . }}{{ end }}
+      - {{ . }}{{ end }}
+    pipelineRuns: {{ range .PipelineRuns }}
+      - {{ . }}{{ end }}
 `
 
 type VariableDelimiter struct {
@@ -110,7 +104,7 @@ var Patterns = map[string]VariableDelimiter{
 	"square": VariableDelimiter{"[[", "]]", `\[\[(.*?)\]\]`},
 }
 
-func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (renderedPipelineruns map[int][]string, allStages []string) {
+func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (renderedPipelineruns map[int][]string) {
 
 	// GET CURRENT TIME
 	dt := time.Now()
@@ -121,22 +115,14 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 	// LOOP OVER PR MAP
 	for _, pipelinerun := range gRPCRequest.Pipelineruns {
 
-		allStages = append(allStages, fmt.Sprintf("%v", pipelinerun.Stage))
-
 		listPipelineParams := make(map[string][]string)
 		pipelineParams := make(map[string]string)
 		var pipelineWorkspaces []Workspace
-
-		// fmt.Println(pipelinerun.Name)
-		// fmt.Println(pipelinerun.Stage)
 
 		paramValues := strings.Split(pipelinerun.Params, ",")
 		for _, v := range paramValues {
 			values := strings.Split(v, "=")
 			pipelineParams[strings.TrimSpace(values[0])] = strings.TrimSpace(values[1])
-			// fmt.Println(i)
-			// fmt.Println(strings.TrimSpace(values[0]))
-			// fmt.Println(strings.TrimSpace(values[1]))
 		}
 
 		for _, v := range strings.Split(pipelinerun.Listparams, ",") {
@@ -146,7 +132,6 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 
 			for _, v := range strings.Split(strings.TrimSpace(keyValues[1]), ";") {
 				values = append(values, v)
-				fmt.Println(v)
 			}
 			listPipelineParams[strings.TrimSpace(keyValues[0])] = values
 		}
@@ -158,8 +143,6 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			workspaces := strings.Split(values[1], ";")
 			pipelineWorkspaces = append(pipelineWorkspaces, Workspace{strings.TrimSpace(values[0]), strings.TrimSpace(workspaces[0]), strings.TrimSpace(workspaces[1]), strings.TrimSpace(workspaces[2])})
 		}
-
-		// fmt.Println(pipelineWorkspaces)
 
 		pr := PipelineRun{
 			Name:                pipelinerun.Name,
@@ -191,27 +174,23 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			log.Fatalf("execution: %s", err)
 		}
 
-		// TEST-OUTPUT
-		// fmt.Println(buf.String())
-
 		// ADD RENDERED PRS TO REVISIONRUN
 		renderedPipelineruns[int(pipelinerun.Stage)] = append(renderedPipelineruns[int(pipelinerun.Stage)], buf.String())
 
 	}
 
-	allStages = sthingsBase.UniqueSlice(allStages)
 	return
 }
 
 func RenderOutputData(template, delimiter string, templateKeyValues map[string]string) {
 
-	// convert string to interface map
+	// CONVERT STRING TO INTERFACE MAP
 	templateValueData := make(map[string]interface{})
 	for k, v := range templateKeyValues {
 		templateValueData[k] = v
 	}
 
-	// render template
+	// RENDER TEMPLATE
 	renderedTemplate, err := sthingsBase.RenderTemplateInline(template, "missingkey=zero", Patterns[delimiter].begin, Patterns[delimiter].end, templateValueData)
 
 	if err != nil {
@@ -222,4 +201,18 @@ func RenderOutputData(template, delimiter string, templateKeyValues map[string]s
 
 	fmt.Println(renderedData)
 
+}
+
+func RenderRevisionRunCR() (renderedCR []byte) {
+
+	cr := make(map[string]interface{})
+	cr["Name"] = "44c6fec0098"
+	cr["Namespace"] = "tekton"
+	cr["Repository"] = "stuttgart-things"
+	cr["Stages"] = []string{"0", "1", "2"}
+	cr["PipelineRuns"] = []string{"0-2321", "1-312", "2-321312"}
+
+	renderedCR, _ = sthingsBase.RenderTemplateInline(RevisionRunTemplate, "missingkey=error", "{{", "}}", cr)
+
+	return renderedCR
 }

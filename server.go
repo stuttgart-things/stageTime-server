@@ -12,6 +12,7 @@ import (
 	"net"
 	"os"
 	"strings"
+	"time"
 
 	server "github.com/stuttgart-things/stageTime-server/server"
 	sthingsBase "github.com/stuttgart-things/sthingsBase"
@@ -38,13 +39,16 @@ var (
 	serverPort  = port
 	logfilePath = "stageTime-server.log"
 	log         = sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
+	now         = time.Now()
 )
 
 var (
-	redisAddress  = os.Getenv("REDIS_SERVER")
-	redisPort     = os.Getenv("REDIS_PORT")
-	redisPassword = os.Getenv("REDIS_PASSWORD")
-	redisQueue    = os.Getenv("REDIS_QUEUE")
+	redisAddress     = os.Getenv("REDIS_SERVER")
+	redisPort        = os.Getenv("REDIS_PORT")
+	redisPassword    = os.Getenv("REDIS_PASSWORD")
+	redisQueue       = os.Getenv("REDIS_QUEUE")
+	redisClient      = sthingsCli.CreateRedisClient(redisAddress+":"+redisPort, redisPassword)
+	redisJSONHandler = rejson.NewReJSONHandler()
 )
 
 type Server struct {
@@ -57,7 +61,8 @@ func NewServer() Server {
 
 func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.CreateRevisionRunRequest) (*revisionrun.Response, error) {
 
-	// server.RenderPipelineRuns(gRPCRequest)
+	// CREATE REDIS CLIENT / JSON HANDLER
+	redisJSONHandler.SetGoRedisClient(redisClient)
 
 	receivedRevisionRun := bytes.Buffer{}
 
@@ -67,39 +72,29 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		return nil, status.Errorf(codes.InvalidArgument, "server create revisionrun: marshal: %v", err)
 	}
 
-	log.Println("REQUEST:", receivedRevisionRun.String())
+	log.Println("INCOMING gRPC REQUEST:", receivedRevisionRun.String())
 
 	if err := json.Unmarshal([]byte(receivedRevisionRun.Bytes()), &gRPCRequest); err != nil {
 		log.Fatal(err)
 	}
 
 	// STATUS OUTPUT GRPC DATA
-	fmt.Println(gRPCRequest.Author + " created RevisionRun " + gRPCRequest.CommitId + " at " + gRPCRequest.PushedAt)
-	fmt.Println("Repository:", gRPCRequest.RepoName)
-	fmt.Println("RepositoryUrl:", gRPCRequest.RepoUrl)
-	fmt.Println("PipelineRuns:", len(gRPCRequest.Pipelineruns))
+	log.Info(gRPCRequest.Author + " created RevisionRun " + gRPCRequest.CommitId + " at " + gRPCRequest.PushedAt)
+	log.Info("REPOSITORY: ", gRPCRequest.RepoName)
+	log.Info("REPOSITORYURL: ", gRPCRequest.RepoUrl)
+	log.Info("PIPELINERUNS: ", len(gRPCRequest.Pipelineruns))
 
 	// TEST RENDERING
-	renderedPipelineruns, allStages := server.RenderPipelineRuns(gRPCRequest)
-	fmt.Println("ALL STAGES", allStages)
+	renderedPipelineruns := server.RenderPipelineRuns(gRPCRequest)
 	log.Info("ALL PIPELINERUNS CAN BE RENDERED")
 
 	// SEND STATS TO REDIS
 	server.SendStatsToRedis(renderedPipelineruns)
 
 	// LOOP OVER REVISIONRUN
-
-	// CREATE REDIS CLIENT / JSON HANDLER
-	redisClient := sthingsCli.CreateRedisClient(redisAddress+":"+redisPort, redisPassword)
-	redisJSONHandler := rejson.NewReJSONHandler()
-	redisJSONHandler.SetGoRedisClient(redisClient)
-
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
 
 		for _, pr := range renderedPipelineruns[i] {
-
-			// fmt.Println(j)
-			// fmt.Println(pr)
 
 			resourceName, _ := sthingsBase.GetRegexSubMatch(pr, `name: "(.*?)"`)
 			revisionRunID, _ := sthingsBase.GetRegexSubMatch(pr, `commit: "(.*?)"`)
@@ -114,9 +109,12 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			fmt.Println("STAGE", stage)
 
 			// SET STAGES ON LIST
-			sthingsCli.AddValueToRedisSet(redisClient, revisionRunID, resourceName)
-			sthingsCli.AddValueToRedisSet(redisClient, revisionRunID+"-"+stage, resourceName)
-			sthingsCli.AddValueToRedisSet(redisClient, revisionRunID+"-"+"stages", stage)
+			sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+revisionRunID+"-"+"stages", stage)
+			sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+revisionRunID, resourceName)
+			log.Info("REVISIONRUN NAME "+resourceName+" STORED ON ", now.Format(time.RFC3339)+"-"+revisionRunID)
+
+			sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+revisionRunID+"-"+stage, resourceName)
+			log.Info("REVISIONRUN NAME "+resourceName+" STORED ON ", now.Format(time.RFC3339)+"-"+revisionRunID+"-"+stage)
 
 			// CONVERT PR TO JSON + ADD TO REDIS
 			prJSON := sthingsCli.ConvertYAMLToJSON(pr)
@@ -125,18 +123,24 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		}
 	}
 
-	// SEND PIPELINERUN TO REDIS MessageQueue
-	streamValues := map[string]interface{}{
-		"stage": "stage0",
-	}
+	fmt.Println("REVISONRUN PRINTED")
+	cr := server.RenderRevisionRunCR()
+	fmt.Println(string(cr))
+	crJSON := sthingsCli.ConvertYAMLToJSON(string(cr))
+	fmt.Println(crJSON)
 
-	server.SendPipelineRunToMessageQueue(streamValues)
-	log.Info("revisionRun was stored in MessageQueue")
+	stageID := "stageTime-" + gRPCRequest.CommitId[0:4]
+	fmt.Println("COMMIT ID: ", stageID)
+	sthingsCli.SetRedisJSON(redisJSONHandler, crJSON, stageID)
+
+	// SEND PIPELINERUN TO REDIS MessageQueue
+	server.SendPipelineRunToMessageQueue(stageID)
+	log.Info("REVISIONRUN WAS STORED IN MESSAGEQUEUE")
 
 	return &revisionrun.Response{
 		Result: revisionrun.Response_SUCCESS,
 		Success: &revisionrun.Response_Success{
-			Data: []byte("good job - revisionRun was stored in MessageQueue"),
+			Data: []byte("GOOD JOB - REVISIONRUN WAS STORED IN MESSAGEQUEUE"),
 		},
 	}, nil
 }

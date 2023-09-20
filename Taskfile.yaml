@@ -97,8 +97,8 @@ tasks:
     desc: Commit, push & tag the module
     deps: [lint, proto]
     cmds:
-      - task: git-push
       - rm -rf dist
+      - task: git-push
       - go mod tidy
       - git pull --tags
       - git tag -a {{ .UPDATED_TAG_VERSION }}{{ .BRANCH }} -m 'updated for stuttgart-things {{ .DATE }} for tag version {{ .UPDATED_TAG_VERSION }}{{ .BRANCH }}'
@@ -119,6 +119,7 @@ tasks:
   git-push:
     desc: Commit & push the module
     cmds:
+      - rm -rf ./dist
       - go mod tidy
       - git pull
       - git config advice.addIgnoredFile false
@@ -148,6 +149,7 @@ tasks:
     desc: Relase binaries
     deps: [tag]
     cmds:
+      - rm -rf ./dist
       - goreleaser healthcheck
       - goreleaser check
       - goreleaser release --skip-publish --snapshot --clean

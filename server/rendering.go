@@ -182,28 +182,7 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 	return
 }
 
-func RenderOutputData(template, delimiter string, templateKeyValues map[string]string) {
-
-	// CONVERT STRING TO INTERFACE MAP
-	templateValueData := make(map[string]interface{})
-	for k, v := range templateKeyValues {
-		templateValueData[k] = v
-	}
-
-	// RENDER TEMPLATE
-	renderedTemplate, err := sthingsBase.RenderTemplateInline(template, "missingkey=zero", Patterns[delimiter].begin, Patterns[delimiter].end, templateValueData)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	renderedData := strings.ReplaceAll(string(renderedTemplate), "&#34;", " ")
-
-	fmt.Println(renderedData)
-
-}
-
-// TEST DATA
+// TEST DATA - TO BE REPLACED
 func RenderRevisionRunCR() (renderedCR []byte) {
 
 	cr := make(map[string]interface{})

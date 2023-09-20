@@ -9,11 +9,9 @@ import (
 	"os"
 	"strings"
 
-	sthingsCli "github.com/stuttgart-things/sthingsCli"
-
-	sthingsBase "github.com/stuttgart-things/sthingsBase"
-
 	redis "github.com/go-redis/redis/v7"
+	sthingsBase "github.com/stuttgart-things/sthingsBase"
+	sthingsCli "github.com/stuttgart-things/sthingsCli"
 )
 
 var (

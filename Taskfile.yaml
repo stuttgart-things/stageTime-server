@@ -143,3 +143,13 @@ tasks:
       - helm push {{ lower (.PROJECT_NAME) }}-{{ .UPDATED_TAG_VERSION }}.tgz oci://{{ .REGISTRY }}/{{ .REPOSITORY_NAME }}
       - rm -rf {{ lower (.PROJECT_NAME) }}-{{ .UPDATED_TAG_VERSION }}.tgz
       - task: git-push
+
+  release:
+    desc: Relase binaries
+    deps: [tag]
+    cmds:
+      - goreleaser healthcheck
+      - goreleaser check
+      - goreleaser release --skip-publish --snapshot --clean
+      - goreleaser release --clean
+      - rm -rf ./dist

@@ -28,7 +28,6 @@ func SendPipelineRunToMessageQueue(stageID string) {
 	}
 
 	sthingsCli.EnqueueDataInRedisStreams(redisAddress+":"+redisPort, redisPassword, redisStream, streamValues)
-
 	fmt.Println("STREAM", redisStream)
 	fmt.Println("VALUES", streamValues)
 

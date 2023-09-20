@@ -20,7 +20,7 @@ var (
 	redisAddress  = os.Getenv("REDIS_SERVER")
 	redisPort     = os.Getenv("REDIS_PORT")
 	redisPassword = os.Getenv("REDIS_PASSWORD")
-	redisQueue    = os.Getenv("REDIS_QUEUE")
+	redisStream   = os.Getenv("REDIS_STREAM")
 )
 
 func SendPipelineRunToMessageQueue(stageID string) {
@@ -29,7 +29,10 @@ func SendPipelineRunToMessageQueue(stageID string) {
 		"stage": stageID,
 	}
 
-	sthingsCli.EnqueueDataInRedisStreams(redisAddress+":"+redisPort, redisPassword, redisQueue, streamValues)
+	sthingsCli.EnqueueDataInRedisStreams(redisAddress+":"+redisPort, redisPassword, redisStream, streamValues)
+
+	fmt.Println("STREAM", redisStream)
+	fmt.Println("VALUES", streamValues)
 
 }
 

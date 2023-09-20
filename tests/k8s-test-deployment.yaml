@@ -97,7 +97,7 @@ data:
   REDIS_SERVER: MTAuMzEuMTAxLjEzOA==
   REDIS_PORT: NjM3OQ==
   REDIS_PASSWORD: QXRsYW43aXM=
-  REDIS_QUEUE: cmVkaXNxdWV1ZTp5YWNodC1yZXZpc2lvbnJ1bnM=
+  REDIS_STREAM: cmVkaXNxdWV1ZTp5YWNodC1yZXZpc2lvbnJ1bnM=
 ---
 apiVersion: v1
 kind: ConfigMap

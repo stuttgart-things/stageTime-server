@@ -46,7 +46,7 @@ var (
 	redisAddress     = os.Getenv("REDIS_SERVER")
 	redisPort        = os.Getenv("REDIS_PORT")
 	redisPassword    = os.Getenv("REDIS_PASSWORD")
-	redisQueue       = os.Getenv("REDIS_QUEUE")
+	redisStream      = os.Getenv("REDIS_STREAM")
 	redisClient      = sthingsCli.CreateRedisClient(redisAddress+":"+redisPort, redisPassword)
 	redisJSONHandler = rejson.NewReJSONHandler()
 )
@@ -123,20 +123,22 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		}
 	}
 
+	// HANDLING OF REVISONRUN CR
 	fmt.Println("REVISONRUN PRINTED")
 	cr := server.RenderRevisionRunCR()
 	fmt.Println(string(cr))
 	crJSON := sthingsCli.ConvertYAMLToJSON(string(cr))
 	fmt.Println(crJSON)
-
 	stageID := "stageTime-" + gRPCRequest.CommitId[0:4]
 	fmt.Println("COMMIT ID: ", stageID)
 	sthingsCli.SetRedisJSON(redisJSONHandler, crJSON, stageID)
+	sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+stageID, stageID)
 
-	// SEND PIPELINERUN TO REDIS MessageQueue
-	server.SendPipelineRunToMessageQueue(stageID)
-	log.Info("REVISIONRUN WAS STORED IN MESSAGEQUEUE")
+	// SEND PIPELINERUN TO REDIS MESSAGEQUEUE
+	server.SendPipelineRunToMessageQueue(now.Format(time.RFC3339) + "-" + stageID)
+	log.Info("PIPELINERUN WERE STORED IN MESSAGEQUEUE ", stageID)
 
+	// SEND gRPC RESPONSE
 	return &revisionrun.Response{
 		Result: revisionrun.Response_SUCCESS,
 		Success: &revisionrun.Response_Success{
@@ -157,7 +159,7 @@ func main() {
 	log.Info("gRPC server running on port " + serverPort)
 	log.Info("redis server " + redisAddress)
 	log.Info("redis port " + redisPort)
-	log.Info("redis queue " + redisQueue)
+	log.Info("redis queue " + redisStream)
 
 	listener, err := net.Listen("tcp", "0.0.0.0"+serverPort)
 	if err != nil {

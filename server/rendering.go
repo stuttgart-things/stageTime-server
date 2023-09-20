@@ -84,14 +84,15 @@ metadata:
   name: {{ .Name }}
   namespace: {{ .Namespace }}
 data:
-  revisionRun: |
-    repository: {{ .Repository }}
-    revision: {{ .Repository }}
-    stages: {{ range .Stages }}
-      - {{ . }}{{ end }}
-    pipelineRuns: {{ range .PipelineRuns }}
-      - {{ . }}{{ end }}
+  revisionRun: {{ .RevisionRun }}
+  repository: {{ .Repository }}
+  revision: {{ .Repository }}
 `
+
+//   stages: {{ range .Stages }}
+//     - "{{ . }}"{{ end }}
+//   pipelineRuns: {{ range .PipelineRuns }}
+//     - "{{ . }}"{{ end }}
 
 type VariableDelimiter struct {
 	begin        string `mapstructure:"begin"`
@@ -176,7 +177,6 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 
 		// ADD RENDERED PRS TO REVISIONRUN
 		renderedPipelineruns[int(pipelinerun.Stage)] = append(renderedPipelineruns[int(pipelinerun.Stage)], buf.String())
-
 	}
 
 	return
@@ -203,12 +203,14 @@ func RenderOutputData(template, delimiter string, templateKeyValues map[string]s
 
 }
 
+// TEST DATA
 func RenderRevisionRunCR() (renderedCR []byte) {
 
 	cr := make(map[string]interface{})
 	cr["Name"] = "44c6fec0098"
 	cr["Namespace"] = "tekton"
 	cr["Repository"] = "stuttgart-things"
+	cr["RevisionRun"] = "44c6fec0098-123"
 	cr["Stages"] = []string{"0", "1", "2"}
 	cr["PipelineRuns"] = []string{"0-2321", "1-312", "2-321312"}
 

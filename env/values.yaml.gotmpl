@@ -1,0 +1,47 @@
+# secrets:
+#   redis-connection:
+#     name: redis-connection
+#     labels:
+#       app: stagetime-server
+#     dataType: stringData
+#     secretKVs:
+#       REDIS_SERVER: redis-stack-deployment-headless.redis-stack.svc.cluster.local
+#       REDIS_PORT: 6379
+#       REDIS_PASSWORD: <PASSWORD>
+
+customresources:
+  stagetime-ingress-certificate:
+    apiVersion: cert-manager.io/v1
+    kind: Certificate
+    metadata:
+      name: stagetime-server-ingress
+      labels:
+        app: stagetime-server
+    spec:
+      commonName: {{ .Values.hostname }}.{{ .Values.ingressDomain }}
+      dnsNames:
+        - {{ .Values.hostname }}.{{ .Values.ingressDomain }}
+      issuerRef:
+        name: cluster-issuer-approle
+        kind: ClusterIssuer
+      secretName: stagetime-server-ingress-tls
+
+ingress:
+  stagetime-server:
+    labels:
+      app: stagetime-server
+    name: stagetime-server
+    ingressClassName: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
+    service:
+      name: stagetime-server-service
+      port: 80
+      path: /
+      pathType: Prefix
+    hostname: {{ .Values.hostname }}
+    domain: {{ .Values.ingressDomain }}
+    tls:
+      secretName: stagetime-server-ingress-tls
+      host: {{ .Values.hostname }}.{{ .Values.ingressDomain }}

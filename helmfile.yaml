@@ -1,0 +1,36 @@
+---
+releases:
+  - name: redis-stack
+    installed: true
+    namespace: stagetime-redis
+    chart: redis/redis
+    version: 17.1.4
+    values:
+      - "env/redis-stack.yaml.gotmpl"
+  - name: stagetime-server
+    installed: true
+    namespace: stagetime
+    chart: stuttgart-things/stagetime-server
+    version: 0.3.15
+    values:
+      - "env/values.yaml.gotmpl"
+
+environments:
+  labul-pve-dev:
+    values:
+      - env/defaults.yaml
+      - env/{{ .Environment.Name }}.yaml
+
+repositories:
+  - name: stuttgart-things
+    url: eu.gcr.io/stuttgart-things
+    oci: true
+  - name: redis
+    url: https://charts.bitnami.com/bitnami
+
+helmDefaults:
+  verify: false
+  wait: false
+  timeout: 600
+  recreatePods: false
+  force: true

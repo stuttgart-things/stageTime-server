@@ -8,11 +8,45 @@ gRPC Server for validating & producing revisionRuns (a collection of tekton pipe
 task push # build & push image + chart to registry
 ```
 
+## HELMFILE
+
+<details><summary>SET VAULT CONNECTION</summary>
+
+```bash
+export VAULT_ADDR=https://${VAULT_FQDN}}
+export VAULT_NAMESPACE=root
+
+# APPROLE AUTH
+export VAULT_AUTH_METHOD=approle
+export VAULT_ROLE_ID=${VAULT_ROLE_ID}
+export VAULT_SECRET_ID=${VAULT_SECRET_ID}
+
+# TOKEN AUTH
+export VAULT_AUTH_METHOD=token #default
+export VAULT_TOKEN=${VAULT_TOKEN}
+```
+
+<details><summary>RENDER/APPLY</summary>
+
+```bash
+helmfile template --environment labul-pve-dev
+helmfile sync --environment labul-pve-dev
+```
+
+</details>
+
+
+
 ## GRPC TEST CALL
 
-```
-kubectl -n redis-stack port-forward redis-stack-deployment-node-0 28015:6379
+```bash
+# PORTWARD REDIS / EXAMPLE DEPLOYMENT!
+kubectl port-forward --namespace stagetime-redis svc/redis-stack 28015:6379
+
+# CHECK REDIS
 redis-cli -h 127.0.0.1 -p 28015 -a <PASSWORD>
+
+# SEND TEST DATA
 go run tests/grpc-testClient-local.go
 ```
 

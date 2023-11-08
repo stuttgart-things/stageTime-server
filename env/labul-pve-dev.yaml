@@ -1,2 +1,3 @@
 ---
 ingressDomain: cd43.sthings-pve.labul.sva.de
+redisPassword: ref+vault://stagetime/redis/password

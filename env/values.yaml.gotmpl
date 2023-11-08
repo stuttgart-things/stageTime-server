@@ -6,8 +6,8 @@ secrets:
       app: stagetime-server
     dataType: stringData
     secretKVs:
-      REDIS_SERVER: redis-stack-headless.stagetime-redis.svc.cluster.local
-      REDIS_PORT: 6379
+      REDIS_SERVER: {{ .Values.redisStack.serviceName }}.{{ .Values.redisStack.namespace }}.svc.cluster.local
+      REDIS_PORT: {{ .Values.redisStack.port }}
       REDIS_PASSWORD: {{ .Values.redisPassword }}
 
 customresources:

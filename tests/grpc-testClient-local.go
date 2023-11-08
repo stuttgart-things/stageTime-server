@@ -22,8 +22,8 @@ import (
 )
 
 var (
-	//address = "localhost:50051" // local go
-	address = "stagetime.cd43.sthings-pve.labul.sva.de:443"
+	address = "localhost:50051" // local go
+	// address = "stagetime.cd43.sthings-pve.labul.sva.de:443"
 	//address = "sleeveless-dev.labul.sva.de:8011"
 	testFilePath = "tests/prs.json"
 	// testFilePath = "tests/ansible.json"
@@ -70,8 +70,8 @@ func (c Client) CreateRevisionRun(ctx context.Context, json io.Reader) error {
 func main() {
 
 	// Check env vor given server port
-	if os.Getenv("YAS_URL") != "" {
-		address = os.Getenv("YAS_URL")
+	if os.Getenv("STAGETIME_SERVER") != "" {
+		address = os.Getenv("STAGETIME_SERVER")
 	}
 
 	if strings.Contains(address, "localhost") {

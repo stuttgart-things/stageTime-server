@@ -1,6 +1,6 @@
 # stuttgart-things/stageTime-server
 
-gRPC Server for validating & producing revisionRuns (a collection of tekton pipelineRuns/stages)
+gRPC Server for validating & producing a collection of tekton pipelineRuns/stages (called revisionRuns).
 
 ## DEV-TASKS
 
@@ -52,7 +52,10 @@ helmfile sync --environment labul-pve-dev
 
 </details>
 
+
 ## CHECK REDIS OUTSIDE/INSIDE CLUSTER
+
+<details><summary>RENDER/APPLY</summary>
 
 ```bash
 # PORTWARD REDIS FOR RUNNING ON A CLUSTER
@@ -62,13 +65,24 @@ kubectl port-forward --namespace stagetime-redis svc/redis-stack 28015:6379
 redis-cli -h 127.0.0.1 -p 28015 -a <PASSWORD>
 ```
 
+</details>
+
+
 # SEND TEST DATA
+
+<details><summary>SEND TEST DATA</summary>
+
+```bash
+export STAGETIME_SERVER=stagetime.cd43.sthings-pve.labul.sva.de:443 #example address | default: localhost:50051
 go run tests/grpc-testClient-local.go
 ```
 
+</details>
+
+
 ## EXAMPLE HELM DEPLOYMENT (ALTERNATIVE TO HELMFILE DEPLOYMENT)
 
-<details><summary>values</summary>
+<details><summary>EXAMPLE VALUES</summary>
 
 ```yaml
 cat <<EOF > stageTime-server.yaml
@@ -123,9 +137,13 @@ ingress:
 EOF
 ```
 
+</details>
+
+<details><summary>EXAMPLE DEPLOYMENT</summary>
+
 ```bash
 helm upgrade --install server helm/
-stagetime-server/ -n stagetime --create-namespace --values stageTime-server.yaml
+stagetime-server/ -n stagetime --create-namespace --values stageTime-server.yaml --create-namespace
 ```
 
 </details>

@@ -26,6 +26,8 @@ export VAULT_AUTH_METHOD=token #default
 export VAULT_TOKEN=${VAULT_TOKEN}
 ```
 
+</details>
+
 <details><summary>RENDER/APPLY</summary>
 
 ```bash
@@ -34,7 +36,6 @@ helmfile sync --environment labul-pve-dev
 ```
 
 </details>
-
 
 
 ## GRPC TEST CALL

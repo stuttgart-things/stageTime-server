@@ -3,3 +3,4 @@ hostname: stagetime
 redisStack:
   port: 6379
   serviceName: redis-stack-headless
+  namespace: stagetime-redis

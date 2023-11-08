@@ -31,7 +31,7 @@ deployment:
       image: eu.gcr.io/stuttgart-things/stagetime-server
       replicaCount: 1
       imagePullPolicy: Always
-      tag: 23.0927.0920-0.3.22
+      tag: 23.1108.1059-0.3.22
       securityContext:
         capabilities: {}
 services:

@@ -1,4 +1,4 @@
-FROM eu.gcr.io/stuttgart-things/sthings-golang:1.22 AS builder
+FROM golang:1.21.4 AS builder
 LABEL maintainer="Patrick Hermann patrick.hermann@sva.de"
 
 ARG VERSION=""

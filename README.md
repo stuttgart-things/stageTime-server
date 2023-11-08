@@ -2,13 +2,28 @@
 
 gRPC Server for validating & producing revisionRuns (a collection of tekton pipelineRuns/stages)
 
-## TASKS
+## DEV-TASKS
 
-```
-task push # build & push image + chart to registry
+```bash
+task --list
+
+task: Available tasks for this project:
+* build:               Build the app
+* build-image:         Build container image
+* build-server:        Build server
+* git-push:            Commit & push the module
+* lint:                Lint code
+* package:             Update Chart.yaml and package archive
+* proto:               Generate Go code from proto
+* push:                Push to registry
+* release:             Relase binaries
+* run-client:          Run client locally
+* run-container:       Run container image
+* run-server:          Run server locally
+* tag:                 Commit, push & tag the module
 ```
 
-## HELMFILE
+## HELMFILE-DEPLOYMENTS
 
 <details><summary>SET VAULT CONNECTION</summary>
 
@@ -37,21 +52,21 @@ helmfile sync --environment labul-pve-dev
 
 </details>
 
-
-## GRPC TEST CALL
+## CHECK REDIS OUTSIDE/INSIDE CLUSTER
 
 ```bash
-# PORTWARD REDIS / EXAMPLE DEPLOYMENT!
+# PORTWARD REDIS FOR RUNNING ON A CLUSTER
 kubectl port-forward --namespace stagetime-redis svc/redis-stack 28015:6379
 
 # CHECK REDIS
 redis-cli -h 127.0.0.1 -p 28015 -a <PASSWORD>
+```
 
 # SEND TEST DATA
 go run tests/grpc-testClient-local.go
 ```
 
-## EXAMPLE DEPLOYMENT (DRAFT)
+## EXAMPLE HELM DEPLOYMENT (ALTERNATIVE TO HELMFILE DEPLOYMENT)
 
 <details><summary>values</summary>
 

@@ -14,7 +14,13 @@ RUN go mod tidy
 RUN CGO_ENABLED=0 go build -buildvcs=false -o /bin/stageTime-server \
     -ldflags="-X ${MODULE}/internal.version=v${VERSION} -X ${MODULE}/internal.date=${BUILD_DATE} -X ${MODULE}/internal.commit=${COMMIT}"
 
-FROM alpine:3.17.0
+RUN CGO_ENABLED=0 go build -o /bin/grpCall tests/grpCall.go
+
+FROM alpine:3.18.4
 COPY --from=builder /bin/stageTime-server /bin/stageTime-server
+
+# FOR SERVICE TESTING
+COPY --from=builder /bin/grpCall /bin/grpCall
+COPY --from=builder /src/tests/prs.json /tmp/prs.json
 
 ENTRYPOINT ["stageTime-server"]

@@ -24,7 +24,6 @@ import (
 var (
 	address = "localhost:50051" // local go
 	// address = "stagetime.cd43.sthings-pve.labul.sva.de:443"
-	//address = "sleeveless-dev.labul.sva.de:8011"
 	testFilePath = "tests/prs.json"
 	// testFilePath = "tests/ansible.json"
 )
@@ -47,7 +46,7 @@ func (c Client) CreateRevisionRun(ctx context.Context, json io.Reader) error {
 
 	req := revisionrun.CreateRevisionRunRequest{}
 	if err := jsonpb.Unmarshal(json, &req); err != nil {
-		return fmt.Errorf("client create revisionrun: unmarshal: %w", err)
+		return fmt.Errorf("CLIENT CREATE REVISIONRUN: UNMARSHAL: %w", err)
 	}
 
 	res, err := c.yasClient.CreateRevisionRun(ctx, &req)
@@ -56,9 +55,9 @@ func (c Client) CreateRevisionRun(ctx context.Context, json io.Reader) error {
 
 	if err != nil {
 		if er, ok := status.FromError(err); ok {
-			return fmt.Errorf("client create revisionrun: code: %s - msg: %s", er.Code(), er.Message())
+			return fmt.Errorf("CLIENT CREATE REVISIONRUN: CODE: %s - msg: %s", er.Code(), er.Message())
 		}
-		return fmt.Errorf("client create revisionrun: %w", err)
+		return fmt.Errorf("CLIENT CREATE REVISIONRUn: %w", err)
 	}
 
 	log.Println("RESULT:", res.Result)
@@ -74,17 +73,21 @@ func main() {
 		address = os.Getenv("STAGETIME_SERVER")
 	}
 
+	if os.Getenv("STAGETIME_TEST_FILES") != "" {
+		testFilePath = os.Getenv("STAGETIME_TEST_FILES")
+	}
+
 	if strings.Contains(address, "localhost") {
-		ConnectInsecure(address)
+		ConnectInsecure(address, testFilePath)
 	} else {
-		ConnectSecure(address)
+		ConnectSecure(address, testFilePath)
 	}
 
 }
 
-func ConnectSecure(address string) {
+func ConnectSecure(address, testFilePath string) {
 
-	log.Println("client started connecting to.. " + address)
+	log.Println("CLIENT STARTED CONNECTING TO.. " + address)
 
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: true,
@@ -111,7 +114,7 @@ func ConnectSecure(address string) {
 
 }
 
-func ConnectInsecure(address string) {
+func ConnectInsecure(address, testFilePath string) {
 
 	log.Println("client started connecting to.. " + address)
 

@@ -2,13 +2,18 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "stagetime-test-connection"
+  name: stagetime-test-connection
   annotations:
     "helm.sh/hook": test
 spec:
   containers:
     - name: wget
-      image: eu.gcr.io/stuttgart-things/stagetime-server:23.1108.1417-0.3.22
-      command: ['wget']
-      args: ""
+      image: scr.cd43.sthings-pve.labul.sva.de/stagetime-server/stagetime-server:23.1109.1148-0.3.22
+      command: ['grpcCall']
+      env:
+        - name: STAGETIME_SERVER
+          value: "stagetime-server-service.stagetime.svc.cluster.local:80"
+          #value: "stagetime.cd43.sthings-pve.labul.sva.de:443"
+        - name: STAGETIME_TEST_FILES
+          value: "/tmp/prs.json"
   restartPolicy: Never

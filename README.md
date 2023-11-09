@@ -77,7 +77,7 @@ redis-cli -h 127.0.0.1 -p 28015 -a <PASSWORD>
 export STAGETIME_SERVER=stagetime.cd43.sthings-pve.labul.sva.de:443 #example address | default: localhost:50051
 export STAGETIME_TEST_FILES=$PWD/prs.json # or leave out for default path/file in tests folder
 
-go run tests/grpCall.go
+go run tests/grpcCall.go
 ```
 
 ## INSIDE CONTAINER
@@ -86,7 +86,7 @@ go run tests/grpCall.go
 nerdctl run -it --entrypoint sh eu.gcr.io/stuttgart-things/stagetime-server:23.1108.1411-0.3.22
 export STAGETIME_SERVER=stagetime.cd43.sthings-pve.labul.sva.de:443
 export STAGETIME_TEST_FILES=/tmp/prs.json
-/bin/grpCall
+/bin/grpcCall
 ```
 
 </details>

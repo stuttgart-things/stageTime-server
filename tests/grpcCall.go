@@ -77,7 +77,7 @@ func main() {
 		testFilePath = os.Getenv("STAGETIME_TEST_FILES")
 	}
 
-	if strings.Contains(address, "localhost") {
+	if strings.Contains(address, "localhost") || strings.Contains(address, "svc.cluster.local") {
 		ConnectInsecure(address, testFilePath)
 	} else {
 		ConnectSecure(address, testFilePath)

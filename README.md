@@ -5,9 +5,7 @@ gRPC Server for validating & producing a collection of tekton pipelineRuns/stage
 ## DEV-TASKS
 
 ```bash
-task --list
-
-task: Available tasks for this project:
+task --list: Available tasks for this project:
 * build:               Build the app
 * build-image:         Build container image
 * build-server:        Build server

@@ -87,12 +87,12 @@ spec:
     - name: {{ .Name }}
       volumeClaimTemplate:
         spec:
-          storageClassName: nfs4-csi
+          storageClassName: {{ .StorageClassName }}
           accessModes:
-          - ReadWriteMany
+            - {{ .AccessModes }}
           resources:
             requests:
-              storage: 1Gi{{ end }}{{ end }}
+              storage: {{ .Storage }}{{ end }}{{ end }}
 `
 
 const RevisionRunTemplate = `

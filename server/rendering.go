@@ -171,7 +171,6 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			RevisionRunRepoName: gRPCRequest.RepoName,
 			Namespace:           pipelineNamespace,
 			PipelineRef:         pipelinerun.Name,
-			ServiceAccount:      "default",
 			Timeout:             "1h",
 			Params:              pipelineParams,
 			ListParams:          listPipelineParams,

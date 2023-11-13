@@ -76,7 +76,7 @@ spec:
     {{ if .PipelineRef }}name: {{ .PipelineRef }}{{ else }}resolver: git{{ end }}
     params:{{ range $name, $value := .ResolverParams }}
       - name: {{ $name }}
-	  value: {{ $value }}{{ end }}
+        value: {{ $value }}{{ end }}
   params:{{ range $name, $value := .Params }}
     - name: {{ $name }}
       value: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}

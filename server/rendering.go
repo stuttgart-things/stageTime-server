@@ -82,8 +82,7 @@ spec:
   workspaces:{{ range .Workspaces }}
     - name: {{ .Name }}
       {{ .WorkspaceKind }}:
-        {{ .WorkspaceKindShortName }}: {{ .WorkspaceRef }}{{ end }}
-    {{ if .VolumeClaimTemplates }}{{ range .VolumeClaimTemplates }}
+        {{ .WorkspaceKindShortName }}: {{ .WorkspaceRef }}{{ end }}{{ if .VolumeClaimTemplates }}{{ range .VolumeClaimTemplates }}
     - name: {{ .Name }}
       volumeClaimTemplate:
         spec:

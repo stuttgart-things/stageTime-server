@@ -68,7 +68,8 @@ metadata:
     stagetime/author: {{ .RevisionRunAuthor }}
     stagetime/stage: "{{ .Stage }}"
 spec:
-  serviceAccountName: {{ .ServiceAccount }}
+  taskRunTemplate:
+    serviceAccountName: {{ .ServiceAccount }}
   timeout: {{ .Timeout }}
   pipelineRef:
     {{ if .PipelineRef }}name: {{ .PipelineRef }}{{ else }}resolver: git{{ end }}

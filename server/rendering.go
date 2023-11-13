@@ -31,7 +31,7 @@ type PipelineRun struct {
 	ResolverParams       map[string]string
 	Namespace            string
 	PipelineRef          string
-	Timeout              string
+	TimeoutPipeline      string
 	Params               map[string]string
 	ListParams           map[string][]string
 	Workspaces           []Workspace
@@ -67,7 +67,9 @@ metadata:
     stagetime/author: {{ .RevisionRunAuthor }}
     stagetime/stage: "{{ .Stage }}"
 spec:
-  timeout: {{ .Timeout }}
+  timeouts:
+    pipeline: "{{ .TimeoutPipeline }}"
+    tasks: "0h1m0s"
   pipelineRef:
     {{ if .PipelineRef }}name: {{ .PipelineRef }}{{ else }}resolver: git{{ end }}
     params:{{ range $name, $value := .ResolverParams }}
@@ -105,11 +107,6 @@ data:
   repository: {{ .Repository }}
   revision: {{ .Repository }}
 `
-
-//   stages: {{ range .Stages }}
-//     - "{{ . }}"{{ end }}
-//   pipelineRuns: {{ range .PipelineRuns }}
-//     - "{{ . }}"{{ end }}
 
 type VariableDelimiter struct {
 	begin        string `mapstructure:"begin"`
@@ -171,7 +168,7 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			RevisionRunRepoName: gRPCRequest.RepoName,
 			Namespace:           pipelineNamespace,
 			PipelineRef:         pipelinerun.Name,
-			Timeout:             "1h",
+			TimeoutPipeline:     "0h4m0s",
 			Params:              pipelineParams,
 			ListParams:          listPipelineParams,
 			Stage:               fmt.Sprintf("%v", pipelinerun.Stage),

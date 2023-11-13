@@ -85,8 +85,14 @@ spec:
         {{ .WorkspaceKindShortName }}: {{ .WorkspaceRef }}{{ end }}
     {{ if .VolumeClaimTemplates }}{{ range .VolumeClaimTemplates }}
     - name: {{ .Name }}
-	  volumeClaimTemplate:
-	    spec:{{ end }}{{ end }}
+      volumeClaimTemplate:
+        spec:
+          storageClassName: nfs4-csi
+          accessModes:
+          - ReadWriteMany
+          resources:
+            requests:
+              storage: 1Gi{{ end }}{{ end }}
 `
 
 const RevisionRunTemplate = `

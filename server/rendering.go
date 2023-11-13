@@ -47,6 +47,13 @@ type Workspace struct {
 	WorkspaceKindShortName string
 }
 
+type VolumeClaimTemplates struct {
+	Name             string
+	StorageClassName string
+	AccessModes      string
+	Storage          string
+}
+
 const PipelineRunTemplate = `
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun

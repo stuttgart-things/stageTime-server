@@ -72,8 +72,7 @@ spec:
         - {{ . }}{{ end }}{{ end }}{{ end }}
   workspaces:{{ range .Workspaces }}
     - name: {{ .Name }}
-      {{ .WorkspaceKind }}:{{ if eq .WorkspaceKind "volumeClaimTemplate" }}
-	  spec:
+      {{ .WorkspaceKind }}:{{ if eq .WorkspaceKind "volumeClaimTemplate" }}spec:
         storageClassName: openebs-hostpath
 	    accessModes:
           - ReadWriteOnce

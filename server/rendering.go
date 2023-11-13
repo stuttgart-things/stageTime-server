@@ -63,7 +63,6 @@ metadata:
   name: {{ .NamePrefix }}-{{ .Stage }}-{{ .Name }}-{{ .NameSuffix }}
   namespace: {{ .Namespace }}
   labels:
-    argocd.argoproj.io/instance: tekton-runs
     stagetime/commit: "{{ .RevisionRunCommitId }}"
     stagetime/repo: {{ .RevisionRunRepoName }}
     stagetime/author: {{ .RevisionRunAuthor }}

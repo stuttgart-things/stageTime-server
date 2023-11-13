@@ -22,22 +22,23 @@ var (
 )
 
 type PipelineRun struct {
-	Name                string
-	RevisionRunAuthor   string
-	RevisionRunRepoName string
-	RevisionRunRepoUrl  string
-	RevisionRunCommitId string
-	RevisionRunCreation string
-	Namespace           string
-	PipelineRef         string
-	ServiceAccount      string
-	Timeout             string
-	Params              map[string]string
-	ListParams          map[string][]string
-	Workspaces          []Workspace
-	NamePrefix          string
-	NameSuffix          string
-	Stage               string
+	Name                 string
+	RevisionRunAuthor    string
+	RevisionRunRepoName  string
+	RevisionRunRepoUrl   string
+	RevisionRunCommitId  string
+	RevisionRunCreation  string
+	Namespace            string
+	PipelineRef          string
+	ServiceAccount       string
+	Timeout              string
+	Params               map[string]string
+	ListParams           map[string][]string
+	Workspaces           []Workspace
+	NamePrefix           string
+	NameSuffix           string
+	Stage                string
+	VolumeClaimTemplates string
 }
 
 type Workspace struct {

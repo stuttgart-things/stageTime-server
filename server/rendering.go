@@ -60,7 +60,7 @@ const PipelineRunTemplate = `
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: {{ .NamePrefix }}-{{ .Stage }}-{{ .Name }}-{{ .NameSuffix }}
+  name: "{{ .NamePrefix }}-{{ .Stage }}-{{ .Name }}-{{ .NameSuffix }}"
   namespace: {{ .Namespace }}
   labels:
     stagetime/commit: "{{ .RevisionRunCommitId }}"

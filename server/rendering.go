@@ -66,15 +66,15 @@ spec:
   pipelineRef:
     name: {{ .PipelineRef }}
   params:{{ range $name, $value := .Params }}
-    - name: {{ $name }}
-      value: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}
-    - name: {{ $name }}
-      value: {{ range $values }}
-        - {{ . }}{{ end }}{{ end }}{{ end }}
+  - name: {{ $name }}
+    value: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}
+  - name: {{ $name }}
+    value: {{ range $values }}
+      - {{ . }}{{ end }}{{ end }}{{ end }}
   workspaces:{{ range .Workspaces }}
-    - name: {{ .Name }}
-      {{ .WorkspaceKind }}:
-        {{ .WorkspaceKindShortName }}: {{ .WorkspaceRef }}{{ end }}
+  - name: {{ .Name }}
+    {{ .WorkspaceKind }}:
+      {{ .WorkspaceKindShortName }}: {{ .WorkspaceRef }}{{ end }}
 `
 
 const RevisionRunTemplate = `

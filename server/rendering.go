@@ -83,7 +83,10 @@ spec:
     - name: {{ .Name }}
       {{ .WorkspaceKind }}:
         {{ .WorkspaceKindShortName }}: {{ .WorkspaceRef }}{{ end }}
-  {{ if .VolumeClaimTemplates }}hello{{ end }}
+    {{ if .VolumeClaimTemplates }}{{ range .VolumeClaimTemplates }}
+    - name: {{ .Name }}
+	  volumeClaimTemplate:
+	    spec:{{ end }}{{ end }}
 `
 
 const RevisionRunTemplate = `

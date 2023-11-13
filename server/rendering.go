@@ -132,8 +132,8 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			pipelineParams[strings.TrimSpace(values[0])] = strings.TrimSpace(values[1])
 		}
 
+		// LOOP OVER PIPELINERUN PARAMS
 		for _, v := range strings.Split(pipelinerun.Listparams, ",") {
-
 			keyValues := strings.Split(v, "=")
 			var values []string
 

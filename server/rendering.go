@@ -54,7 +54,6 @@ metadata:
   name: "{{ .NamePrefix }}-{{ .Stage }}-{{ .Name }}-{{ .NameSuffix }}"
   namespace: {{ .Namespace }}
   labels:
-    argocd.argoproj.io/instance: tekton-runs
     stagetime/commit: "{{ .RevisionRunCommitId }}"
     stagetime/repo: {{ .RevisionRunRepoName }}
     stagetime/author: {{ .RevisionRunAuthor }}
@@ -73,8 +72,15 @@ spec:
       - {{ . }}{{ end }}{{ end }}{{ end }}
   workspaces:{{ range .Workspaces }}
   - name: {{ .Name }}
-    {{ .WorkspaceKind }}:
-      {{ .WorkspaceKindShortName }}: {{ .WorkspaceRef }}{{ end }}
+    {{ .WorkspaceKind }}:{{ if eq .WorkspaceKind "volumeClaimTemplate" }}
+	spec:
+      storageClassName: openebs-hostpath
+	  accessModes:
+	    - ReadWriteOnce
+	  resources:
+	    requests:
+          storage: 1Gi{{ else }}
+      {{ .WorkspaceKindShortName }}: {{ .WorkspaceRef }}{{ end }}{{ end }}
 `
 
 const RevisionRunTemplate = `

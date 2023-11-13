@@ -57,10 +57,10 @@ type VolumeClaimTemplate struct {
 }
 
 const PipelineRunTemplate = `
-apiVersion: tekton.dev/v1beta1
+apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: "{{ .NamePrefix }}-{{ .Stage }}-{{ .Name }}-{{ .NameSuffix }}"
+  name: {{ .NamePrefix }}-{{ .Stage }}-{{ .Name }}-{{ .NameSuffix }}
   namespace: {{ .Namespace }}
   labels:
     argocd.argoproj.io/instance: tekton-runs
@@ -68,7 +68,6 @@ metadata:
     stagetime/repo: {{ .RevisionRunRepoName }}
     stagetime/author: {{ .RevisionRunAuthor }}
     stagetime/stage: "{{ .Stage }}"
-    tekton.dev/pipeline: {{ .PipelineRef }}
 spec:
   serviceAccountName: {{ .ServiceAccount }}
   timeout: {{ .Timeout }}

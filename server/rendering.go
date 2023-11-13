@@ -28,6 +28,7 @@ type PipelineRun struct {
 	RevisionRunRepoUrl   string
 	RevisionRunCommitId  string
 	RevisionRunCreation  string
+	PipelineResolver     PipelineResolverConfig
 	Namespace            string
 	PipelineRef          string
 	ServiceAccount       string
@@ -55,6 +56,13 @@ type VolumeClaimTemplate struct {
 	Storage          string
 }
 
+type PipelineResolverConfig struct {
+	ResolverType string
+	Url          string
+	Revsion      string
+	PathInRepo   string
+}
+
 const PipelineRunTemplate = `
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
@@ -72,7 +80,7 @@ spec:
   serviceAccountName: {{ .ServiceAccount }}
   timeout: {{ .Timeout }}
   pipelineRef:
-    name: {{ .PipelineRef }}
+    {{ if .PipelineRef }}name: {{ .PipelineRef }}{{ else }}resolver: git{{ end }}
   params:{{ range $name, $value := .Params }}
     - name: {{ $name }}
       value: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}

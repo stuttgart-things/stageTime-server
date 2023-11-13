@@ -31,7 +31,6 @@ type PipelineRun struct {
 	ResolverParams       map[string]string
 	Namespace            string
 	PipelineRef          string
-	ServiceAccount       string
 	Timeout              string
 	Params               map[string]string
 	ListParams           map[string][]string
@@ -68,8 +67,6 @@ metadata:
     stagetime/author: {{ .RevisionRunAuthor }}
     stagetime/stage: "{{ .Stage }}"
 spec:
-  taskRunTemplate:
-    serviceAccountName: {{ .ServiceAccount }}
   timeout: {{ .Timeout }}
   pipelineRef:
     {{ if .PipelineRef }}name: {{ .PipelineRef }}{{ else }}resolver: git{{ end }}

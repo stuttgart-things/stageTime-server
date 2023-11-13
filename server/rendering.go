@@ -38,7 +38,7 @@ type PipelineRun struct {
 	NamePrefix           string
 	NameSuffix           string
 	Stage                string
-	VolumeClaimTemplates string
+	VolumeClaimTemplates []VolumeClaimTemplate
 }
 
 type Workspace struct {
@@ -48,7 +48,7 @@ type Workspace struct {
 	WorkspaceKindShortName string
 }
 
-type VolumeClaimTemplates struct {
+type VolumeClaimTemplate struct {
 	Name             string
 	StorageClassName string
 	AccessModes      string

@@ -54,6 +54,7 @@ metadata:
   name: "{{ .NamePrefix }}-{{ .Stage }}-{{ .Name }}-{{ .NameSuffix }}"
   namespace: {{ .Namespace }}
   labels:
+    argocd.argoproj.io/instance: tekton-runs
     stagetime/commit: "{{ .RevisionRunCommitId }}"
     stagetime/repo: {{ .RevisionRunRepoName }}
     stagetime/author: {{ .RevisionRunAuthor }}
@@ -65,21 +66,15 @@ spec:
   pipelineRef:
     name: {{ .PipelineRef }}
   params:{{ range $name, $value := .Params }}
-    - name: {{ $name }}
-      value: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}
-    - name: {{ $name }}
-      value: {{ range $values }}
-        - {{ . }}{{ end }}{{ end }}{{ end }}
+	- name: {{ $name }}
+		value: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}
+	- name: {{ $name }}
+		value: {{ range $values }}
+		- {{ . }}{{ end }}{{ end }}{{ end }}
   workspaces:{{ range .Workspaces }}
-    - name: {{ .Name }}
-      {{ .WorkspaceKind }}:{{ if eq .WorkspaceKind "volumeClaimTemplate" }}spec:
-        storageClassName: openebs-hostpath
-	    accessModes:
-          - ReadWriteOnce
-	    resources:
-	      requests:
-            storage: 1Gi{{ else }}
-        {{ .WorkspaceKindShortName }}: {{ .WorkspaceRef }}{{ end }}{{ end }}
+	- name: {{ .Name }}
+		{{ .WorkspaceKind }}:
+		{{ .WorkspaceKindShortName }}: {{ .WorkspaceRef }}{{ end }}
 `
 
 const RevisionRunTemplate = `
@@ -131,8 +126,8 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			pipelineParams[strings.TrimSpace(values[0])] = strings.TrimSpace(values[1])
 		}
 
-		// LOOP OVER PIPELINERUN PARAMS
 		for _, v := range strings.Split(pipelinerun.Listparams, ",") {
+
 			keyValues := strings.Split(v, "=")
 			var values []string
 

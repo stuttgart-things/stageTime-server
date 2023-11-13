@@ -97,7 +97,7 @@ tasks:
       - nerdctl run -e SERVER_PORT={{ .LOCAL_CONTAINER_SERVER_PORT }} -p {{ .LOCAL_CONTAINER_SERVER_PORT }}:{{ .LOCAL_CONTAINER_SERVER_PORT }}  {{ .REGISTRY }}/{{ .PROJECT_NAME }}/{{ .PROJECT_NAME }}:{{ .DATE }}
 
   tag:
-    desc: Commit, push & tag the module
+    desc: Commit, push & tag the module on remote
     deps: [lint, proto]
     cmds:
       - rm -rf dist

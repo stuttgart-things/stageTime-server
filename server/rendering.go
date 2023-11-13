@@ -67,13 +67,13 @@ spec:
     name: {{ .PipelineRef }}
   params:{{ range $name, $value := .Params }}
 	- name: {{ $name }}
-		value: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}
+	  value: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}
 	- name: {{ $name }}
-		value: {{ range $values }}
+	  value: {{ range $values }}
 		- {{ . }}{{ end }}{{ end }}{{ end }}
   workspaces:{{ range .Workspaces }}
 	- name: {{ .Name }}
-		{{ .WorkspaceKind }}:
+	  {{ .WorkspaceKind }}:
 		{{ .WorkspaceKindShortName }}: {{ .WorkspaceRef }}{{ end }}
 `
 

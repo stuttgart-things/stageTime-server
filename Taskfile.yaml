@@ -119,17 +119,6 @@ tasks:
         git commit -am "${COMMIT_MESSAGE} for {{ .UPDATED_TAG_VERSION }}"
       - git push
 
-  git-push:
-    desc: Commit & push the module
-    cmds:
-      - rm -rf ./dist
-      - go mod tidy
-      - git pull
-      - git config advice.addIgnoredFile false
-      - git add *
-      - git commit -am 'updated {{ .PROJECT_NAME }} {{ .DATE }} for tag version {{ .UPDATED_TAG_VERSION }}{{ .BRANCH }}'
-      - git push
-
   package:
     desc: Update Chart.yaml and package archive
     cmds:

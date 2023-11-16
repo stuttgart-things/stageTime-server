@@ -10,6 +10,7 @@ secrets:
       REDIS_PORT: {{ .Values.redisStack.port }}
       REDIS_PASSWORD: {{ .Values.redisPassword }}
 
+{{ if .Values.enableCertificateRequest }}
 customresources:
   stagetime-ingress-certificate:
     apiVersion: cert-manager.io/v1
@@ -26,7 +27,9 @@ customresources:
         name: cluster-issuer-approle
         kind: ClusterIssuer
       secretName: stagetime-server-ingress-tls
+{{ end }}
 
+{{ if .Values.enableIngress }}
 ingress:
   stagetime-server:
     labels:
@@ -46,3 +49,4 @@ ingress:
     tls:
       secretName: stagetime-server-ingress-tls
       host: {{ .Values.hostname }}.{{ .Values.ingressDomain }}
+{{ end }}

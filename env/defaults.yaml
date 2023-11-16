@@ -1,4 +1,8 @@
 ---
+persistenceEnabled: true
+enableIngress: false
+enableCertificateRequest: false
+ingressDomain: stagetime.svc.cluster.local
 hostname: stagetime
 redisStack:
   port: 6379

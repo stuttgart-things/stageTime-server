@@ -28,10 +28,10 @@ deployment:
       memory: 128Mi
   containers:
     stagetime-server:
-      image: eu.gcr.io/stuttgart-things/stagetime-server
+      image: scr.cd43.sthings-pve.labul.sva.de/stagetime-server/stagetime-server
       replicaCount: 1
       imagePullPolicy: Always
-      tag: 23.1115.1727-0.3.48
+      tag: 23.1116.0648-0.3.48
       securityContext:
         capabilities: {}
 services:

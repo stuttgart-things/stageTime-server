@@ -1,5 +1,5 @@
 ---
 enableIngress: false
-redisPassword: ref+vault://stagetime/redis/password
+redisPassword: vlusterR0cks
 redisServer: redis-stack-headless.stagetime-redis.svc.cluster.local
 persistenceEnabled: false

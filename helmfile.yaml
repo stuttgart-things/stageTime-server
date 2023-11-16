@@ -14,7 +14,6 @@ releases:
     version: 0.3.48
     values:
       - "env/values.yaml.gotmpl"
-
 environments:
   labul-pve-dev:
     values:
@@ -24,17 +23,20 @@ environments:
     values:
       - env/defaults.yaml
       - env/{{ .Environment.Name }}.yaml
-
 repositories:
   - name: stagetime-server
     url: scr.cd43.sthings-pve.labul.sva.de/stagetime-server
     oci: true
   - name: redis
     url: https://charts.bitnami.com/bitnami
-
 helmDefaults:
   verify: false
   wait: false
   timeout: 600
   recreatePods: false
   force: true
+web:
+  environment:
+    - null
+    - null
+    - MAINTENANCE_MODE=true

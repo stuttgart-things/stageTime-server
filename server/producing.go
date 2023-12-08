@@ -51,6 +51,7 @@ func SendStageToMessageQueue(stageID string) {
 
 func CreateTable(renderedPipelineruns map[int][]string) {
 
+	fmt.Println("TABLE")
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
 
 		for j, pr := range renderedPipelineruns[i] {

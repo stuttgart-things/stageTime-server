@@ -7,10 +7,7 @@ package server
 import (
 	"fmt"
 	"os"
-	"strings"
 
-	redis "github.com/go-redis/redis/v7"
-	sthingsBase "github.com/stuttgart-things/sthingsBase"
 	sthingsCli "github.com/stuttgart-things/sthingsCli"
 )
 
@@ -21,7 +18,26 @@ var (
 	redisStream   = os.Getenv("REDIS_STREAM")
 )
 
-func SendPipelineRunToMessageQueue(stageID string) {
+type PipelineRunStatus struct {
+	Name    string
+	Status  string
+	CanFail bool
+}
+
+type StageStatus struct {
+	ID                string
+	Status            string
+	PipelineRunStatus []PipelineRunStatus
+}
+
+type RevisionRunStatus struct {
+	ID          string
+	CountStages string
+	Status      string
+	StageStatus []StageStatus
+}
+
+func SendStageToMessageQueue(stageID string) {
 
 	streamValues := map[string]interface{}{
 		"stage": stageID,
@@ -33,34 +49,34 @@ func SendPipelineRunToMessageQueue(stageID string) {
 
 }
 
-func SendStatsToRedis(renderedPipelineruns map[int][]string) {
+// func SendStatsToRedis(renderedPipelineruns map[int][]string) {
 
-	redisClient := redis.NewClient(&redis.Options{
-		Addr:     redisAddress + ":" + redisPort,
-		Password: redisPassword, // no password set
-		DB:       0,             // use default DB
-	})
+// 	redisClient := redis.NewClient(&redis.Options{
+// 		Addr:     redisAddress + ":" + redisPort,
+// 		Password: redisPassword, // no password set
+// 		DB:       0,             // use default DB
+// 	})
 
-	for i := 0; i < (len(renderedPipelineruns)); i++ {
+// 	for i := 0; i < (len(renderedPipelineruns)); i++ {
 
-		for j, pr := range renderedPipelineruns[i] {
+// 		for j, pr := range renderedPipelineruns[i] {
 
-			fmt.Println(j)
-			fmt.Println(pr)
+// 			fmt.Println(j)
+// 			fmt.Println(pr)
 
-			resourceName, _ := sthingsBase.GetRegexSubMatch(pr, `name: "(.*?)"`)
-			prIdentifier := strings.Split(resourceName, "-")
-			err := redisClient.Set("prIdentifier", prIdentifier[(len(prIdentifier)-1)], 0).Err()
-			if err != nil {
-				panic(err)
-			}
+// 			resourceName, _ := sthingsBase.GetRegexSubMatch(pr, `name: "(.*?)"`)
+// 			prIdentifier := strings.Split(resourceName, "-")
+// 			err := redisClient.Set("prIdentifier", prIdentifier[(len(prIdentifier)-1)], 0).Err()
+// 			if err != nil {
+// 				panic(err)
+// 			}
 
-			err = redisClient.Set("countPipelineRuns", len(renderedPipelineruns), 0).Err()
-			if err != nil {
-				panic(err)
-			}
+// 			err = redisClient.Set("countPipelineRuns", len(renderedPipelineruns), 0).Err()
+// 			if err != nil {
+// 				panic(err)
+// 			}
 
-		}
-	}
+// 		}
+// 	}
 
-}
+// }

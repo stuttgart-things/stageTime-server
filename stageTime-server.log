@@ -1,0 +1,5 @@
+{"level":"info","msg":"gRPC server running on port :50051","time":"06 Dec 23 15:05 UTC"}
+{"level":"info","msg":"redis server ","time":"06 Dec 23 15:05 UTC"}
+{"level":"info","msg":"redis port ","time":"06 Dec 23 15:05 UTC"}
+{"level":"info","msg":"redis queue ","time":"06 Dec 23 15:05 UTC"}
+{"level":"info","msg":"stageTime-server running at [::]:50051:50051","time":"06 Dec 23 15:05 UTC"}

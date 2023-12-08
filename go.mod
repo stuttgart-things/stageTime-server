@@ -2,7 +2,6 @@ module github.com/stuttgart-things/stageTime-server
 
 require (
 	github.com/fatih/color v1.14.1
-	github.com/go-redis/redis/v7 v7.4.1
 	github.com/golang/protobuf v1.5.3
 	github.com/gomodule/redigo v1.8.3
 	github.com/nitishm/go-rejson/v4 v4.1.1-0.20230331060235-d2aa875760e4

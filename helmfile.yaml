@@ -35,8 +35,3 @@ helmDefaults:
   timeout: 600
   recreatePods: false
   force: true
-web:
-  environment:
-    - null
-    - null
-    - MAINTENANCE_MODE=true

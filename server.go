@@ -89,7 +89,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	log.Info("ALL PIPELINERUNS CAN BE RENDERED")
 
 	// SEND STATS TO REDIS
-	server.SendStatsToRedis(renderedPipelineruns)
+	// server.SendStatsToRedis(renderedPipelineruns)
 
 	// LOOP OVER REVISIONRUN
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
@@ -125,24 +125,25 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 
 	// HANDLING OF REVISONRUN CR
 	fmt.Println("REVISONRUN PRINTED")
-	cr := server.RenderRevisionRunCR()
-	fmt.Println(string(cr))
-	crJSON := sthingsCli.ConvertYAMLToJSON(string(cr))
-	fmt.Println(crJSON)
 	stageID := "stageTime-" + gRPCRequest.CommitId[0:4]
-	fmt.Println("COMMIT ID: ", stageID)
-	sthingsCli.SetRedisJSON(redisJSONHandler, crJSON, stageID)
+	fmt.Println("REVISIONRUN ID: ", stageID)
 	sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+stageID, stageID)
 
+	// cr := server.RenderRevisionRunCR()
+	// fmt.Println(string(cr))
+	// crJSON := sthingsCli.ConvertYAMLToJSON(string(cr))
+	// fmt.Println(crJSON)
+	// sthingsCli.SetRedisJSON(redisJSONHandler, crJSON, stageID)
+
 	// SEND PIPELINERUN TO REDIS MESSAGEQUEUE
-	server.SendPipelineRunToMessageQueue(now.Format(time.RFC3339) + "-" + stageID)
-	log.Info("PIPELINERUN WERE STORED IN MESSAGEQUEUE ", stageID)
+	server.SendStageToMessageQueue(now.Format(time.RFC3339) + "-" + stageID)
+	log.Info("STAGE WAS STORED IN MESSAGEQUEUE ", stageID)
 
 	// SEND gRPC RESPONSE
 	return &revisionrun.Response{
 		Result: revisionrun.Response_SUCCESS,
 		Success: &revisionrun.Response_Success{
-			Data: []byte("GOOD JOB - REVISIONRUN WAS STORED IN MESSAGEQUEUE"),
+			Data: []byte("GOOD JOB - REVISIONRUN WAS CREATED"),
 		},
 	}, nil
 }

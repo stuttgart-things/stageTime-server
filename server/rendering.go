@@ -14,7 +14,6 @@ import (
 	"time"
 
 	revisionrun "github.com/stuttgart-things/stageTime-server/revisionrun"
-	sthingsBase "github.com/stuttgart-things/sthingsBase"
 )
 
 var (
@@ -196,17 +195,17 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 }
 
 // TEST DATA - TO BE REPLACED
-func RenderRevisionRunCR() (renderedCR []byte) {
+// func RenderRevisionRunCR() (renderedCR []byte) {
 
-	cr := make(map[string]interface{})
-	cr["Name"] = "44c6fec0098"
-	cr["Namespace"] = "tekton"
-	cr["Repository"] = "stuttgart-things"
-	cr["RevisionRun"] = "44c6fec0098-123"
-	cr["Stages"] = []string{"0", "1", "2"}
-	cr["PipelineRuns"] = []string{"0-2321", "1-312", "2-321312"}
+// 	cr := make(map[string]interface{})
+// 	cr["Name"] = "44c6fec0098"
+// 	cr["Namespace"] = "tekton"
+// 	cr["Repository"] = "stuttgart-things"
+// 	cr["RevisionRun"] = "44c6fec0098-123"
+// 	cr["Stages"] = []string{"0", "1", "2"}
+// 	cr["PipelineRuns"] = []string{"0-2321", "1-312", "2-321312"}
 
-	renderedCR, _ = sthingsBase.RenderTemplateInline(RevisionRunTemplate, "missingkey=error", "{{", "}}", cr)
+// 	renderedCR, _ = sthingsBase.RenderTemplateInline(RevisionRunTemplate, "missingkey=error", "{{", "}}", cr)
 
-	return renderedCR
-}
+// 	return renderedCR
+// }

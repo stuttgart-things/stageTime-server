@@ -49,7 +49,18 @@ func SendStageToMessageQueue(stageID string) {
 
 }
 
-// func SendStatsToRedis(renderedPipelineruns map[int][]string) {
+func CreateTable(renderedPipelineruns map[int][]string) {
+
+	for i := 0; i < (len(renderedPipelineruns)); i++ {
+
+		for j, pr := range renderedPipelineruns[i] {
+
+			fmt.Println(j, pr)
+
+		}
+	}
+
+}
 
 // 	redisClient := redis.NewClient(&redis.Options{
 // 		Addr:     redisAddress + ":" + redisPort,

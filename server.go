@@ -89,7 +89,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	log.Info("ALL PIPELINERUNS CAN BE RENDERED")
 
 	// SEND STATS TO REDIS
-	// server.SendStatsToRedis(renderedPipelineruns)
+	server.CreateTable(renderedPipelineruns)
 
 	// LOOP OVER REVISIONRUN
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
@@ -112,7 +112,6 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+revisionRunID+"-"+"stages", stage)
 			sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+revisionRunID, resourceName)
 			log.Info("REVISIONRUN NAME "+resourceName+" STORED ON ", now.Format(time.RFC3339)+"-"+revisionRunID)
-
 			sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+revisionRunID+"-"+stage, resourceName)
 			log.Info("REVISIONRUN NAME "+resourceName+" STORED ON ", now.Format(time.RFC3339)+"-"+revisionRunID+"-"+stage)
 

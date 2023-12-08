@@ -125,7 +125,6 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 
 	// INIT PR MAP
 	renderedPipelineruns = make(map[int][]string)
-
 	// LOOP OVER PR MAP
 	for _, pipelinerun := range gRPCRequest.Pipelineruns {
 

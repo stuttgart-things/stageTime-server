@@ -25,7 +25,7 @@ environments:
       - env/{{ .Environment.Name }}.yaml
 repositories:
   - name: stagetime-server
-    url: scr.cd43.sthings-pve.labul.sva.de/stagetime-server
+    url: scr.app.4sthings.tiab.ssc.sva.de/stagetime-server
     oci: true
   - name: redis
     url: https://charts.bitnami.com/bitnami

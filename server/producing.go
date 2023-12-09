@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 
+	sthingsBase "github.com/stuttgart-things/sthingsBase"
 	sthingsCli "github.com/stuttgart-things/sthingsCli"
 )
 
@@ -19,9 +20,11 @@ var (
 )
 
 type PipelineRunStatus struct {
-	Name    string
-	Status  string
-	CanFail bool
+	Stage       int
+	PipelineRun string
+	CanFail     bool
+	LastUpdated string
+	Status      string
 }
 
 type StageStatus struct {
@@ -51,15 +54,25 @@ func SendStageToMessageQueue(stageID string) {
 
 func CreateTable(renderedPipelineruns map[int][]string) {
 
-	fmt.Println("TABLE")
+	countPipelineRuns := 0
+	stageNumber := ""
+
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
 
-		for j, pr := range renderedPipelineruns[i] {
-
-			fmt.Println(j, pr)
-
+		for _, pr := range renderedPipelineruns[i] {
+			countPipelineRuns += 1
+			stageNumber, _ = sthingsBase.GetRegexSubMatch(pr, `stage: "(.*?)"`)
 		}
+
 	}
+
+	countStage := sthingsBase.ConvertStringToInteger(stageNumber) + 1
+
+	fmt.Println("TOTAL STAGES:")
+	fmt.Println(countStage)
+
+	fmt.Println("TOTAL PIPELINERUNS:")
+	fmt.Println(countPipelineRuns)
 
 }
 

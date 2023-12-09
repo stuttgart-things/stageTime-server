@@ -35,11 +35,23 @@ const (
 	port = ":50051"
 )
 
+type RevisionRunStatus struct {
+	RevisionRun       string
+	CountStages       int
+	CountPipelineRuns int
+	LastUpdated       string
+	Status            string
+}
+
 var (
-	serverPort  = port
-	logfilePath = "stageTime-server.log"
-	log         = sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
-	now         = time.Now()
+	serverPort        = port
+	logfilePath       = "stageTime-server.log"
+	log               = sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
+	now               = time.Now()
+	countStage        int
+	stage             string
+	revisionRunID     string
+	countPipelineRuns = 0
 )
 
 var (
@@ -93,9 +105,10 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 
 		for _, pr := range renderedPipelineruns[i] {
 
+			countPipelineRuns += 1
 			resourceName, _ := sthingsBase.GetRegexSubMatch(pr, `name: "(.*?)"`)
-			revisionRunID, _ := sthingsBase.GetRegexSubMatch(pr, `commit: "(.*?)"`)
-			stage, _ := sthingsBase.GetRegexSubMatch(pr, `stage: "(.*?)"`)
+			revisionRunID, _ = sthingsBase.GetRegexSubMatch(pr, `commit: "(.*?)"`)
+			stage, _ = sthingsBase.GetRegexSubMatch(pr, `stage: "(.*?)"`)
 
 			prIdentifier := strings.Split(resourceName, "-")
 
@@ -118,6 +131,17 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			sthingsCli.SetRedisJSON(redisJSONHandler, prJSON, resourceName)
 		}
 	}
+
+	countStage := sthingsBase.ConvertStringToInteger(stage) + 1
+
+	rrs := RevisionRunStatus{
+		RevisionRun:       revisionRunID,
+		CountStages:       countStage,
+		CountPipelineRuns: countPipelineRuns,
+		LastUpdated:       now.Format("2006-01-02 15:04:05"),
+		Status:            "CREATED W/ STAGETIME-SERVER",
+	}
+	fmt.Println(rrs)
 
 	// HANDLING OF REVISONRUN CR
 	fmt.Println("REVISONRUN PRINTED")

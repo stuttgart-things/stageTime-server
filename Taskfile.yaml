@@ -145,6 +145,7 @@ tasks:
 
   vcluster:
     desc: Test deploy on vcluster
+    deps: [push]
     cmds:
       - vcluster disconnect || true
       - vcluster create {{ .VCLUSTER_NAME }} --expose --set storage.className={{ .VCLUSTER_STORAGE_CLASS }} --update-current -n {{ .VCLUSTER_NAMESPACE }}

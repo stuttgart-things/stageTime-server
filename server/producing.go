@@ -7,6 +7,9 @@ package server
 import (
 	"fmt"
 	"os"
+	"time"
+
+	"github.com/jedib0t/go-pretty/v6/table"
 
 	sthingsBase "github.com/stuttgart-things/sthingsBase"
 	sthingsCli "github.com/stuttgart-things/sthingsCli"
@@ -34,10 +37,11 @@ type StageStatus struct {
 }
 
 type RevisionRunStatus struct {
-	ID          string
-	CountStages string
-	Status      string
-	StageStatus []StageStatus
+	RevisionRun       string
+	CountStages       int
+	CountPipelineRuns int
+	LastUpdated       string
+	Status            string
 }
 
 func SendStageToMessageQueue(stageID string) {
@@ -52,28 +56,38 @@ func SendStageToMessageQueue(stageID string) {
 
 }
 
-func CreateTable(renderedPipelineruns map[int][]string) {
+func OutputRevisonRunStatus(renderedPipelineruns map[int][]string) {
 
+	t := time.Now()
 	countPipelineRuns := 0
 	stageNumber := ""
+	revisionRunID := ""
 
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
-
 		for _, pr := range renderedPipelineruns[i] {
 			countPipelineRuns += 1
 			stageNumber, _ = sthingsBase.GetRegexSubMatch(pr, `stage: "(.*?)"`)
+			revisionRunID, _ = sthingsBase.GetRegexSubMatch(pr, `commit: "(.*?)"`)
 		}
-
 	}
-
 	countStage := sthingsBase.ConvertStringToInteger(stageNumber) + 1
 
-	fmt.Println("TOTAL STAGES:")
-	fmt.Println(countStage)
+	rrs := RevisionRunStatus{
+		RevisionRun:       revisionRunID,
+		CountStages:       countStage,
+		CountPipelineRuns: countPipelineRuns,
+		LastUpdated:       t.Format("2006-01-02 15:04:05"),
+		Status:            "CREATED W/ STAGETIME-SERVER",
+	}
 
-	fmt.Println("TOTAL PIPELINERUNS:")
-	fmt.Println(countPipelineRuns)
-
+	tw := table.NewWriter()
+	header := sthingsCli.CreateTableHeader(rrs)
+	tw.AppendHeader(header)
+	tw.AppendRow(sthingsCli.CreateTableRows(rrs))
+	tw.AppendSeparator()
+	tw.SetStyle(table.StyleColoredBright)
+	tw.SetOutputMirror(os.Stdout)
+	tw.Render()
 }
 
 // 	redisClient := redis.NewClient(&redis.Options{

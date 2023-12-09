@@ -4,6 +4,7 @@ require (
 	github.com/fatih/color v1.14.1
 	github.com/golang/protobuf v1.5.3
 	github.com/gomodule/redigo v1.8.3
+	github.com/jedib0t/go-pretty/v6 v6.4.6
 	github.com/nitishm/go-rejson/v4 v4.1.1-0.20230331060235-d2aa875760e4
 	github.com/stuttgart-things/sthingsBase v0.1.30
 	github.com/stuttgart-things/sthingsCli v0.1.39
@@ -53,7 +54,6 @@ require (
 	github.com/huandu/xstrings v1.3.3 // indirect
 	github.com/imdario/mergo v0.3.13 // indirect
 	github.com/jbenet/go-context v0.0.0-20150711004518-d14ea06fba99 // indirect
-	github.com/jedib0t/go-pretty/v6 v6.4.6 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 	github.com/kevinburke/ssh_config v1.2.0 // indirect
 	github.com/kyokomi/emoji/v2 v2.2.11 // indirect

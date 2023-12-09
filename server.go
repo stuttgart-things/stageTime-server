@@ -88,9 +88,6 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	renderedPipelineruns := server.RenderPipelineRuns(gRPCRequest)
 	log.Info("ALL PIPELINERUNS CAN BE RENDERED")
 
-	// SEND STATS TO REDIS
-	server.CreateTable(renderedPipelineruns)
-
 	// LOOP OVER REVISIONRUN
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
 
@@ -134,6 +131,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	// fmt.Println(crJSON)
 	// sthingsCli.SetRedisJSON(redisJSONHandler, crJSON, stageID)
 
+	// OUTPUT RevisionRun STATUS
+	server.OutputRevisonRunStatus(renderedPipelineruns)
 	// SEND PIPELINERUN TO REDIS MESSAGEQUEUE
 	server.SendStageToMessageQueue(now.Format(time.RFC3339) + "-" + stageID)
 	log.Info("STAGE WAS STORED IN MESSAGEQUEUE ", stageID)

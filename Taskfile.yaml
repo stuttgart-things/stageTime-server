@@ -152,4 +152,4 @@ tasks:
       - vcluster connect {{ .VCLUSTER_NAME }} -n {{ .VCLUSTER_NAMESPACE }}
       - helmfile sync --environment {{ .VCLUSTER_HELMFILE_ENV }}
       - helmfile test --environment {{ .VCLUSTER_HELMFILE_ENV }}
-      - vcluster disconnect
+      # - vcluster disconnect

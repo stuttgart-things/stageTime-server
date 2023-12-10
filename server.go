@@ -143,9 +143,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	}
 
 	fmt.Println("STAGGGGGE", stages)
-
-	for pipelineRunCount := range stages {
-		fmt.Println(pipelineRunCount)
+	for key := range stages {
+		fmt.Println(stages[key])
 	}
 
 	countStage := sthingsBase.ConvertStringToInteger(stage) + 1

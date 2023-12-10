@@ -63,7 +63,6 @@ var (
 	logfilePath       = "stageTime-server.log"
 	log               = sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
 	now               = time.Now()
-	countStage        int
 	stage             string
 	revisionRunID     string
 	countPipelineRuns = 0
@@ -194,7 +193,6 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	}
 
 	// HANDLING OF REVISONRUN CR
-	fmt.Println("REVISONRUN PRINTED")
 	stageID := "stageTime-" + gRPCRequest.CommitId[0:4]
 	fmt.Println("REVISIONRUN ID: ", stageID)
 	sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+stageID, stageID)

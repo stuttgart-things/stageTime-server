@@ -108,7 +108,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	log.Info("ALL PIPELINERUNS CAN BE RENDERED")
 
 	// LOOP OVER REVISIONRUN
-	stages := make(map[string]string)
+	stages := make(map[string]int)
 
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
 
@@ -142,11 +142,6 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		}
 	}
 
-	fmt.Println("STAGGGGGE", stages)
-	for key := range stages {
-		fmt.Println(stages[key])
-	}
-
 	countStage := sthingsBase.ConvertStringToInteger(stage) + 1
 
 	// CREATE ON REVISIONRUN STATUS ON REDIS + PRINT AS TABLE
@@ -162,13 +157,20 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 
 	// CREATE ON STATE STATUS ON REDIS + PRINT AS TABLE
 
-	// initialStageStatus := StageStatus{
-	// 	RevisionRun:       revisionRunID,
-	// 	CountPipelineRuns:       countStage,
-	// 	CountPipelineRuns: countPipelineRuns,
-	// 	LastUpdated:       now.Format("2006-01-02 15:04:05"),
-	// 	Status:            "CREATED W/ STAGETIME-SERVER",
-	// }
+	fmt.Println("STAGGGGGE", stages)
+	for key := range stages {
+
+		initialStageStatus := StageStatus{
+			RevisionRun:       revisionRunID,
+			CountPipelineRuns: stages[key],
+			LastUpdated:       now.Format("2006-01-02 15:04:05"),
+			Status:            "CREATED W/ STAGETIME-SERVER",
+		}
+
+		sthingsCli.SetRedisJSON(redisJSONHandler, initialStageStatus, revisionRunID+"-stage")
+		server.PrintTable(initialStageStatus)
+
+	}
 
 	// HANDLING OF REVISONRUN CR
 	fmt.Println("REVISONRUN PRINTED")
@@ -228,13 +230,13 @@ func main() {
 	log.Fatalln(grpcServer.Serve(listener))
 }
 
-func SetStage(stages map[string]string, stage string) (updatedValue string) {
+func SetStage(stages map[string]int, stage string) (updatedValue int) {
 	existingValue, ok := stages[stage]
 
 	if ok {
-		updatedValue = sthingsBase.ConvertIntegerToString(sthingsBase.ConvertStringToInteger(existingValue) + 1)
+		updatedValue = existingValue + 1
 	} else {
-		updatedValue = "1"
+		updatedValue = 1
 	}
 
 	return

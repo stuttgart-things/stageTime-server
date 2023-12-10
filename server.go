@@ -50,6 +50,14 @@ type StageStatus struct {
 	Status            string
 }
 
+type PipelineRunStatus struct {
+	Stage           int
+	PipelineRunName string
+	CanFail         bool
+	LastUpdated     string
+	Status          string
+}
+
 var (
 	serverPort        = port
 	logfilePath       = "stageTime-server.log"
@@ -59,6 +67,7 @@ var (
 	stage             string
 	revisionRunID     string
 	countPipelineRuns = 0
+	pipelineRunStatus []PipelineRunStatus
 )
 
 var (
@@ -139,12 +148,22 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			prJSON := sthingsCli.ConvertYAMLToJSON(pr)
 			fmt.Println(string(prJSON))
 			sthingsCli.SetRedisJSON(redisJSONHandler, prJSON, resourceName)
+
+			// CREATE ON REVISIONRUN STATUS ON REDIS + PRINT AS TABLE
+			initialPrs := PipelineRunStatus{
+				Stage:           sthingsBase.ConvertStringToInteger(stage),
+				PipelineRunName: resourceName,
+				CanFail:         false,
+				LastUpdated:     now.Format("2006-01-02 15:04:05"),
+				Status:          "NOT STARTED (YET)",
+			}
+			pipelineRunStatus = append(pipelineRunStatus, initialPrs)
 		}
 	}
 
 	countStage := sthingsBase.ConvertStringToInteger(stage) + 1
 
-	// CREATE ON REVISIONRUN STATUS ON REDIS + PRINT AS TABLE
+	// CREATE REVISIONRUN STATUS ON REDIS + PRINT AS TABLE
 	initialRrs := RevisionRunStatus{
 		RevisionRun:       revisionRunID,
 		CountStages:       countStage,
@@ -155,9 +174,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	sthingsCli.SetRedisJSON(redisJSONHandler, initialRrs, revisionRunID+"-status")
 	server.PrintTable(initialRrs)
 
-	// CREATE ON STATE STATUS ON REDIS + PRINT AS TABLE
-
-	fmt.Println("STAGGGGGE", stages)
+	// CREATE STATE STATUS ON REDIS + PRINT AS TABLE
 	for key := range stages {
 
 		initialStageStatus := StageStatus{
@@ -166,10 +183,14 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			LastUpdated:       now.Format("2006-01-02 15:04:05"),
 			Status:            "CREATED W/ STAGETIME-SERVER",
 		}
-
 		sthingsCli.SetRedisJSON(redisJSONHandler, initialStageStatus, revisionRunID+"-stage")
 		server.PrintTable(initialStageStatus)
+	}
 
+	// CREATE PIPELINERUN STATUS ON REDIS + PRINT AS TABLE
+	for _, pr := range pipelineRunStatus {
+		sthingsCli.SetRedisJSON(redisJSONHandler, pr, revisionRunID+"-prs")
+		server.PrintTable(pr)
 	}
 
 	// HANDLING OF REVISONRUN CR

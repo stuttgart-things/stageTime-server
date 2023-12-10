@@ -22,28 +22,6 @@ var (
 	redisStream   = os.Getenv("REDIS_STREAM")
 )
 
-type PipelineRunStatus struct {
-	Stage       int
-	PipelineRun string
-	CanFail     bool
-	LastUpdated string
-	Status      string
-}
-
-type StageStatus struct {
-	ID                string
-	Status            string
-	PipelineRunStatus []PipelineRunStatus
-}
-
-type RevisionRunStatus struct {
-	RevisionRun       string
-	CountStages       int
-	CountPipelineRuns int
-	LastUpdated       string
-	Status            string
-}
-
 func SendStageToMessageQueue(stageID string) {
 
 	streamValues := map[string]interface{}{
@@ -89,33 +67,3 @@ func OutputRevisonRunStatus(renderedPipelineruns map[int][]string) {
 	tw.SetOutputMirror(os.Stdout)
 	tw.Render()
 }
-
-// 	redisClient := redis.NewClient(&redis.Options{
-// 		Addr:     redisAddress + ":" + redisPort,
-// 		Password: redisPassword, // no password set
-// 		DB:       0,             // use default DB
-// 	})
-
-// 	for i := 0; i < (len(renderedPipelineruns)); i++ {
-
-// 		for j, pr := range renderedPipelineruns[i] {
-
-// 			fmt.Println(j)
-// 			fmt.Println(pr)
-
-// 			resourceName, _ := sthingsBase.GetRegexSubMatch(pr, `name: "(.*?)"`)
-// 			prIdentifier := strings.Split(resourceName, "-")
-// 			err := redisClient.Set("prIdentifier", prIdentifier[(len(prIdentifier)-1)], 0).Err()
-// 			if err != nil {
-// 				panic(err)
-// 			}
-
-// 			err = redisClient.Set("countPipelineRuns", len(renderedPipelineruns), 0).Err()
-// 			if err != nil {
-// 				panic(err)
-// 			}
-
-// 		}
-// 	}
-
-// }

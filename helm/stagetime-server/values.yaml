@@ -27,13 +27,16 @@ deployment:
       cpu: 100m
       memory: 128Mi
   containers:
-    stagetime-server:
+    stagetimeserver:
       image: scr.cd43.sthings-pve.labul.sva.de/stagetime-server/stagetime-server
       replicaCount: 1
       imagePullPolicy: Always
       tag: 23.1210.1154-0.3.48
       securityContext:
         capabilities: {}
+    stagetime-server:
+      tag: 23.1210.2018-0.3.48
+      image: scr.cd43.sthings-pve.labul.sva.de/stagetime-server/stagetime-server
 services:
   stagetime-server:
     labels:

@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
     - name: wget
-      image: scr.cd43.sthings-pve.labul.sva.de/stagetime-server/stagetime-server:23.1109.1148-0.3.22
+      image: {{ .Values.deployment.containers.stagetimeserver.image }}:{{ .Values.deployment.containers.stagetimeserver.tag }}
       command: ['grpcCall']
       env:
         - name: STAGETIME_SERVER

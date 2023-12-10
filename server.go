@@ -35,29 +35,6 @@ const (
 	port = ":50051"
 )
 
-type RevisionRunStatus struct {
-	RevisionRun       string
-	CountStages       int
-	CountPipelineRuns int
-	LastUpdated       string
-	Status            string
-}
-
-type StageStatus struct {
-	RevisionRun       string
-	CountPipelineRuns int
-	LastUpdated       string
-	Status            string
-}
-
-type PipelineRunStatus struct {
-	Stage           int
-	PipelineRunName string
-	CanFail         bool
-	LastUpdated     string
-	Status          string
-}
-
 var (
 	serverPort        = port
 	logfilePath       = "stageTime-server.log"
@@ -66,7 +43,7 @@ var (
 	stage             string
 	revisionRunID     string
 	countPipelineRuns = 0
-	pipelineRunStatus []PipelineRunStatus
+	pipelineRunStatus []server.PipelineRunStatus
 )
 
 var (
@@ -149,7 +126,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			sthingsCli.SetRedisJSON(redisJSONHandler, prJSON, resourceName)
 
 			// CREATE ON REVISIONRUN STATUS ON REDIS + PRINT AS TABLE
-			initialPrs := PipelineRunStatus{
+			initialPrs := server.PipelineRunStatus{
 				Stage:           sthingsBase.ConvertStringToInteger(stage),
 				PipelineRunName: resourceName,
 				CanFail:         false,
@@ -163,7 +140,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	countStage := sthingsBase.ConvertStringToInteger(stage) + 1
 
 	// CREATE REVISIONRUN STATUS ON REDIS + PRINT AS TABLE
-	initialRrs := RevisionRunStatus{
+	initialRrs := server.RevisionRunStatus{
 		RevisionRun:       revisionRunID,
 		CountStages:       countStage,
 		CountPipelineRuns: countPipelineRuns,
@@ -176,7 +153,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	// CREATE STATE STATUS ON REDIS + PRINT AS TABLE
 	for key := range stages {
 
-		initialStageStatus := StageStatus{
+		initialStageStatus := server.StageStatus{
 			RevisionRun:       revisionRunID,
 			CountPipelineRuns: stages[key],
 			LastUpdated:       now.Format("2006-01-02 15:04:05"),

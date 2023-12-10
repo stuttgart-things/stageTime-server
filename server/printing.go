@@ -11,6 +11,29 @@ import (
 	sthingsCli "github.com/stuttgart-things/sthingsCli"
 )
 
+type RevisionRunStatus struct {
+	RevisionRun       string
+	CountStages       int
+	CountPipelineRuns int
+	LastUpdated       string
+	Status            string
+}
+
+type StageStatus struct {
+	RevisionRun       string
+	CountPipelineRuns int
+	LastUpdated       string
+	Status            string
+}
+
+type PipelineRunStatus struct {
+	Stage           int
+	PipelineRunName string
+	CanFail         bool
+	LastUpdated     string
+	Status          string
+}
+
 func PrintTable(printObject interface{}) {
 
 	tw := table.NewWriter()

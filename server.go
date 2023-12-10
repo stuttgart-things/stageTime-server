@@ -43,6 +43,13 @@ type RevisionRunStatus struct {
 	Status            string
 }
 
+type StageStatus struct {
+	RevisionRun       string
+	CountPipelineRuns int
+	LastUpdated       string
+	Status            string
+}
+
 var (
 	serverPort        = port
 	logfilePath       = "stageTime-server.log"
@@ -101,6 +108,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	log.Info("ALL PIPELINERUNS CAN BE RENDERED")
 
 	// LOOP OVER REVISIONRUN
+	stages := make(map[string]string)
+
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
 
 		for _, pr := range renderedPipelineruns[i] {
@@ -109,6 +118,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			resourceName, _ := sthingsBase.GetRegexSubMatch(pr, `name: "(.*?)"`)
 			revisionRunID, _ = sthingsBase.GetRegexSubMatch(pr, `commit: "(.*?)"`)
 			stage, _ = sthingsBase.GetRegexSubMatch(pr, `stage: "(.*?)"`)
+			stages[stage] = SetStage(stages, stage)
 
 			prIdentifier := strings.Split(resourceName, "-")
 
@@ -132,9 +142,11 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		}
 	}
 
+	fmt.Println("STAGGGGGE", stages)
+
 	countStage := sthingsBase.ConvertStringToInteger(stage) + 1
 
-	// CREATE ON REDIS + PRINT REVISIONRUN STATUS
+	// CREATE ON REVISIONRUN STATUS ON REDIS + PRINT AS TABLE
 	initialRrs := RevisionRunStatus{
 		RevisionRun:       revisionRunID,
 		CountStages:       countStage,
@@ -142,10 +154,18 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		LastUpdated:       now.Format("2006-01-02 15:04:05"),
 		Status:            "CREATED W/ STAGETIME-SERVER",
 	}
-
 	sthingsCli.SetRedisJSON(redisJSONHandler, initialRrs, revisionRunID+"-status")
 	server.PrintTable(initialRrs)
-	fmt.Println(initialRrs)
+
+	// CREATE ON STATE STATUS ON REDIS + PRINT AS TABLE
+
+	// initialStageStatus := StageStatus{
+	// 	RevisionRun:       revisionRunID,
+	// 	CountPipelineRuns:       countStage,
+	// 	CountPipelineRuns: countPipelineRuns,
+	// 	LastUpdated:       now.Format("2006-01-02 15:04:05"),
+	// 	Status:            "CREATED W/ STAGETIME-SERVER",
+	// }
 
 	// HANDLING OF REVISONRUN CR
 	fmt.Println("REVISONRUN PRINTED")
@@ -203,4 +223,16 @@ func main() {
 	revisionrun.RegisterStageTimeApplicationServiceServer(grpcServer, stageTimeServer)
 
 	log.Fatalln(grpcServer.Serve(listener))
+}
+
+func SetStage(stages map[string]string, stage string) (updatedValue string) {
+	existingValue, ok := stages[stage]
+
+	if ok {
+		updatedValue = sthingsBase.ConvertIntegerToString(sthingsBase.ConvertStringToInteger(existingValue) + 1)
+	} else {
+		updatedValue = "1"
+	}
+
+	return
 }

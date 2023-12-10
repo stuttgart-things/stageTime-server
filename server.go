@@ -144,6 +144,10 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 
 	fmt.Println("STAGGGGGE", stages)
 
+	for pipelineRunCount := range stages {
+		fmt.Println(pipelineRunCount)
+	}
+
 	countStage := sthingsBase.ConvertStringToInteger(stage) + 1
 
 	// CREATE ON REVISIONRUN STATUS ON REDIS + PRINT AS TABLE

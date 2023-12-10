@@ -35,7 +35,7 @@ deployment:
       securityContext:
         capabilities: {}
     stagetime-server:
-      tag: 23.1210.2018-0.3.48
+      tag: 23.1210.2101-v0.4.1
       image: scr.cd43.sthings-pve.labul.sva.de/stagetime-server/stagetime-server
 services:
   stagetime-server:

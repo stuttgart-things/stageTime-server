@@ -20,7 +20,7 @@ type RevisionRunStatus struct {
 }
 
 type StageStatus struct {
-	RevisionRun       string
+	StageID           string
 	CountPipelineRuns int
 	LastUpdated       string
 	Status            string

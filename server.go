@@ -124,7 +124,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			prJSON := sthingsCli.ConvertYAMLToJSON(pr)
 			fmt.Println(string(prJSON))
 			sthingsCli.SetRedisJSON(redisJSONHandler, prJSON, resourceName)
-			log.Info("PIPELINERUN WAS ADDED TO REDIS (JSON)", resourceName)
+			log.Info("PIPELINERUN WAS ADDED TO REDIS (JSON): ", resourceName)
 
 			// CREATE ON REVISIONRUN STATUS ON REDIS + PRINT AS TABLE
 			initialPrs := server.PipelineRunStatus{
@@ -149,27 +149,27 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		Status:            "CREATED W/ STAGETIME-SERVER",
 	}
 	sthingsCli.SetRedisJSON(redisJSONHandler, initialRrs, revisionRunID+"-status")
-	log.Info("INITIAL REVISIONRUNSTATUS WAS ADDED TO REDIS (JSON) ", revisionRunID+"-status")
+	log.Info("INITIAL REVISIONRUNSTATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+"-status")
 	server.PrintTable(initialRrs)
 
 	// CREATE PIPELINERUN STATUS ON REDIS + PRINT AS TABLE
 	for _, pr := range pipelineRunStatus {
 		sthingsCli.SetRedisJSON(redisJSONHandler, pr, revisionRunID+"-"+pr.PipelineRunName)
-		log.Info("INITIAL PIPELINERUN STATUS WAS ADDED TO REDIS (JSON) ", revisionRunID+"-"+pr.PipelineRunName)
+		log.Info("INITIAL PIPELINERUN STATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+"-"+pr.PipelineRunName)
 		server.PrintTable(pr)
 	}
 
 	// CREATE STATE STATUS ON REDIS + PRINT AS TABLE
-	for key := range stages {
+	for key, index := range stages {
 
 		initialStageStatus := server.StageStatus{
-			RevisionRun:       revisionRunID,
+			StageID:           revisionRunID + "-" + sthingsBase.ConvertIntegerToString(index),
 			CountPipelineRuns: stages[key],
 			LastUpdated:       now.Format("2006-01-02 15:04:05"),
 			Status:            "CREATED W/ STAGETIME-SERVER",
 		}
 		sthingsCli.SetRedisJSON(redisJSONHandler, initialStageStatus, revisionRunID+"-stage")
-		log.Info("INITIAL STATE STATUS WAS ADDED TO REDIS (JSON) ", revisionRunID+"-stage")
+		log.Info("INITIAL STATE STATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+"-stage")
 		server.PrintTable(initialStageStatus)
 	}
 
@@ -178,7 +178,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 
 	// SEND PIPELINERUN TO REDIS MESSAGEQUEUE
 	server.SendStageToMessageQueue(now.Format(time.RFC3339) + "-" + revisionRunID)
-	log.Info("STAGE WAS QUEUED FOR PIPELINERUN CREATION ON SERVER (STREAM) ", revisionRunID)
+	log.Info("STAGE WAS QUEUED FOR PIPELINERUN CREATION ON SERVER (STREAM): ", revisionRunID)
 
 	// HANDLING OF REVISONRUN CR
 	// stageID := "stageTime-" + gRPCRequest.CommitId[0:4]

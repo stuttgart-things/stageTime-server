@@ -31,7 +31,6 @@ func SendStageToMessageQueue(stageID string) {
 	sthingsCli.EnqueueDataInRedisStreams(redisAddress+":"+redisPort, redisPassword, redisStream, streamValues)
 	fmt.Println("STREAM", redisStream)
 	fmt.Println("VALUES", streamValues)
-
 }
 
 func OutputRevisonRunStatus(renderedPipelineruns map[int][]string) {
@@ -57,7 +56,6 @@ func OutputRevisonRunStatus(renderedPipelineruns map[int][]string) {
 		LastUpdated:       t.Format("2006-01-02 15:04:05"),
 		Status:            "CREATED W/ STAGETIME-SERVER",
 	}
-
 	tw := table.NewWriter()
 	header := sthingsCli.CreateTableHeader(rrs)
 	tw.AppendHeader(header)

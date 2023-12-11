@@ -42,6 +42,7 @@ var (
 	now               = time.Now()
 	stage             string
 	revisionRunID     string
+	stageNumber       string
 	countPipelineRuns = 0
 	pipelineRunStatus []server.PipelineRunStatus
 )
@@ -166,7 +167,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	// CREATE STATE STATUS ON REDIS + PRINT AS TABLE
 	for key, index := range stages {
 
-		stageNumber := sthingsBase.ConvertIntegerToString(index - 1)
+		stageNumber = sthingsBase.ConvertIntegerToString(index - 1)
 
 		initialStageStatus := server.StageStatus{
 			StageID:           revisionRunID + "-" + stageNumber,
@@ -176,7 +177,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		}
 
 		log.Info("INITIAL STATE STATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+"-"+stageNumber)
-		sthingsCli.SetRedisJSON(redisJSONHandler, initialStageStatus, "hello")
+		sthingsCli.SetRedisJSON(redisJSONHandler, initialStageStatus, revisionRunID+"-"+stageNumber)
 		server.PrintTable(initialStageStatus)
 	}
 

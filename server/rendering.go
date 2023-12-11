@@ -27,6 +27,7 @@ type PipelineRun struct {
 	RevisionRunRepoUrl   string
 	RevisionRunCommitId  string
 	RevisionRunCreation  string
+	CanFail              bool
 	ResolverParams       map[string]string
 	Namespace            string
 	PipelineRef          string
@@ -60,6 +61,8 @@ kind: PipelineRun
 metadata:
   name: "{{ .NamePrefix }}-{{ .Stage }}-{{ .Name }}-{{ .NameSuffix }}"
   namespace: {{ .Namespace }}
+  annotations:
+    canfail: "{{ .CanFail }}"
   labels:
     stagetime/commit: "{{ .RevisionRunCommitId }}"
     stagetime/repo: {{ .RevisionRunRepoName }}
@@ -164,6 +167,7 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			RevisionRunCommitId: gRPCRequest.CommitId,
 			RevisionRunRepoUrl:  gRPCRequest.RepoUrl,
 			RevisionRunRepoName: gRPCRequest.RepoName,
+			CanFail:             pipelinerun.Canfail,
 			Namespace:           pipelineNamespace,
 			PipelineRef:         pipelinerun.Name,
 			TimeoutPipeline:     "0h12m0s",

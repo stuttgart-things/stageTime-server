@@ -154,6 +154,10 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 
 	// CREATE PIPELINERUN STATUS ON REDIS + PRINT AS TABLE
 	for _, pr := range pipelineRunStatus {
+		sthingsCli.DeleteRedisSet(redisClient, revisionRunID+"-"+sthingsBase.ConvertIntegerToString(pr.Stage))
+		sthingsCli.AddValueToRedisSet(redisClient, revisionRunID+"-"+sthingsBase.ConvertIntegerToString(pr.Stage), pr.PipelineRunName)
+		log.Info("ADDED PIPELINERUN NAMES TO REDIS (SET): ", revisionRunID+"-"+sthingsBase.ConvertIntegerToString(pr.Stage))
+
 		sthingsCli.SetRedisJSON(redisJSONHandler, pr, revisionRunID+"-"+pr.PipelineRunName)
 		log.Info("INITIAL PIPELINERUN STATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+"-"+pr.PipelineRunName)
 		server.PrintTable(pr)

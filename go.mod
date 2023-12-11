@@ -7,7 +7,7 @@ require (
 	github.com/jedib0t/go-pretty/v6 v6.4.6
 	github.com/nitishm/go-rejson/v4 v4.1.1-0.20230331060235-d2aa875760e4
 	github.com/stuttgart-things/sthingsBase v0.1.30
-	github.com/stuttgart-things/sthingsCli v0.1.39
+	github.com/stuttgart-things/sthingsCli v0.1.80
 	go.hein.dev/go-version v0.1.0
 	google.golang.org/grpc v1.55.0
 	google.golang.org/protobuf v1.30.0
@@ -22,6 +22,7 @@ require (
 	github.com/Microsoft/go-winio v0.6.1 // indirect
 	github.com/ProtonMail/go-crypto v0.0.0-20230717121422-5aa5874ade95 // indirect
 	github.com/acomagu/bufpipe v1.0.4 // indirect
+	github.com/allegro/bigcache/v3 v3.1.0 // indirect
 	github.com/andygrunwald/go-jira v1.16.0 // indirect
 	github.com/atc0005/go-teams-notify/v2 v2.7.1 // indirect
 	github.com/cenkalti/backoff/v3 v3.0.0 // indirect

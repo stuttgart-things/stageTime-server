@@ -168,15 +168,15 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			LastUpdated:       now.Format("2006-01-02 15:04:05"),
 			Status:            "CREATED W/ STAGETIME-SERVER",
 		}
-		sthingsCli.SetRedisJSON(redisJSONHandler, initialStageStatus, revisionRunID+sthingsBase.ConvertIntegerToString(index))
-		log.Info("INITIAL STATE STATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+sthingsBase.ConvertIntegerToString(index))
+		sthingsCli.SetRedisJSON(redisJSONHandler, initialStageStatus, revisionRunID+"-"+sthingsBase.ConvertIntegerToString(index))
+		log.Info("INITIAL STATE STATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+"-"+sthingsBase.ConvertIntegerToString(index))
 		server.PrintTable(initialStageStatus)
 	}
 
 	// OUTPUT RevisionRun STATUS
 	server.OutputRevisonRunStatus(renderedPipelineruns)
 
-	// SEND PIPELINERUN TO REDIS MESSAGEQUEUE
+	// SEND STAGE TO STREAM
 	server.SendStageToMessageQueue(now.Format(time.RFC3339) + "+" + revisionRunID + "+0")
 	log.Info("STAGE WAS QUEUED FOR PIPELINERUN CREATION ON SERVER (STREAM): ", revisionRunID+"+0")
 

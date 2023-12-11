@@ -167,7 +167,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	// CREATE STATE STATUS ON REDIS + PRINT AS TABLE
 	for key, index := range stages {
 
-		stageNumber = sthingsBase.ConvertIntegerToString(index - 1)
+		stageNumber = revisionRunID + "-" + sthingsBase.ConvertIntegerToString(index-1)
 
 		initialStageStatus := server.StageStatus{
 			StageID:           revisionRunID + "-" + stageNumber,
@@ -176,8 +176,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			Status:            "CREATED W/ STAGETIME-SERVER",
 		}
 
-		log.Info("INITIAL STATE STATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+"-"+stageNumber)
-		sthingsCli.SetRedisJSON(redisJSONHandler, initialStageStatus, revisionRunID+"-"+stageNumber)
+		log.Info("INITIAL STATE STATUS WAS ADDED TO REDIS (JSON): ", stageNumber)
+		sthingsCli.SetRedisJSON(redisJSONHandler, initialStageStatus, stageNumber)
 		server.PrintTable(initialStageStatus)
 	}
 

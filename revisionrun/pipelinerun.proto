@@ -6,8 +6,9 @@ option go_package = "github.com/stuttgart-things/stageTime-server";
 
 message Pipelinerun {
     string name = 1;
-    double stage = 2;
-    string params = 3;
-    string listparams = 4;
-    string workspaces = 5;
+    bool canfail = 2;
+    double stage = 3;
+    string params = 4;
+    string listparams = 5;
+    string workspaces = 6;
 }

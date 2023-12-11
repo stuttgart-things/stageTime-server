@@ -45,3 +45,15 @@ func PrintTable(printObject interface{}) {
 	tw.SetOutputMirror(os.Stdout)
 	tw.Render()
 }
+
+func SetStage(stages map[string]int, stage string) (updatedValue int) {
+	existingValue, ok := stages[stage]
+
+	if ok {
+		updatedValue = existingValue + 1
+	} else {
+		updatedValue = 1
+	}
+
+	return
+}

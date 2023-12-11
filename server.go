@@ -103,7 +103,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			resourceName, _ := sthingsBase.GetRegexSubMatch(pr, `name: "(.*?)"`)
 			revisionRunID, _ = sthingsBase.GetRegexSubMatch(pr, `commit: "(.*?)"`)
 			stage, _ = sthingsBase.GetRegexSubMatch(pr, `stage: "(.*?)"`)
-			stages[stage] = SetStage(stages, stage)
+			stages[stage] = server.SetStage(stages, stage)
 
 			prIdentifier := strings.Split(resourceName, "-")
 
@@ -168,8 +168,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			LastUpdated:       now.Format("2006-01-02 15:04:05"),
 			Status:            "CREATED W/ STAGETIME-SERVER",
 		}
-		sthingsCli.SetRedisJSON(redisJSONHandler, initialStageStatus, revisionRunID+"-stage")
-		log.Info("INITIAL STATE STATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+"-stage")
+		sthingsCli.SetRedisJSON(redisJSONHandler, initialStageStatus, revisionRunID+sthingsBase.ConvertIntegerToString(index))
+		log.Info("INITIAL STATE STATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+sthingsBase.ConvertIntegerToString(index))
 		server.PrintTable(initialStageStatus)
 	}
 
@@ -229,16 +229,4 @@ func main() {
 	revisionrun.RegisterStageTimeApplicationServiceServer(grpcServer, stageTimeServer)
 
 	log.Fatalln(grpcServer.Serve(listener))
-}
-
-func SetStage(stages map[string]int, stage string) (updatedValue int) {
-	existingValue, ok := stages[stage]
-
-	if ok {
-		updatedValue = existingValue + 1
-	} else {
-		updatedValue = 1
-	}
-
-	return
 }

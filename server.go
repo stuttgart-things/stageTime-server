@@ -177,8 +177,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	server.OutputRevisonRunStatus(renderedPipelineruns)
 
 	// SEND PIPELINERUN TO REDIS MESSAGEQUEUE
-	server.SendStageToMessageQueue(now.Format(time.RFC3339) + "-" + revisionRunID)
-	log.Info("STAGE WAS QUEUED FOR PIPELINERUN CREATION ON SERVER (STREAM): ", revisionRunID)
+	server.SendStageToMessageQueue(now.Format(time.RFC3339) + "+" + revisionRunID + "+0")
+	log.Info("STAGE WAS QUEUED FOR PIPELINERUN CREATION ON SERVER (STREAM): ", revisionRunID+"+0")
 
 	// HANDLING OF REVISONRUN CR
 	// stageID := "stageTime-" + gRPCRequest.CommitId[0:4]

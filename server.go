@@ -137,8 +137,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			}
 			pipelineRunStatus = append(pipelineRunStatus, initialPrs)
 
-			sthingsCli.DeleteRedisSet(redisClient, revisionRunID+"-"+stage)
-			sthingsCli.AddValueToRedisSet(redisClient, revisionRunID+"-"+stage, resourceName)
+			// sthingsCli.DeleteRedisSet(redisClient, revisionRunID+"-"+stage)
+			sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+revisionRunID+"-"+stage, resourceName)
 			log.Info("ADDED PIPELINERUN NAMES TO REDIS (SET): ", revisionRunID+"-"+stage)
 		}
 	}

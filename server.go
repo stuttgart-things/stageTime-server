@@ -165,7 +165,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	}
 
 	// CREATE STATE STATUS ON REDIS + PRINT AS TABLE
-	for key, index := range stages {
+	for _, index := range stages {
 
 		stageNumber = sthingsBase.ConvertIntegerToString(index - 1)
 

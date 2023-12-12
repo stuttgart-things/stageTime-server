@@ -171,7 +171,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 
 		initialStageStatus := server.StageStatus{
 			StageID:           now.Format(time.RFC3339)+revisionRunID+"-"+stageNumber,
-			CountPipelineRuns: stages[key],
+			CountPipelineRuns: stages[stageNumber],
 			LastUpdated:       now.Format("2006-01-02 15:04:05"),
 			Status:            "CREATED W/ STAGETIME-SERVER",
 		}

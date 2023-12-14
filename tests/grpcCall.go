@@ -29,13 +29,13 @@ var (
 )
 
 type Client struct {
-	yasClient revisionrun.StageTimeApplicationServiceClient
+	stsClient revisionrun.StageTimeApplicationServiceClient
 	timeout   time.Duration
 }
 
 func NewClient(conn grpc.ClientConnInterface, timeout time.Duration) Client {
 	return Client{
-		yasClient: revisionrun.NewStageTimeApplicationServiceClient(conn),
+		stsClient: revisionrun.NewStageTimeApplicationServiceClient(conn),
 		timeout:   timeout,
 	}
 }
@@ -49,7 +49,7 @@ func (c Client) CreateRevisionRun(ctx context.Context, json io.Reader) error {
 		return fmt.Errorf("CLIENT CREATE REVISIONRUN: UNMARSHAL: %w", err)
 	}
 
-	res, err := c.yasClient.CreateRevisionRun(ctx, &req)
+	res, err := c.stsClient.CreateRevisionRun(ctx, &req)
 
 	fmt.Println(res)
 
@@ -107,8 +107,8 @@ func ConnectSecure(address, testFilePath string) {
 		log.Fatalln(err)
 	}
 
-	yasClient := NewClient(conn, time.Second)
-	err = yasClient.CreateRevisionRun(context.Background(), bytes.NewBuffer(json))
+	stsClient := NewClient(conn, time.Second)
+	err = stsClient.CreateRevisionRun(context.Background(), bytes.NewBuffer(json))
 
 	log.Println("ERR:", err)
 
@@ -130,8 +130,8 @@ func ConnectInsecure(address, testFilePath string) {
 		log.Fatalln(err)
 	}
 
-	yasClient := NewClient(conn, time.Second)
-	err = yasClient.CreateRevisionRun(context.Background(), bytes.NewBuffer(json))
+	stsClient := NewClient(conn, time.Second)
+	err = stsClient.CreateRevisionRun(context.Background(), bytes.NewBuffer(json))
 
 	log.Println("ERR:", err)
 

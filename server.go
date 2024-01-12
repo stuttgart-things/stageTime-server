@@ -117,9 +117,6 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			// SET STAGES ON LIST
 			// sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+revisionRunID+"-"+"stages", stage)
 			// sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+revisionRunID, resourceName)
-			//log.Info("REVISIONRUN NAME "+resourceName+" STORED ON ", now.Format(time.RFC3339)+"-"+revisionRunID)
-			//sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+revisionRunID+"-"+stage, resourceName)
-			//log.Info("REVISIONRUN NAME "+resourceName+" STORED ON ", now.Format(time.RFC3339)+"-"+revisionRunID+"-"+stage)
 
 			// CONVERT PR TO JSON + ADD TO REDIS
 			prJSON := sthingsCli.ConvertYAMLToJSON(pr)
@@ -170,7 +167,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		stageNumber = sthingsBase.ConvertIntegerToString(index - 1)
 
 		initialStageStatus := server.StageStatus{
-			StageID:           now.Format(time.RFC3339)+revisionRunID+"-"+stageNumber,
+			StageID:           now.Format(time.RFC3339) + revisionRunID + "-" + stageNumber,
 			CountPipelineRuns: stages[stageNumber],
 			LastUpdated:       now.Format("2006-01-02 15:04:05"),
 			Status:            "CREATED W/ STAGETIME-SERVER",

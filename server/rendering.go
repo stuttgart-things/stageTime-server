@@ -7,10 +7,10 @@ package server
 import (
 	"bytes"
 	"fmt"
+	"html/template"
 	"log"
 	"os"
 	"strings"
-	"text/template"
 	"time"
 
 	revisionrun "github.com/stuttgart-things/stageTime-server/revisionrun"
@@ -184,36 +184,27 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			Workspaces:          pipelineWorkspaces,
 		}
 
-		// RENDERING
-		var buf bytes.Buffer
-		tmpl, err := template.New("pipelinerun").Parse(PipelineRunTemplate)
-		if err != nil {
-			panic(err)
-		}
-		err = tmpl.Execute(&buf, pr)
-		if err != nil {
-			log.Fatalf("execution: %s", err)
-		}
+		// RENDER REVISIONRUN
+		renderedPipelineRun, _ := RenderPipelineRun(PipelineRunTemplate, pr)
 
 		// ADD RENDERED PRS TO REVISIONRUN
-		renderedPipelineruns[int(pipelinerun.Stage)] = append(renderedPipelineruns[int(pipelinerun.Stage)], buf.String())
+		renderedPipelineruns[int(pipelinerun.Stage)] = append(renderedPipelineruns[int(pipelinerun.Stage)], renderedPipelineRun)
 	}
 
 	return
 }
 
-// TEST DATA - TO BE REPLACED
-// func RenderRevisionRunCR() (renderedCR []byte) {
+func RenderPipelineRun(PipelineRunTemplate string, pr PipelineRun) (string, error) {
 
-// 	cr := make(map[string]interface{})
-// 	cr["Name"] = "44c6fec0098"
-// 	cr["Namespace"] = "tekton"
-// 	cr["Repository"] = "stuttgart-things"
-// 	cr["RevisionRun"] = "44c6fec0098-123"
-// 	cr["Stages"] = []string{"0", "1", "2"}
-// 	cr["PipelineRuns"] = []string{"0-2321", "1-312", "2-321312"}
+	var buf bytes.Buffer
+	tmpl, err := template.New("pipelineRun").Option("missingkey=error").Parse(PipelineRunTemplate)
+	if err != nil {
+		panic(err)
+	}
+	err = tmpl.Execute(&buf, pr)
+	if err != nil {
+		log.Fatalf("execution: %s", err)
+	}
 
-// 	renderedCR, _ = sthingsBase.RenderTemplateInline(RevisionRunTemplate, "missingkey=error", "{{", "}}", cr)
-
-// 	return renderedCR
-// }
+	return buf.String(), nil
+}

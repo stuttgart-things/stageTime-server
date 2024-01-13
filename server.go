@@ -64,6 +64,37 @@ func NewServer() Server {
 	return Server{}
 }
 
+func main() {
+
+	// PRINT BANNER + VERSION INFO
+	internal.PrintBanner()
+
+	if os.Getenv("SERVER_PORT") != "" {
+		serverPort = ":" + os.Getenv("SERVER_PORT")
+	}
+
+	log.Info("gRPC server running on port " + serverPort)
+	log.Info("redis server " + redisAddress)
+	log.Info("redis port " + redisPort)
+	log.Info("redis queue " + redisStream)
+
+	listener, err := net.Listen("tcp", "0.0.0.0"+serverPort)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	log.Info("stageTime-server running at ", listener.Addr(), serverPort)
+
+	grpcServer := grpc.NewServer()
+	reflection.Register(grpcServer)
+
+	stageTimeServer := NewServer()
+
+	revisionrun.RegisterStageTimeApplicationServiceServer(grpcServer, stageTimeServer)
+
+	log.Fatalln(grpcServer.Serve(listener))
+}
+
 func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.CreateRevisionRunRequest) (*revisionrun.Response, error) {
 
 	// CREATE REDIS CLIENT / JSON HANDLER
@@ -203,35 +234,4 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			Data: []byte("GOOD JOB - REVISIONRUN WAS CREATED"),
 		},
 	}, nil
-}
-
-func main() {
-
-	// PRINT BANNER + VERSION INFO
-	internal.PrintBanner()
-
-	if os.Getenv("SERVER_PORT") != "" {
-		serverPort = ":" + os.Getenv("SERVER_PORT")
-	}
-
-	log.Info("gRPC server running on port " + serverPort)
-	log.Info("redis server " + redisAddress)
-	log.Info("redis port " + redisPort)
-	log.Info("redis queue " + redisStream)
-
-	listener, err := net.Listen("tcp", "0.0.0.0"+serverPort)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	log.Info("stageTime-server running at ", listener.Addr(), serverPort)
-
-	grpcServer := grpc.NewServer()
-	reflection.Register(grpcServer)
-
-	stageTimeServer := NewServer()
-
-	revisionrun.RegisterStageTimeApplicationServiceServer(grpcServer, stageTimeServer)
-
-	log.Fatalln(grpcServer.Serve(listener))
 }

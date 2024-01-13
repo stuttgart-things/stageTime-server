@@ -71,6 +71,7 @@ redis-cli -h 127.0.0.1 -p 28015 -a <PASSWORD>
 <details><summary>SEND TEST DATA</summary>
 
 ## LOCAL w/ GO
+
 ```bash
 export STAGETIME_SERVER=stagetime.cd43.sthings-pve.labul.sva.de:443 #example address | default: localhost:50051
 export STAGETIME_TEST_FILES=$PWD/prs.json # or leave out for default path/file in tests folder

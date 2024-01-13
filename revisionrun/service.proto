@@ -10,8 +10,4 @@ import "revisionrun/revisionrun.proto";
 
 service StageTimeApplicationService {
     rpc CreateRevisionRun(CreateRevisionRunRequest) returns (Response) {}
-
-//    rpc UpdateLeague(UpdateRevisionRunRequest) returns (Response) {}
-//    rpc FindLeague(FindRevisionRunRequest) returns (Response) {}
-//    rpc DeleteLeague(DeleteRevisionRunRequest) returns (Response) {}
 }

@@ -79,9 +79,9 @@ spec:
         value: {{ $value }}{{ end }}
   params:{{ range $name, $value := .Params }}
     - name: {{ $name }}
-      value: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}
+      default: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}
     - name: {{ $name }}
-      value: {{ range $values }}
+	  default: {{ range $values }}
         - {{ . }}{{ end }}{{ end }}{{ end }}
   workspaces:{{ range .Workspaces }}
     - name: {{ .Name }}
@@ -128,6 +128,7 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 
 	// INIT PR MAP
 	renderedPipelineruns = make(map[int][]string)
+
 	// LOOP OVER PR MAP
 	for _, pipelinerun := range gRPCRequest.Pipelineruns {
 
@@ -141,15 +142,19 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			pipelineParams[strings.TrimSpace(values[0])] = strings.TrimSpace(values[1])
 		}
 
-		for _, v := range strings.Split(pipelinerun.Listparams, ",") {
+		if pipelinerun.Listparams != "" {
 
-			keyValues := strings.Split(v, "=")
-			var values []string
+			for _, v := range strings.Split(pipelinerun.Listparams, ",") {
 
-			for _, v := range strings.Split(strings.TrimSpace(keyValues[1]), ";") {
-				values = append(values, v)
+				keyValues := strings.Split(v, "=")
+				var values []string
+
+				for _, v := range strings.Split(strings.TrimSpace(keyValues[1]), ";") {
+					values = append(values, v)
+				}
+
+				listPipelineParams[strings.TrimSpace(keyValues[0])] = values
 			}
-			listPipelineParams[strings.TrimSpace(keyValues[0])] = values
 		}
 
 		workspaces := strings.Split(pipelinerun.Workspaces, ",")

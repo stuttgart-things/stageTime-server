@@ -1,0 +1,17 @@
+{
+    "repo_name": "stuttgart-things",
+    "pushed_at": "2024-01-13T13:40:36Z",
+    "author": "patrick-hermann-sva",
+    "repo_url": "https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git",
+    "commit_id": "3c5ac44c6fec00989c7e27b36630a82cdfd26e3b0",
+    "pipelineruns": [
+      {
+        "name": "simulate-stagetime-pipelinerun-25",
+        "canfail": false,
+        "stage": 0,
+        "params": "gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s",
+        "listparams": "",
+        "workspaces": "shared-workspace=persistentVolumeClaim;ansible-tekton;claimName"
+      }
+    ]
+  }

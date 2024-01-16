@@ -38,6 +38,7 @@ type PipelineRun struct {
 	NamePrefix           string
 	NameSuffix           string
 	Stage                string
+	TaskRunTemplate      TaskRunTemplate
 	VolumeClaimTemplates []VolumeClaimTemplate
 }
 
@@ -55,6 +56,10 @@ type VolumeClaimTemplate struct {
 	Storage          string
 }
 
+type TaskRunTemplate struct {
+	fsGroup int
+}
+
 const PipelineRunTemplate = `
 apiVersion: tekton.dev/v1
 kind: PipelineRun
@@ -68,7 +73,11 @@ metadata:
     stagetime/repo: {{ .RevisionRunRepoName }}
     stagetime/author: {{ .RevisionRunAuthor }}
     stagetime/stage: "{{ .Stage }}"
-spec:
+spec:{{ if .TaskRunTemplate }}
+  taskRunTemplate:
+    podTemplate:
+      securityContext:
+        fsGroup: 65532{{ end }}
   timeouts:
     pipeline: "{{ .TimeoutPipeline }}"
     tasks: "0h1m0s"
@@ -79,9 +88,9 @@ spec:
         value: {{ $value }}{{ end }}
   params:{{ range $name, $value := .Params }}
     - name: {{ $name }}
-      default: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}
+      value: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}
     - name: {{ $name }}
-	  default: {{ range $values }}
+	  value: {{ range $values }}
         - {{ . }}{{ end }}{{ end }}{{ end }}
   workspaces:{{ range .Workspaces }}
     - name: {{ .Name }}

@@ -60,7 +60,6 @@ func TestRenderPipelineRuns(t *testing.T) {
 
 	// // Using the Replace Function
 	// testresults := strings.ReplaceAll(renderedPipelineRun, "value:", "default:")
-
 	// // Display the ReplaceAll Output
 	// fmt.Println(testresults)
 

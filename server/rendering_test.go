@@ -6,6 +6,7 @@ package server
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 )
 
@@ -58,6 +59,16 @@ func TestRenderPipelineRuns(t *testing.T) {
 
 	fmt.Println(renderedPipelineRun)
 
+	split := strings.Split(renderedPipelineRun, "timeouts")
+
+	fmt.Println(split[0])
+	fmt.Println(split[1])
+
+	paramsAsDefaults := strings.ReplaceAll("timeouts"+split[1], "value:", "default:")
+
+	renderedPipelineRun = split[0] + paramsAsDefaults
+
+	fmt.Println(renderedPipelineRun)
 	// // Using the Replace Function
 	// testresults := strings.ReplaceAll(renderedPipelineRun, "value:", "default:")
 	// // Display the ReplaceAll Output

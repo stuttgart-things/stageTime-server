@@ -9,6 +9,7 @@ message Pipelinerun {
     bool canfail = 2;
     double stage = 3;
     string params = 4;
-    string listparams = 5;
-    string workspaces = 6;
+    string resolverParams = 5;
+    string listparams = 6;
+    string workspaces = 7;
 }

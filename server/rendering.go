@@ -64,7 +64,7 @@ const PipelineRunTemplate = `
 apiVersion: tekton.dev/v1
 kind: PipelineRun
 metadata:
-  name: "{{ .NamePrefix }}-{{ .Stage }}-{{ .Name }}-{{ .NameSuffix }}"
+  name: {{ .NamePrefix }}-{{ .Stage }}-{{ .Name }}-{{ .NameSuffix }}
   namespace: {{ .Namespace }}
   annotations:
     canfail: "{{ .CanFail }}"
@@ -78,14 +78,14 @@ spec:{{ if .TaskRunTemplate }}
     podTemplate:
       securityContext:
         fsGroup: 65532{{ end }}
-  timeouts:
-    pipeline: "{{ .TimeoutPipeline }}"
-    tasks: "0h1m0s"
   pipelineRef:
     {{ if .PipelineRef }}name: {{ .PipelineRef }}{{ else }}resolver: git{{ end }}
     params:{{ range $name, $value := .ResolverParams }}
       - name: {{ $name }}
         value: {{ $value }}{{ end }}
+  timeouts:
+    pipeline: "{{ .TimeoutPipeline }}"
+    tasks: "0h1m0s"
   params:{{ range $name, $value := .Params }}
     - name: {{ $name }}
       value: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}
@@ -142,17 +142,26 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 	for _, pipelinerun := range gRPCRequest.Pipelineruns {
 
 		listPipelineParams := make(map[string][]string)
+		resolverParams := make(map[string]string)
 		pipelineParams := make(map[string]string)
 		var pipelineWorkspaces []Workspace
 
+		// SET RESOLVER PARAMS
+		resolverValues := strings.Split(pipelinerun.ResolverParams, ",")
+		for _, v := range resolverValues {
+			values := strings.Split(v, "=")
+			resolverParams[strings.TrimSpace(values[0])] = strings.TrimSpace(values[1])
+		}
+
+		// SET PARAMS
 		paramValues := strings.Split(pipelinerun.Params, ",")
 		for _, v := range paramValues {
 			values := strings.Split(v, "=")
 			pipelineParams[strings.TrimSpace(values[0])] = strings.TrimSpace(values[1])
 		}
 
+		// SET LIST PARAMETERS IF GIVEN
 		if pipelinerun.Listparams != "" {
-
 			for _, v := range strings.Split(pipelinerun.Listparams, ",") {
 
 				keyValues := strings.Split(v, "=")
@@ -166,8 +175,8 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			}
 		}
 
+		// SET WORKSPACES IF GIVEN
 		workspaces := strings.Split(pipelinerun.Workspaces, ",")
-
 		for _, v := range workspaces {
 			values := strings.Split(v, "=")
 			workspaces := strings.Split(values[1], ";")
@@ -183,14 +192,15 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			RevisionRunRepoName: gRPCRequest.RepoName,
 			CanFail:             pipelinerun.Canfail,
 			Namespace:           pipelineNamespace,
-			PipelineRef:         pipelinerun.Name,
-			TimeoutPipeline:     "0h12m0s",
-			Params:              pipelineParams,
-			ListParams:          listPipelineParams,
-			Stage:               fmt.Sprintf("%v", pipelinerun.Stage),
-			NamePrefix:          "st",
-			NameSuffix:          dt.Format("020405") + gRPCRequest.CommitId[0:4],
-			Workspaces:          pipelineWorkspaces,
+			// PipelineRef:         pipelinerun.Name,
+			ResolverParams:  resolverParams,
+			TimeoutPipeline: "0h12m0s",
+			Params:          pipelineParams,
+			ListParams:      listPipelineParams,
+			Stage:           fmt.Sprintf("%v", pipelinerun.Stage),
+			NamePrefix:      "st",
+			NameSuffix:      dt.Format("020405") + gRPCRequest.CommitId[0:4],
+			Workspaces:      pipelineWorkspaces,
 		}
 
 		// RENDER REVISIONRUN

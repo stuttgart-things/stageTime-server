@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"net"
 	"os"
-	"strings"
 	"time"
 
 	server "github.com/stuttgart-things/stageTime-server/server"
@@ -41,7 +40,6 @@ var (
 	log               = sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
 	now               = time.Now()
 	stage             string
-	revisionRunID     string
 	stageNumber       string
 	countPipelineRuns = 0
 	pipelineRunStatus []server.PipelineRunStatus
@@ -54,6 +52,7 @@ var (
 	redisStream      = os.Getenv("REDIS_STREAM")
 	redisClient      = sthingsCli.CreateRedisClient(redisAddress+":"+redisPort, redisPassword)
 	redisJSONHandler = rejson.NewReJSONHandler()
+	prInformation    = make(map[string]string)
 )
 
 type Server struct {
@@ -132,63 +131,64 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		for _, pr := range renderedPipelineruns[i] {
 
 			countPipelineRuns += 1
-			resourceName, _ := sthingsBase.GetRegexSubMatch(pr, `name: "(.*?)"`)
-			revisionRunID, _ = sthingsBase.GetRegexSubMatch(pr, `commit: "(.*?)"`)
-			stage, _ = sthingsBase.GetRegexSubMatch(pr, `stage: "(.*?)"`)
-			stages[stage] = server.SetStage(stages, stage)
 
-			prIdentifier := strings.Split(resourceName, "-")
+			prValid, prInformation := internal.ValidateStorePipelineRuns(pr)
 
-			log.Info("PR", i)
-			log.Info("RESOURCE-NAME", resourceName)
-			log.Info("IDENTIFIER", prIdentifier)
-			log.Info("REVISIONRUN-ID", revisionRunID)
-			log.Info("STAGE", stage)
+			if !prValid {
+				log.Error("PIPELINERUN NOT VALID - SKIPPING")
+				break
+			}
+
+			log.Info("COUNT PR", i)
+			log.Info("RESOURCE-NAME", prInformation["name"])
+			log.Info("IDENTIFIER", prInformation["name"])
+			log.Info("REVISIONRUN-ID", prInformation["stagetime/commit"])
+			log.Info("STAGE", prInformation["stage"])
 
 			// SET STAGES ON LIST
-			// sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+revisionRunID+"-"+"stages", stage)
-			// sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+revisionRunID, resourceName)
+			// sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+prInformation["stagetime/commit"]+"-"+"stages", stage)
+			// sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+prInformation["stagetime/commit"], prInformation["name"])
 
 			// CONVERT PR TO JSON + ADD TO REDIS
 			prJSON := sthingsCli.ConvertYAMLToJSON(pr)
 			fmt.Println(string(prJSON))
-			sthingsCli.SetRedisJSON(redisJSONHandler, prJSON, resourceName)
-			log.Info("PIPELINERUN WAS ADDED TO REDIS (JSON): ", resourceName)
+			sthingsCli.SetRedisJSON(redisJSONHandler, prJSON, prInformation["name"])
+			log.Info("PIPELINERUN WAS ADDED TO REDIS (JSON): ", prInformation["name"])
 
 			// CREATE ON REVISIONRUN STATUS ON REDIS + PRINT AS TABLE
 			initialPrs := server.PipelineRunStatus{
-				Stage:           sthingsBase.ConvertStringToInteger(stage),
-				PipelineRunName: resourceName,
+				Stage:           sthingsBase.ConvertStringToInteger(prInformation["stage"]),
+				PipelineRunName: prInformation["name"],
 				CanFail:         false,
 				LastUpdated:     now.Format("2006-01-02 15:04:05"),
 				Status:          "NOT STARTED (YET)",
 			}
 			pipelineRunStatus = append(pipelineRunStatus, initialPrs)
 
-			// sthingsCli.DeleteRedisSet(redisClient, revisionRunID+"-"+stage)
-			sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+revisionRunID+"-"+stage, resourceName)
-			log.Info("ADDED PIPELINERUN NAMES TO REDIS (SET): ", revisionRunID+"-"+stage)
+			// sthingsCli.DeleteRedisSet(redisClient, prInformation["stagetime/commit"]+"-"+stage)
+			sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+prInformation["stagetime/commit"]+"-"+prInformation["stage"], prInformation["name"])
+			log.Info("ADDED PIPELINERUN NAMES TO REDIS (SET): ", prInformation["stagetime/commit"]+"-"+prInformation["stage"])
 		}
 	}
 
-	countStage := sthingsBase.ConvertStringToInteger(stage) + 1
+	countStage := sthingsBase.ConvertStringToInteger(prInformation["stage"]) + 1
 
 	// CREATE REVISIONRUN STATUS ON REDIS + PRINT AS TABLE
 	initialRrs := server.RevisionRunStatus{
-		RevisionRun:       revisionRunID,
+		RevisionRun:       prInformation["stagetime/commit"],
 		CountStages:       countStage,
 		CountPipelineRuns: countPipelineRuns,
 		LastUpdated:       now.Format("2006-01-02 15:04:05"),
 		Status:            "CREATED W/ STAGETIME-SERVER",
 	}
-	sthingsCli.SetRedisJSON(redisJSONHandler, initialRrs, revisionRunID+"-status")
-	log.Info("INITIAL REVISIONRUNSTATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+"-status")
+	sthingsCli.SetRedisJSON(redisJSONHandler, initialRrs, prInformation["stagetime/commit"]+"-status")
+	log.Info("INITIAL REVISIONRUNSTATUS WAS ADDED TO REDIS (JSON): ", prInformation["stagetime/commit"]+"-status")
 	server.PrintTable(initialRrs)
 
 	// CREATE PIPELINERUN STATUS ON REDIS + PRINT AS TABLE
 	for _, pr := range pipelineRunStatus {
-		sthingsCli.SetRedisJSON(redisJSONHandler, pr, revisionRunID+"-"+pr.PipelineRunName)
-		log.Info("INITIAL PIPELINERUN STATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+"-"+pr.PipelineRunName)
+		sthingsCli.SetRedisJSON(redisJSONHandler, pr, prInformation["stagetime/commit"]+"-"+pr.PipelineRunName)
+		log.Info("INITIAL PIPELINERUN STATUS WAS ADDED TO REDIS (JSON): ", prInformation["stagetime/commit"]+"-"+pr.PipelineRunName)
 		server.PrintTable(pr)
 	}
 
@@ -198,14 +198,14 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		stageNumber = sthingsBase.ConvertIntegerToString(index - 1)
 
 		initialStageStatus := server.StageStatus{
-			StageID:           now.Format(time.RFC3339) + revisionRunID + "-" + stageNumber,
+			StageID:           now.Format(time.RFC3339) + prInformation["stagetime/commit"] + "-" + stageNumber,
 			CountPipelineRuns: stages[stageNumber],
 			LastUpdated:       now.Format("2006-01-02 15:04:05"),
 			Status:            "CREATED W/ STAGETIME-SERVER",
 		}
 
-		log.Info("INITIAL STATE STATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+stageNumber)
-		sthingsCli.SetRedisJSON(redisJSONHandler, initialStageStatus, revisionRunID+stageNumber)
+		log.Info("INITIAL STATE STATUS WAS ADDED TO REDIS (JSON): ", prInformation["stagetime/commit"]+stageNumber)
+		sthingsCli.SetRedisJSON(redisJSONHandler, initialStageStatus, prInformation["stagetime/commit"]+stageNumber)
 		server.PrintTable(initialStageStatus)
 	}
 
@@ -213,8 +213,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	server.OutputRevisonRunStatus(renderedPipelineruns)
 
 	// SEND STAGE TO STREAM
-	server.SendStageToMessageQueue(now.Format(time.RFC3339) + "+" + revisionRunID + "+0")
-	log.Info("STAGE WAS QUEUED FOR PIPELINERUN CREATION ON SERVER (STREAM): ", revisionRunID+"+0")
+	server.SendStageToMessageQueue(now.Format(time.RFC3339) + "+" + prInformation["stagetime/commit"] + "+0")
+	log.Info("STAGE WAS QUEUED FOR PIPELINERUN CREATION ON SERVER (STREAM): ", prInformation["stagetime/commit"]+"+0")
 
 	// HANDLING OF REVISONRUN CR
 	// stageID := "stageTime-" + gRPCRequest.CommitId[0:4]

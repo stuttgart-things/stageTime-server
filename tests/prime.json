@@ -6,13 +6,22 @@
     "commit_id": "3c5ac44c6fec00989c7e27b36630a82cdfd26e3b0",
     "pipelineruns": [
       {
-        "name": "simulate-stagetime-pipelinerun-25",
+        "name": "simulate-stagetime",
         "canfail": false,
         "stage": 0,
         "resolverParams": "url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml",
         "params": "gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s",
         "listparams": "",
-        "workspaces": "shared-workspace=persistentVolumeClaim;ansible-tekton;claimName"
+        "volumeClaimTemplates": "source=openebs-hostpath;ReadWriteOnce;20Mi"
+      },
+      {
+        "name": "simulate-stagetime",
+        "canfail": true,
+        "stage": 1,
+        "resolverParams": "url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml",
+        "params": "gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s",
+        "listparams": "",
+        "volumeClaimTemplates": "source=openebs-hostpath;ReadWriteOnce;20Mi"
       }
     ]
   }

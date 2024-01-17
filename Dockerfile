@@ -21,6 +21,6 @@ COPY --from=builder /bin/stageTime-server /bin/stageTime-server
 
 # FOR SERVICE TESTING
 COPY --from=builder /bin/grpcCall /bin/grpcCall
-COPY --from=builder /src/tests/prs.json /tmp/prs.json
+COPY --from=builder /src/tests/prime.json /tmp/prime.json
 
 ENTRYPOINT ["stageTime-server"]

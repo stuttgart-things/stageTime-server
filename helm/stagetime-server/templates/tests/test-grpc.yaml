@@ -15,5 +15,5 @@ spec:
           value: "stagetime-server-service.stagetime.svc.cluster.local:80"
           #value: "stagetime.cd43.sthings-pve.labul.sva.de:443"
         - name: STAGETIME_TEST_FILES
-          value: "/tmp/prs.json"
+          value: "/tmp/prime.json"
   restartPolicy: Never

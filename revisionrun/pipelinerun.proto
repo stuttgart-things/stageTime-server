@@ -12,4 +12,5 @@ message Pipelinerun {
     string resolverParams = 5;
     string listparams = 6;
     string workspaces = 7;
+    string volumeClaimTemplates = 8;
 }

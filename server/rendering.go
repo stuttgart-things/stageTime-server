@@ -85,7 +85,7 @@ spec:{{ if .TaskRunTemplate }}
         value: {{ $value }}{{ end }}
   timeouts:
     pipeline: "{{ .TimeoutPipeline }}"
-    tasks: "0h1m0s"
+    tasks: "{{ .TimeoutPipeline }}"
   params:{{ range $name, $value := .Params }}
     - name: {{ $name }}
       value: {{ $value }}{{ end }}{{ if .ListParams }}{{ range $name, $values := .ListParams }}
@@ -145,6 +145,7 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 		resolverParams := make(map[string]string)
 		pipelineParams := make(map[string]string)
 		var pipelineWorkspaces []Workspace
+		var pipelinevolumeClaimTemplates []VolumeClaimTemplate
 
 		// SET RESOLVER PARAMS
 		resolverValues := strings.Split(pipelinerun.ResolverParams, ",")
@@ -176,11 +177,23 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 		}
 
 		// SET WORKSPACES IF GIVEN
-		workspaces := strings.Split(pipelinerun.Workspaces, ",")
-		for _, v := range workspaces {
-			values := strings.Split(v, "=")
-			workspaces := strings.Split(values[1], ";")
-			pipelineWorkspaces = append(pipelineWorkspaces, Workspace{strings.TrimSpace(values[0]), strings.TrimSpace(workspaces[0]), strings.TrimSpace(workspaces[1]), strings.TrimSpace(workspaces[2])})
+		if len(pipelinerun.Workspaces) > 0 {
+			workspaces := strings.Split(pipelinerun.Workspaces, ",")
+			for _, v := range workspaces {
+				values := strings.Split(v, "=")
+				workspaces := strings.Split(values[1], ";")
+				pipelineWorkspaces = append(pipelineWorkspaces, Workspace{strings.TrimSpace(values[0]), strings.TrimSpace(workspaces[0]), strings.TrimSpace(workspaces[1]), strings.TrimSpace(workspaces[2])})
+			}
+		}
+
+		// SET VOLUMECLAIMTEMPLATES IF GIVEN
+		if len(pipelinerun.VolumeClaimTemplates) > 0 {
+			volumeClaimTemplates := strings.Split(pipelinerun.VolumeClaimTemplates, ",")
+			for _, v := range volumeClaimTemplates {
+				values := strings.Split(v, "=")
+				claims := strings.Split(values[1], ";")
+				pipelinevolumeClaimTemplates = append(pipelinevolumeClaimTemplates, VolumeClaimTemplate{strings.TrimSpace(values[0]), strings.TrimSpace(claims[0]), strings.TrimSpace(claims[1]), strings.TrimSpace(claims[2])})
+			}
 		}
 
 		pr := PipelineRun{
@@ -193,14 +206,15 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			CanFail:             pipelinerun.Canfail,
 			Namespace:           pipelineNamespace,
 			// PipelineRef:         pipelinerun.Name,
-			ResolverParams:  resolverParams,
-			TimeoutPipeline: "0h12m0s",
-			Params:          pipelineParams,
-			ListParams:      listPipelineParams,
-			Stage:           fmt.Sprintf("%v", pipelinerun.Stage),
-			NamePrefix:      "st",
-			NameSuffix:      dt.Format("020405") + gRPCRequest.CommitId[0:4],
-			Workspaces:      pipelineWorkspaces,
+			ResolverParams:       resolverParams,
+			TimeoutPipeline:      "0h30m0s",
+			Params:               pipelineParams,
+			ListParams:           listPipelineParams,
+			Stage:                fmt.Sprintf("%v", pipelinerun.Stage),
+			NamePrefix:           "st",
+			NameSuffix:           dt.Format("020405") + gRPCRequest.CommitId[0:4],
+			Workspaces:           pipelineWorkspaces,
+			VolumeClaimTemplates: pipelinevolumeClaimTemplates,
 		}
 
 		// RENDER REVISIONRUN

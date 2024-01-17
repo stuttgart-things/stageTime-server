@@ -141,6 +141,7 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 	// LOOP OVER PR MAP
 	for _, pipelinerun := range gRPCRequest.Pipelineruns {
 
+		// DECLARE VARIABLES
 		listPipelineParams := make(map[string][]string)
 		resolverParams := make(map[string]string)
 		pipelineParams := make(map[string]string)
@@ -171,7 +172,6 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 				for _, v := range strings.Split(strings.TrimSpace(keyValues[1]), ";") {
 					values = append(values, v)
 				}
-
 				listPipelineParams[strings.TrimSpace(keyValues[0])] = values
 			}
 		}

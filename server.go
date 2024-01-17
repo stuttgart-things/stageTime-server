@@ -139,11 +139,11 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 				break
 			}
 
-			log.Info("COUNT PR", i)
-			log.Info("RESOURCE-NAME", prInformation["name"])
-			log.Info("IDENTIFIER", prInformation["name"])
-			log.Info("REVISIONRUN-ID", prInformation["stagetime/commit"])
-			log.Info("STAGE", prInformation["stagetime/stage"])
+			log.Info("#COUNT PR: ", i)
+			log.Info("RESOURCE-NAME: ", prInformation["name"])
+			log.Info("IDENTIFIER: ", prInformation["name"])
+			log.Info("REVISIONRUN-ID: ", prInformation["stagetime/commit"])
+			log.Info("STAGE: ", prInformation["stagetime/stage"])
 
 			// SET STAGES ON LIST
 			// sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+prInformation["stagetime/commit"]+"-"+"stages", stage)
@@ -181,7 +181,9 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		LastUpdated:       now.Format("2006-01-02 15:04:05"),
 		Status:            "CREATED W/ STAGETIME-SERVER",
 	}
-	sthingsCli.SetRedisJSON(redisJSONHandler, initialRrs, prInformation["stagetime/commit"]+"-status")
+
+	statusIdentifier := prInformation["stagetime/commit"] + "-status"
+	sthingsCli.SetRedisJSON(redisJSONHandler, initialRrs, statusIdentifier)
 	log.Info("INITIAL REVISIONRUNSTATUS WAS ADDED TO REDIS (JSON): ", prInformation["stagetime/commit"]+"-status")
 	server.PrintTable(initialRrs)
 

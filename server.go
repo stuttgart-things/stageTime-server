@@ -183,14 +183,19 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	}
 
 	statusIdentifier := prInformation["stagetime/commit"] + "-status"
+	prIdentifier := prInformation["stagetime/commit"] + prInformation["name"]
+
+	fmt.Println(statusIdentifier)
+	fmt.Println(prIdentifier)
+
 	sthingsCli.SetRedisJSON(redisJSONHandler, initialRrs, statusIdentifier)
-	log.Info("INITIAL REVISIONRUNSTATUS WAS ADDED TO REDIS (JSON): ", prInformation["stagetime/commit"]+"-status")
+	log.Info("INITIAL REVISIONRUNSTATUS WAS ADDED TO REDIS (JSON): ", statusIdentifier)
 	server.PrintTable(initialRrs)
 
 	// CREATE PIPELINERUN STATUS ON REDIS + PRINT AS TABLE
 	for _, pr := range pipelineRunStatus {
-		sthingsCli.SetRedisJSON(redisJSONHandler, pr, prInformation["stagetime/commit"]+"-"+prInformation["name"])
-		log.Info("INITIAL PIPELINERUN STATUS WAS ADDED TO REDIS (JSON): ", prInformation["stagetime/commit"]+"-"+prInformation["name"])
+		sthingsCli.SetRedisJSON(redisJSONHandler, pr, prIdentifier)
+		log.Info("INITIAL PIPELINERUN STATUS WAS ADDED TO REDIS (JSON): ", prIdentifier)
 		server.PrintTable(pr)
 	}
 

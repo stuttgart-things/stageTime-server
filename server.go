@@ -157,9 +157,9 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 
 			// CREATE ON REVISIONRUN STATUS ON REDIS + PRINT AS TABLE
 			initialPrs := server.PipelineRunStatus{
-				Stage:           sthingsBase.ConvertStringToInteger(prInformation["stage"]),
+				Stage:           sthingsBase.ConvertStringToInteger(prInformation["stagetime/stage"]),
 				PipelineRunName: prInformation["name"],
-				CanFail:         false,
+				CanFail:         sthingsBase.ConvertStringToBoolean(prInformation["canFail"]),
 				LastUpdated:     now.Format("2006-01-02 15:04:05"),
 				Status:          "NOT STARTED (YET)",
 			}

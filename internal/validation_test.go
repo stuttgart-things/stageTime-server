@@ -5,6 +5,7 @@ Copyright © 2023 PATRICK HERMANN patrick.hermann@sva.de
 package internal
 
 import (
+	"fmt"
 	"reflect"
 
 	"github.com/stretchr/testify/assert"
@@ -71,11 +72,13 @@ func TestValidateStorePipelineRuns(t *testing.T) {
 
 	assert := assert.New(t)
 
-	expectedPrInformation := map[string]string{"identifier": "st", "name": "st-1-simulate-stagetime-1713293c5a", "revision-id": "st", "stagetime/author": "patrick-hermann-sva", "stagetime/commit": "3c5ac44c6fec00989c7e27b36630a82cdfd26e3b0", "stagetime/repo": "stuttgart-things", "stagetime/stage": "1"}
+	expectedPrInformation := map[string]string{"canFail": "true", "identifier": "st-1-simulate-stagetime-1713293c5a", "name": "st-1-simulate-stagetime-1713293c5a", "revision-id": "st", "stagetime/author": "patrick-hermann-sva", "stagetime/commit": "3c5ac44c6fec00989c7e27b36630a82cdfd26e3b0", "stagetime/repo": "stuttgart-things", "stagetime/stage": "1"}
 
 	valid, prInformation := ValidateStorePipelineRuns(pipelineRun)
 
-	// map[identifier:st name:st-1-simulate-stagetime-1713293c5a revision-id:st stagetime/author:patrick-hermann-sva stagetime/commit:3c5ac44c6fec00989c7e27b36630a82cdfd26e3b0 stagetime/repo:stuttgart-things stagetime/stage:1]
+	fmt.Println(expectedPrInformation)
+	fmt.Println(prInformation)
+
 	if !reflect.DeepEqual(expectedPrInformation, prInformation) {
 		t.Errorf("error")
 	}

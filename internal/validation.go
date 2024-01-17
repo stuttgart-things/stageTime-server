@@ -28,6 +28,12 @@ func ValidateStorePipelineRuns(pipelienRun string) (bool, map[string]string) {
 		prInformation["identifier"] = pipelineRun.Name
 		prInformation["revision-id"] = strings.Split(pipelineRun.Name, "-")[0]
 
+		if pipelineRun.Annotations["canfail"] != "" {
+			prInformation["canFail"] = pipelineRun.Annotations["canfail"]
+		} else {
+			prInformation["canFail"] = "false"
+		}
+
 		return true, prInformation
 
 	} else {

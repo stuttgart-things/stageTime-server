@@ -72,17 +72,17 @@ func main() {
 		serverPort = ":" + os.Getenv("SERVER_PORT")
 	}
 
-	log.Info("gRPC server running on port " + serverPort)
-	log.Info("redis server " + redisAddress)
-	log.Info("redis port " + redisPort)
-	log.Info("redis queue " + redisStream)
+	log.Info("GRPC SERVER RUNNING ON PORT: " + serverPort)
+	log.Info("REDIS SERVER: " + redisAddress)
+	log.Info("REDIS PORT: " + redisPort)
+	log.Info("REDIS QUEUE: " + redisStream)
 
 	listener, err := net.Listen("tcp", "0.0.0.0"+serverPort)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	log.Info("stageTime-server running at ", listener.Addr(), serverPort)
+	log.Info("STAGETIME-SERVER RUNNING AT ", listener.Addr(), serverPort)
 
 	grpcServer := grpc.NewServer()
 	reflection.Register(grpcServer)
@@ -171,7 +171,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			pipelineRunStatus = append(pipelineRunStatus, initialPrs)
 
 			// sthingsCli.DeleteRedisSet(redisClient, prInformation["stagetime/commit"]+"-"+stage)
-			sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+prInformation["stagetime/commit"]+"-"+prInformation["stage"], prInformation["name"])
+			sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+prInformation["stagetime/commit"]+"-"+prInformation["stagetime/stage"], prInformation["name"])
 			log.Info("ADDED PIPELINERUN NAMES TO REDIS (SET): ", prInformation["stagetime/commit"]+"-"+prInformation["stagetime/stage"])
 		}
 	}

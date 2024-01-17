@@ -52,7 +52,6 @@ var (
 	redisStream      = os.Getenv("REDIS_STREAM")
 	redisClient      = sthingsCli.CreateRedisClient(redisAddress+":"+redisPort, redisPassword)
 	redisJSONHandler = rejson.NewReJSONHandler()
-	prInformation    = make(map[string]string)
 )
 
 type Server struct {
@@ -95,6 +94,8 @@ func main() {
 }
 
 func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.CreateRevisionRunRequest) (*revisionrun.Response, error) {
+
+	prInformation := make(map[string]string)
 
 	// CREATE REDIS CLIENT / JSON HANDLER
 	redisJSONHandler.SetGoRedisClient(redisClient)
@@ -139,7 +140,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 				break
 			}
 
-			log.Info("#COUNT PR: ", i)
+			log.Info("COUNT-PR: ", i)
 			log.Info("RESOURCE-NAME: ", prInformation["name"])
 			log.Info("IDENTIFIER: ", prInformation["name"])
 			log.Info("REVISIONRUN-ID: ", prInformation["stagetime/commit"])
@@ -227,7 +228,6 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	// stageID := "stageTime-" + gRPCRequest.CommitId[0:4]
 	// fmt.Println("REVISIONRUN ID: ", stageID)
 	// sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+stageID, stageID)
-
 	// cr := server.RenderRevisionRunCR()
 	// fmt.Println(string(cr))
 	// crJSON := sthingsCli.ConvertYAMLToJSON(string(cr))

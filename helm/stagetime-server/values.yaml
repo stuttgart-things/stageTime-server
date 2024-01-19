@@ -31,7 +31,7 @@ deployment:
       image: scr.cd43.sthings-pve.labul.sva.de/stagetime-server/stagetime-server
       replicaCount: 1
       imagePullPolicy: Always
-      tag: 24.0117.1438-v0.4.20
+      tag: 24.0119.0910-v0.4.21
       securityContext:
         capabilities: {}
 services:

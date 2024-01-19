@@ -17,6 +17,7 @@ import (
 )
 
 var (
+	now               = time.Now()
 	pipelineNamespace = os.Getenv("PIPELINE_WORKSPACE")
 )
 
@@ -27,6 +28,7 @@ type PipelineRun struct {
 	RevisionRunRepoUrl   string
 	RevisionRunCommitId  string
 	RevisionRunCreation  string
+	RevisionRunDate      string
 	CanFail              bool
 	ResolverParams       map[string]string
 	Namespace            string
@@ -73,6 +75,7 @@ metadata:
     stagetime/repo: {{ .RevisionRunRepoName }}
     stagetime/author: {{ .RevisionRunAuthor }}
     stagetime/stage: "{{ .Stage }}"
+    stagetime/date: "{{ .RevisionRunDate }}"
 spec:{{ if .TaskRunTemplate }}
   taskRunTemplate:
     podTemplate:
@@ -203,6 +206,7 @@ func RenderPipelineRuns(gRPCRequest *revisionrun.CreateRevisionRunRequest) (rend
 			RevisionRunCommitId: gRPCRequest.CommitId,
 			RevisionRunRepoUrl:  gRPCRequest.RepoUrl,
 			RevisionRunRepoName: gRPCRequest.RepoName,
+			RevisionRunDate:     now.Format("2006-01-02 15:04:05"),
 			CanFail:             pipelinerun.Canfail,
 			Namespace:           pipelineNamespace,
 			// PipelineRef:         pipelinerun.Name,

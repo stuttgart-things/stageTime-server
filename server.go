@@ -205,7 +205,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		stageNumber = sthingsBase.ConvertIntegerToString(index - 1)
 
 		initialStageStatus := server.StageStatus{
-			StageID:           now.Format("2006-01-0215-04-05") + revisionRunID + "-" + stageNumber,
+			StageID:           now.Format("2006-01-0215-04-05") + "-" + revisionRunID + "-" + stageNumber,
 			CountPipelineRuns: stages[stageNumber],
 			LastUpdated:       now.Format("2006-01-0215-04-05"),
 			Status:            "CREATED W/ STAGETIME-SERVER",

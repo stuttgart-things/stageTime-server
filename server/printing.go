@@ -71,7 +71,7 @@ func SetStage(stages map[string]int, stage string) (updatedValue int) {
 	return
 }
 
-func GetPipelineRunStatus(jsonKey string) PipelineRunStatus {
+func GetPipelineRunStatus(jsonKey string, redisJSONHandler *rejson.Handler) PipelineRunStatus {
 
 	pipelineRunStatusJson := sthingsCli.GetRedisJSON(redisJSONHandler, jsonKey)
 	pipelineRunStatus := PipelineRunStatus{}

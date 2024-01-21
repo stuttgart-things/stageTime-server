@@ -5,10 +5,23 @@ Copyright © 2023 Patrick Hermann patrick.hermann@sva.de
 package server
 
 import (
+	"encoding/json"
+	"fmt"
 	"os"
+
+	"github.com/nitishm/go-rejson/v4"
+
+	goredis "github.com/redis/go-redis/v9"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 	sthingsCli "github.com/stuttgart-things/sthingsCli"
+)
+
+var (
+	redisUrl = os.Getenv("REDIS_SERVER") + ":" + os.Getenv("REDIS_PORT")
+	// redisPassword    = os.Getenv("REDIS_PASSWORD")
+	redisClient      = goredis.NewClient(&goredis.Options{Addr: redisUrl, Password: redisPassword, DB: 0})
+	redisJSONHandler = rejson.NewReJSONHandler()
 )
 
 type RevisionRunStatus struct {
@@ -56,4 +69,17 @@ func SetStage(stages map[string]int, stage string) (updatedValue int) {
 	}
 
 	return
+}
+
+func GetPipelineRunStatus(jsonKey string) PipelineRunStatus {
+
+	pipelineRunStatusJson := sthingsCli.GetRedisJSON(redisJSONHandler, jsonKey)
+	pipelineRunStatus := PipelineRunStatus{}
+
+	err := json.Unmarshal(pipelineRunStatusJson, &pipelineRunStatus)
+	if err != nil {
+		fmt.Println("FAILED TO JSON UNMARSHAL")
+	}
+
+	return pipelineRunStatus
 }

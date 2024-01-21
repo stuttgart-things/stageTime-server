@@ -31,3 +31,11 @@ func TestPrintTable(t *testing.T) {
 
 	PrintTable(testPr)
 }
+
+// func TestGetPipelineRunStatus(t *testing.T) {
+
+// 	redisClient = goredis.NewClient(&goredis.Options{Addr: redisUrl, Password: redisPassword, DB: 0})
+
+// 	hello := GetPipelineRunStatus(redisClient, "st-0-simulate-stagetime-2057253c5a-status")
+// 	fmt.Println(hello)
+// }

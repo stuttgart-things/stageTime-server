@@ -83,3 +83,16 @@ func GetPipelineRunStatus(jsonKey string, redisJSONHandler *rejson.Handler) Pipe
 
 	return pipelineRunStatus
 }
+
+func GetStageStatus(jsonKey string, redisJSONHandler *rejson.Handler) StageStatus {
+
+	stageStatusJson := sthingsCli.GetRedisJSON(redisJSONHandler, jsonKey)
+	stageStatus := StageStatus{}
+
+	err := json.Unmarshal(stageStatusJson, &stageStatus)
+	if err != nil {
+		fmt.Println("FAILED TO JSON UNMARSHAL")
+	}
+
+	return stageStatus
+}

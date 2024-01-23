@@ -3,7 +3,7 @@
     "pushed_at": "2024-01-13T13:40:36Z",
     "author": "patrick-hermann-sva",
     "repo_url": "https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git",
-    "commit_id": "3c5ac44c6fec00989c7e27b36630a82cdfd26e3b0",
+    "commit_id": "3c5ac44c6fec00989c7e27b36630a",
     "pipelineruns": [
       {
         "name": "simulate-stagetime",

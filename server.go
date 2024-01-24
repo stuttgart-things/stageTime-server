@@ -199,9 +199,15 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	}
 
 	// CREATE STAGE STATUS ON REDIS + PRINT AS TABLE
-	for _, index := range stages {
+	fmt.Println("LEN STAGES", len(stages))
 
-		stageNumber = sthingsBase.ConvertIntegerToString(index)
+	for key, index := range stages {
+
+		fmt.Println("KEY: ", key)
+		fmt.Println("INDEX: ", index)
+
+		stageNumber = sthingsBase.ConvertIntegerToString(index - 2)
+		fmt.Println("STAGENUMBER: ", stageNumber)
 
 		initialStageStatus := server.StageStatus{
 			StageID:           now.Format("2006-01-0215-04-05") + "-" + revisionRunID + "-" + stageNumber,

@@ -1,0 +1,14 @@
+---
+resources:
+  - importer-job.yaml
+configMapGenerator:
+  - name: revisionruns
+    files:
+      - prime.json
+patches:
+  - target:
+      kind: Pod
+    patch: |-
+      - op: replace
+        path: /metadata/name
+        value: revisionrun-importer

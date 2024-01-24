@@ -1,0 +1,45 @@
+{
+    "repo_name": "stuttgart-things",
+    "pushed_at": "2024-01-13T13:40:36Z",
+    "author": "patrick-hermann-sva",
+    "repo_url": "https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git",
+    "commit_id": "000000005",
+    "pipelineruns": [
+      {
+        "name": "simulate-stagetime",
+        "canfail": true,
+        "stage": 0,
+        "resolverParams": "url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml",
+        "params": "gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s",
+        "listparams": "",
+        "volumeClaimTemplates": "source=openebs-hostpath;ReadWriteOnce;20Mi"
+      },
+      {
+        "name": "simulate-stagetime-2",
+        "canfail": true,
+        "stage": 0,
+        "resolverParams": "url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml",
+        "params": "gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s",
+        "listparams": "",
+        "volumeClaimTemplates": "source=openebs-hostpath;ReadWriteOnce;20Mi"
+      },
+      {
+        "name": "simulate-stagetime-3",
+        "canfail": true,
+        "stage": 0,
+        "resolverParams": "url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml",
+        "params": "gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s",
+        "listparams": "",
+        "volumeClaimTemplates": "source=openebs-hostpath;ReadWriteOnce;20Mi"
+      },
+      {
+        "name": "simulate-stagetime-4",
+        "canfail": true,
+        "stage": 1,
+        "resolverParams": "url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml",
+        "params": "gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s",
+        "listparams": "",
+        "volumeClaimTemplates": "source=openebs-hostpath;ReadWriteOnce;20Mi"
+      }
+    ]
+  }

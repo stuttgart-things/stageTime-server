@@ -2,13 +2,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kustomize-inline-guestbook
+  name: stagetime-importer
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: test1
+    namespace: default
     server: https://kubernetes.default.svc
   project: default
   source:

@@ -37,7 +37,7 @@ spec:
           repo: stagetime
           tokenRef:
             secretName: github
-            key: token
+            key: GITHUB_TOKEN
           # labels:
           #   - build # label on PR that trigger review app
         requeueAfterSeconds: 300

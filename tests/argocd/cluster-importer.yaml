@@ -1,0 +1,25 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kustomize-inline-guestbook
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: test1
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: tests/cluster-importer
+    repoURL: https://github.com/stuttgart-things/stageTime-server.git
+    targetRevision: main
+    kustomize:
+      patches:
+        - target:
+            kind: Pod
+          patch: |-
+            - op: replace
+              path: /metadata/name
+              value: revisionrun-importer

@@ -34,7 +34,7 @@ spec:
     - pullRequest:
         github:
           owner: stuttgart-things
-          repo: stagetime
+          repo: stagetime-server
           tokenRef:
             secretName: github
             key: GITHUB_TOKEN

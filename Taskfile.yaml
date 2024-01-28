@@ -53,7 +53,7 @@ tasks:
         read COMMIT_MESSAGE;
         git add *
         git commit -am "$(echo ${COMMIT_MESSAGE})"
-        git push origin -u {{ .BRANCH }}
+        git push origin -u "{{ .BRANCH }}"
 
   pr:
     desc: Create pull request into main

@@ -85,9 +85,11 @@ const banner = `
 `
 
 // OUTPUT BANNER + VERSION OUTPUT
-func PrintBanner() {
+func PrintBanner() string {
 	color.Magenta(logo)
 	color.Cyan(banner)
 	resp := goVersion.FuncWithOutput(false, version, commit, date, output)
 	color.Magenta(resp + "\n")
+	return resp
+
 }

@@ -43,7 +43,7 @@ spec:
         requeueAfterSeconds: 300
   template:
     metadata:
-      name: 'stagetime-importer-{{ branch }}-{{ number }}'
+      name: 'stagetime-importer-{{ branch_slug }}-{{ number }}'
       namespace: argocd
       finalizers:
         - resources-finalizer.argocd.argoproj.io

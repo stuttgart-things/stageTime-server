@@ -17,5 +17,6 @@ jobs:
       runs-on: arc-runner-scale-set-stagetime-server
       polaris-image: eu.gcr.io/stuttgart-things/sthings-polaris:8.5.4
       severity: danger
-      scan-object: manifest
-      scan-path: tests/k8s-test-deployment.yaml
+      #scan-object: manifest
+      scan-object: helm
+      scan-path: helm/stagetime-server

@@ -15,7 +15,7 @@ jobs:
     with:
       environment-name: k8s
       runs-on: arc-runner-scale-set-stagetime-server
-      polaris-image: quay.io/fairwinds/polaris:8.5
+      polaris-image: eu.gcr.io/stuttgart-things/sthings-polaris:8.5.4
       severity: danger
       scan-object: manifest
       scan-path: tests/k8s-test-deployment.yaml

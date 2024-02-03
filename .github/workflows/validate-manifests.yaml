@@ -15,7 +15,7 @@ jobs:
     with:
       environment-name: k8s
       runs-on: arc-runner-scale-set-stagetime-server
-      polaris-image: eu.gcr.io/stuttgart-things/sthings-polaris:8.5.4
+      polaris-image: eu.gcr.io/stuttgart-things/sthings-polaris:8.5.4-3.14.0
       severity: danger
       #scan-object: manifest
       scan-object: helm

@@ -19,4 +19,3 @@ jobs:
       severity: danger
       scan-object: helm-chart
       scan-path: helm/stagetime-server
-      output-path: /tmp/polaris-results.json

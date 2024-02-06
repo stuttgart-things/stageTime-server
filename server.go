@@ -199,8 +199,6 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	}
 
 	// CREATE STAGE STATUS ON REDIS + PRINT AS TABLE
-	fmt.Println("LEN STAGES", len(stages))
-
 	for stageNumber, _ := range stages {
 
 		fmt.Println("STAGENUMBER: ", stageNumber)
@@ -222,8 +220,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	server.OutputRevisonRunStatus(renderedPipelineruns)
 
 	// SEND STAGE TO STREAM
-	server.SendStageToMessageQueue(now.Format("2006-01-0215-04-05") + "+" + revisionRunID + "+0")
-	log.Info("STAGE WAS QUEUED FOR PIPELINERUN CREATION ON SERVER (STREAM): ", revisionRunID+"+0")
+	server.SendStageToMessageQueue(now.Format("2006-01-0215-04-05") + "-" + revisionRunID + "-0")
+	log.Info("STAGE WAS QUEUED FOR PIPELINERUN CREATION ON SERVER (STREAM): ", revisionRunID+"-0")
 
 	// HANDLING OF REVISONRUN CR
 	// stageID := "stageTime-" + gRPCRequest.CommitId[0:4]

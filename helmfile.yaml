@@ -11,7 +11,7 @@ releases:
     installed: true
     namespace: stagetime
     chart: stagetime-server/stagetime-server
-    version: v0.4.48
+    version: v0.4.49
     values:
       - "env/values.yaml.gotmpl"
 environments:

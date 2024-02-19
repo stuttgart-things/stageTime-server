@@ -63,6 +63,15 @@ func NewServer() Server {
 	return Server{}
 }
 
+type StatusService struct {
+	revisionrun.UnimplementedStatusesServer
+}
+
+func registerServices(s *grpc.Server) {
+	revisionrun.RegisterStageTimeApplicationServiceServer(s, &Server{})
+	revisionrun.RegisterStatusesServer(s, &StatusService{})
+}
+
 func main() {
 
 	// PRINT BANNER + VERSION INFO
@@ -87,11 +96,21 @@ func main() {
 	grpcServer := grpc.NewServer()
 	reflection.Register(grpcServer)
 
-	stageTimeServer := NewServer()
+	// stageTimeServer := NewServer()
+	registerServices(grpcServer)
 
-	revisionrun.RegisterStageTimeApplicationServiceServer(grpcServer, stageTimeServer)
+	// revisionrun.RegisterStageTimeApplicationServiceServer(grpcServer, stageTimeServer)
+	// revisionrun.RegisterStatusesServer(grpcServer, stageTimeServer)
 
 	log.Fatalln(grpcServer.Serve(listener))
+}
+
+func (s StatusService) GetStatus(ctx context.Context, gRPCRequest *revisionrun.StatusGetRequest) (*revisionrun.StatusGetReply, error) {
+
+	// SEND gRPC RESPONSE
+	fmt.Println("HELLLOOO")
+	return &revisionrun.StatusGetReply{}, nil
+
 }
 
 func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.CreateRevisionRunRequest) (*revisionrun.Response, error) {

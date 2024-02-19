@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package revisionrun;
+
+option go_package = "github.com/stuttgart-things/stageTime-server";
+
+
+service Statuses {
+  rpc GetStatus (StatusGetRequest) returns (StatusGetReply) {}
+}
+
+message StatusGetRequest {
+  string email = 1;
+  string id = 2;
+}
+
+message Status {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  int32 age = 4;
+}
+
+message StatusGetReply {
+  Status status = 1;
+}

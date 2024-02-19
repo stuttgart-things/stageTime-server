@@ -215,7 +215,6 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		}
 
 		server.SetStageStatusInRedis(redisJSONHandler, revisionRunID+stageNumber, "STAGE CREATED W/ STAGETIME-SERVER", initialStageStatus, true)
-
 		log.Info("INITIAL STATE STATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+stageNumber)
 
 	}

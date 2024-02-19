@@ -7,6 +7,7 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -22,8 +23,8 @@ var (
 	redisPort     = os.Getenv("REDIS_PORT")
 	redisPassword = os.Getenv("REDIS_PASSWORD")
 	redisStream   = os.Getenv("REDIS_STREAM")
-	log           = sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
-	logfilePath   = "stageTime-server.log"
+	// log           = sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
+	// logfilePath   = "stageTime-server.log"
 )
 
 func SendStageToMessageQueue(stageID string) {
@@ -96,7 +97,6 @@ func SetRevisionRunStatusToRedis(redisJSONHandler *rejson.Handler, revisionRunSt
 	revisionRunFromRedis.Status = updatedMessage
 
 	sthingsCli.SetRedisJSON(redisJSONHandler, revisionRunFromRedis, revisionRunStautsID)
-	log.Info("REVISIONRUN STATUS WAS UPDATED ON REDIS: ", revisionRunStautsID)
 
 	if print {
 		PrintTable(revisionRunFromRedis)

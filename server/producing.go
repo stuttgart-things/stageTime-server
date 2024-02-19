@@ -70,10 +70,10 @@ func OutputRevisonRunStatus(renderedPipelineruns map[int][]string) {
 	tw.Render()
 }
 
-// revisionRunID+"-status"
-func GetRevisionRunFromRedis(redisJSONHandler *rejson.Handler, revisionRunID string, print bool) (revisionRunFromRedis RevisionRunStatus) {
+// GET REVISIONRUN STATUS FROM REDIS
+func GetRevisionRunFromRedis(redisJSONHandler *rejson.Handler, revisionRunStautsID string, print bool) (revisionRunFromRedis RevisionRunStatus) {
 
-	revisionRunStatus := sthingsCli.GetRedisJSON(redisJSONHandler, revisionRunID)
+	revisionRunStatus := sthingsCli.GetRedisJSON(redisJSONHandler, revisionRunStautsID)
 
 	revisionRunFromRedis = RevisionRunStatus{}
 	err := json.Unmarshal(revisionRunStatus, &revisionRunFromRedis)
@@ -86,4 +86,19 @@ func GetRevisionRunFromRedis(redisJSONHandler *rejson.Handler, revisionRunID str
 	}
 
 	return
+}
+
+// SET REVISIONRUN STATUS IN REDIS
+func SetRevisionRunStatusToRedis(redisJSONHandler *rejson.Handler, revisionRunStautsID, updatedMessage string, revisionRunFromRedis RevisionRunStatus, print bool) {
+
+	// UPDATE MESSAGE
+	revisionRunFromRedis.Status = updatedMessage
+
+	sthingsCli.SetRedisJSON(redisJSONHandler, revisionRunFromRedis, revisionRunStautsID)
+	log.Info("REVISIONRUN STATUS WAS UPDATED ON REDIS: ", revisionRunStautsID)
+
+	if print {
+		PrintTable(revisionRunFromRedis)
+	}
+
 }

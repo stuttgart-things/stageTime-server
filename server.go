@@ -150,9 +150,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			stage = prInformation["stagetime/stage"]
 			stages[stage] = server.SetStage(stages, stage)
 			revisionRunID = prInformation["stagetime/commit"]
+
 			// SET STAGES ON LIST
-			// sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+prInformation["stagetime/commit"]+"-"+"stages", stage)
-			// sthingsCli.AddValueToRedisSet(redisClient, now.Format(time.RFC3339)+"-"+prInformation["stagetime/commit"], prInformation["name"])
 
 			// CONVERT PR TO JSON + ADD TO REDIS
 			prJSON := sthingsCli.ConvertYAMLToJSON(pr)
@@ -184,7 +183,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		CountStages:       countStage,
 		CountPipelineRuns: countPipelineRuns,
 		LastUpdated:       now.Format("2006-01-0215-04-05"),
-		Status:            "CREATED W/ STAGETIME-SERVER",
+		Status:            "REVISIONRUN CREATED W/ STAGETIME-SERVER",
 	}
 
 	sthingsCli.SetRedisJSON(redisJSONHandler, initialRrs, revisionRunID+"-status")
@@ -209,9 +208,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			StageID:           now.Format("2006-01-0215-04-05") + "-" + revisionRunID + "-" + stageNumber,
 			CountPipelineRuns: stages[stageNumber],
 			LastUpdated:       now.Format("2006-01-0215-04-05"),
-			Status:            "CREATED W/ STAGETIME-SERVER",
+			Status:            "STAGE CREATED W/ STAGETIME-SERVER",
 		}
-		// "2024-01-2405-54-56-093uohkjscbod32903de-0"
 
 		log.Info("INITIAL STATE STATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+stageNumber)
 		sthingsCli.SetRedisJSON(redisJSONHandler, initialStageStatus, revisionRunID+stageNumber)

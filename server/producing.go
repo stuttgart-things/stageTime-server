@@ -5,11 +5,14 @@ Copyright © 2023 Patrick Hermann patrick.hermann@sva.de
 package server
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
 	"github.com/jedib0t/go-pretty/v6/table"
+	"github.com/nitishm/go-rejson/v4"
 
 	sthingsBase "github.com/stuttgart-things/sthingsBase"
 	sthingsCli "github.com/stuttgart-things/sthingsCli"
@@ -65,4 +68,22 @@ func OutputRevisonRunStatus(renderedPipelineruns map[int][]string) {
 	tw.SetStyle(table.StyleColoredBright)
 	tw.SetOutputMirror(os.Stdout)
 	tw.Render()
+}
+
+// revisionRunID+"-status"
+func GetRevisionRunFromRedis(redisJSONHandler *rejson.Handler, revisionRunID string, print bool) (revisionRunFromRedis RevisionRunStatus) {
+
+	revisionRunStatus := sthingsCli.GetRedisJSON(redisJSONHandler, revisionRunID)
+
+	revisionRunFromRedis = RevisionRunStatus{}
+	err := json.Unmarshal(revisionRunStatus, &revisionRunFromRedis)
+	if err != nil {
+		log.Fatalf("FAILED TO JSON UNMARSHAL REVISIONRUN STATUS")
+	}
+
+	if print {
+		PrintTable(revisionRunFromRedis)
+	}
+
+	return
 }

@@ -186,7 +186,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		Status:            "",
 	}
 
-	server.SetRevisionRunStatusToRedis(redisJSONHandler, revisionRunID+"-status", "REVISIONRUN CREATED W/ STAGETIME-SERVER", initialRrs, true)
+	server.SetRevisionRunStatusInRedis(redisJSONHandler, revisionRunID+"-status", "REVISIONRUN CREATED W/ STAGETIME-SERVER", initialRrs, true)
 	log.Info("INITIAL REVISIONRUNSTATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+"-status")
 
 	// sthingsCli.SetRedisJSON(redisJSONHandler, initialRrs, revisionRunID+"-status")

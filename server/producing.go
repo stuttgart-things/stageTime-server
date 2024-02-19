@@ -77,7 +77,6 @@ func GetRevisionRunFromRedis(redisJSONHandler *rejson.Handler, revisionRunStatus
 
 	revisionRunStatus := sthingsCli.GetRedisJSON(redisJSONHandler, revisionRunStatusID)
 
-	revisionRunFromRedis = RevisionRunStatus{}
 	err := json.Unmarshal(revisionRunStatus, &revisionRunFromRedis)
 	if err != nil {
 		log.Fatalf("FAILED TO JSON UNMARSHAL REVISIONRUN STATUS")
@@ -90,8 +89,25 @@ func GetRevisionRunFromRedis(redisJSONHandler *rejson.Handler, revisionRunStatus
 	return
 }
 
+// GET STAGE STATUS FROM REDIS
+func GetStageFromRedis(redisJSONHandler *rejson.Handler, stageID string, print bool) (stageStatus StageStatus) {
+
+	revisionRunStatus := sthingsCli.GetRedisJSON(redisJSONHandler, stageID)
+
+	err := json.Unmarshal(revisionRunStatus, &stageStatus)
+	if err != nil {
+		log.Fatalf("FAILED TO JSON UNMARSHAL STAGE STATUS")
+	}
+
+	if print {
+		PrintTable(stageStatus)
+	}
+
+	return
+}
+
 // SET REVISIONRUN STATUS IN REDIS
-func SetRevisionRunStatusToRedis(redisJSONHandler *rejson.Handler, revisionRunStatusID, updatedMessage string, revisionRun RevisionRunStatus, print bool) {
+func SetRevisionRunStatusInRedis(redisJSONHandler *rejson.Handler, revisionRunStatusID, updatedMessage string, revisionRun RevisionRunStatus, print bool) {
 
 	// UPDATE MESSAGE
 	revisionRun.Status = updatedMessage

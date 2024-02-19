@@ -428,3 +428,210 @@
 {"level":"info","msg":"redis port ","time":"17 Jan 24 12:13 UTC"}
 {"level":"info","msg":"redis queue ","time":"17 Jan 24 12:13 UTC"}
 {"level":"info","msg":"stageTime-server running at [::]:50051:50051","time":"17 Jan 24 12:13 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"08 Feb 24 14:42 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"08 Feb 24 14:42 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"08 Feb 24 14:42 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"08 Feb 24 14:42 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"08 Feb 24 14:42 UTC"}
+{"level":"info","msg":"INCOMING gRPC REQUEST: {\"repo_name\":\"stuttgart-things\",\"pushed_at\":\"2023-02-20T22:40:36Z\",\"author\":\"patrick\",\"repo_url\":\"https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git\",\"commit_id\":\"3c5ac44c6fec00989c7e27b36630a82cdfd26e3b0\",\"pipelineruns\":[{\"name\":\"package-publish-helmchart\",\"canfail\":false,\"stage\":0,\"params\":\"git-revision=master, git-repo-url='git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git', gitWorkspaceSubdirectory=/helm/sthings-cluster, helm-chart-path=gitops/apps, helm-chart-name=sthings-cluster, helm-chart-tag=0.2.1, registry=scr.tiab.labda.sva.de, working-image=scr.tiab.labda.sva.de/sthings-k8s-workspace/sthings-k8s-workspace:281126-1644\",\"resolverParams\":\"\",\"listparams\":\"git-revision=master;hello;whatever\",\"workspaces\":\"ssh-credentials=secret;codehub-ssh;secretName, source=persistentVolumeClaim;sthings-kaniko-workspace;claimName, dockerconfig=secret;scr-labda;secretName\",\"volumeClaimTemplates\":\"\"},{\"name\":\"build-kaniko-image\",\"canfail\":true,\"stage\":0,\"params\":\"context=/kaniko/decksman, dockerfile=./Dockerfile, git-revision=main, gitRepoUrl='git@codehub.sva.de:Lab/stuttgart-things/dev/decksman.git', gitWorkspaceSubdirectory=/kaniko/decksman, image=scr.tiab.labda.sva.de/decksman/decksman, registry=scr.tiab.labda.sva.de, tag=0.8.66\",\"resolverParams\":\"\",\"listparams\":\"git-revision=master;hello;whatever\",\"workspaces\":\"ssh-credentials=secret;codehub-ssh;secretName, shared-workspace=persistentVolumeClaim;sthings-kaniko-workspace;claimName, dockerconfig=secret;scr-labda;secretName\",\"volumeClaimTemplates\":\"\"},{\"name\":\"package-publish-helmchart\",\"canfail\":false,\"stage\":1,\"params\":\"git-revision=master, git-repo-url='git@codehub.sva.de:Lab/stuttgart-things/stuttgart-things.git', gitWorkspaceSubdirectory=/helm/sthings-tekton, helm-chart-path=gitops/apps, helm-chart-name=sthings-tekton, helm-chart-tag=0.4.4, registry=scr.tiab.labda.sva.de, working-image=scr.tiab.labda.sva.de/sthings-k8s-workspace/sthings-k8s-workspace:281126-1644\",\"resolverParams\":\"\",\"listparams\":\"git-revision=master;hello;whatever\",\"workspaces\":\"ssh-credentials=secret;codehub-ssh;secretName, source=persistentVolumeClaim;sthings-kaniko-workspace;claimName, dockerconfig=secret;scr-labda;secretName\",\"volumeClaimTemplates\":\"\"}]}","time":"08 Feb 24 14:42 UTC"}
+{"level":"info","msg":"patrick created RevisionRun 3c5ac44c6fec00989c7e27b36630a82cdfd26e3b0 at 2023-02-20T22:40:36Z","time":"08 Feb 24 14:42 UTC"}
+{"level":"info","msg":"REPOSITORY: stuttgart-things","time":"08 Feb 24 14:42 UTC"}
+{"level":"info","msg":"REPOSITORYURL: https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git","time":"08 Feb 24 14:42 UTC"}
+{"level":"info","msg":"PIPELINERUNS: 3","time":"08 Feb 24 14:42 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"INCOMING gRPC REQUEST: {\"repo_name\":\"stuttgart-things\",\"pushed_at\":\"2024-01-13T13:40:36Z\",\"author\":\"patrick-hermann-sva\",\"repo_url\":\"https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git\",\"commit_id\":\"135866d3v43453\",\"pipelineruns\":[{\"name\":\"simulate-stagetime\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"},{\"name\":\"simulate-stagetime-2\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"}]}","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"patrick-hermann-sva created RevisionRun 135866d3v43453 at 2024-01-13T13:40:36Z","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"REPOSITORY: stuttgart-things","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"REPOSITORYURL: https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"PIPELINERUNS: 2","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"ALL PIPELINERUNS CAN BE RENDERED","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"COUNT-PR: 0","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"RESOURCE-NAME: st-0-simulate-stagetime-0814101358","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"IDENTIFIER: st-0-simulate-stagetime-0814101358","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"REVISIONRUN-ID: 135866d3v43453","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"STAGE: 0","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"DATE: 2024-02-0819-14-08","time":"08 Feb 24 19:14 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"08 Feb 24 19:39 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"08 Feb 24 19:39 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"08 Feb 24 19:39 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"08 Feb 24 19:39 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"08 Feb 24 19:39 UTC"}
+{"level":"info","msg":"INCOMING gRPC REQUEST: {\"repo_name\":\"stuttgart-things\",\"pushed_at\":\"2024-01-13T13:40:36Z\",\"author\":\"patrick-hermann-sva\",\"repo_url\":\"https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git\",\"commit_id\":\"135866d3v43453\",\"pipelineruns\":[{\"name\":\"simulate-stagetime\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"},{\"name\":\"simulate-stagetime-2\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"}]}","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"patrick-hermann-sva created RevisionRun 135866d3v43453 at 2024-01-13T13:40:36Z","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"REPOSITORY: stuttgart-things","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"REPOSITORYURL: https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"PIPELINERUNS: 2","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"ALL PIPELINERUNS CAN BE RENDERED","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"COUNT-PR: 0","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"RESOURCE-NAME: st-0-simulate-stagetime-0840021358","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"IDENTIFIER: st-0-simulate-stagetime-0840021358","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"REVISIONRUN-ID: 135866d3v43453","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"STAGE: 0","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"DATE: 2024-02-0819-39-58","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"08 Feb 24 19:40 UTC"}
+{"level":"info","msg":"INCOMING gRPC REQUEST: {\"repo_name\":\"stuttgart-things\",\"pushed_at\":\"2024-01-13T13:40:36Z\",\"author\":\"patrick-hermann-sva\",\"repo_url\":\"https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git\",\"commit_id\":\"135866d3v43453\",\"pipelineruns\":[{\"name\":\"simulate-stagetime\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"},{\"name\":\"simulate-stagetime-2\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"}]}","time":"08 Feb 24 19:50 UTC"}
+{"level":"info","msg":"patrick-hermann-sva created RevisionRun 135866d3v43453 at 2024-01-13T13:40:36Z","time":"08 Feb 24 19:50 UTC"}
+{"level":"info","msg":"REPOSITORY: stuttgart-things","time":"08 Feb 24 19:50 UTC"}
+{"level":"info","msg":"REPOSITORYURL: https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git","time":"08 Feb 24 19:50 UTC"}
+{"level":"info","msg":"PIPELINERUNS: 2","time":"08 Feb 24 19:50 UTC"}
+{"level":"info","msg":"ALL PIPELINERUNS CAN BE RENDERED","time":"08 Feb 24 19:50 UTC"}
+{"level":"info","msg":"COUNT-PR: 0","time":"08 Feb 24 19:50 UTC"}
+{"level":"info","msg":"RESOURCE-NAME: st-0-simulate-stagetime-0850071358","time":"08 Feb 24 19:50 UTC"}
+{"level":"info","msg":"IDENTIFIER: st-0-simulate-stagetime-0850071358","time":"08 Feb 24 19:50 UTC"}
+{"level":"info","msg":"REVISIONRUN-ID: 135866d3v43453","time":"08 Feb 24 19:50 UTC"}
+{"level":"info","msg":"STAGE: 0","time":"08 Feb 24 19:50 UTC"}
+{"level":"info","msg":"DATE: 2024-02-0819-40-40","time":"08 Feb 24 19:50 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"10 Feb 24 16:25 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"10 Feb 24 16:25 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"10 Feb 24 16:25 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"10 Feb 24 16:25 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"10 Feb 24 16:25 UTC"}
+{"level":"info","msg":"INCOMING gRPC REQUEST: {\"repo_name\":\"stuttgart-things\",\"pushed_at\":\"2024-01-13T13:40:36Z\",\"author\":\"patrick-hermann-sva\",\"repo_url\":\"https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git\",\"commit_id\":\"135866d3v43453\",\"pipelineruns\":[{\"name\":\"simulate-stagetime\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"},{\"name\":\"simulate-stagetime-2\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"}]}","time":"10 Feb 24 16:27 UTC"}
+{"level":"info","msg":"patrick-hermann-sva created RevisionRun 135866d3v43453 at 2024-01-13T13:40:36Z","time":"10 Feb 24 16:27 UTC"}
+{"level":"info","msg":"REPOSITORY: stuttgart-things","time":"10 Feb 24 16:27 UTC"}
+{"level":"info","msg":"REPOSITORYURL: https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git","time":"10 Feb 24 16:27 UTC"}
+{"level":"info","msg":"PIPELINERUNS: 2","time":"10 Feb 24 16:27 UTC"}
+{"level":"info","msg":"ALL PIPELINERUNS CAN BE RENDERED","time":"10 Feb 24 16:27 UTC"}
+{"level":"info","msg":"COUNT-PR: 0","time":"10 Feb 24 16:27 UTC"}
+{"level":"info","msg":"RESOURCE-NAME: st-0-simulate-stagetime-1027451358","time":"10 Feb 24 16:27 UTC"}
+{"level":"info","msg":"IDENTIFIER: st-0-simulate-stagetime-1027451358","time":"10 Feb 24 16:27 UTC"}
+{"level":"info","msg":"REVISIONRUN-ID: 135866d3v43453","time":"10 Feb 24 16:27 UTC"}
+{"level":"info","msg":"STAGE: 0","time":"10 Feb 24 16:27 UTC"}
+{"level":"info","msg":"DATE: 2024-02-1016-25-08","time":"10 Feb 24 16:27 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"INCOMING gRPC REQUEST: {\"repo_name\":\"stuttgart-things\",\"pushed_at\":\"2024-01-13T13:40:36Z\",\"author\":\"patrick-hermann-sva\",\"repo_url\":\"https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git\",\"commit_id\":\"135866d3v43453\",\"pipelineruns\":[{\"name\":\"simulate-stagetime\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"},{\"name\":\"simulate-stagetime-2\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"}]}","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"patrick-hermann-sva created RevisionRun 135866d3v43453 at 2024-01-13T13:40:36Z","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"REPOSITORY: stuttgart-things","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"REPOSITORYURL: https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"PIPELINERUNS: 2","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"ALL PIPELINERUNS CAN BE RENDERED","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"COUNT-PR: 0","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"RESOURCE-NAME: st-0-simulate-stagetime-1052381358","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"IDENTIFIER: st-0-simulate-stagetime-1052381358","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"REVISIONRUN-ID: 135866d3v43453","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"STAGE: 0","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"DATE: 2024-02-1016-52-37","time":"10 Feb 24 16:52 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"INCOMING gRPC REQUEST: {\"repo_name\":\"stuttgart-things\",\"pushed_at\":\"2024-01-13T13:40:36Z\",\"author\":\"patrick-hermann-sva\",\"repo_url\":\"https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git\",\"commit_id\":\"135866d3v43453\",\"pipelineruns\":[{\"name\":\"simulate-stagetime\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"},{\"name\":\"simulate-stagetime-2\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"}]}","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"patrick-hermann-sva created RevisionRun 135866d3v43453 at 2024-01-13T13:40:36Z","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"REPOSITORY: stuttgart-things","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"REPOSITORYURL: https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"PIPELINERUNS: 2","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"ALL PIPELINERUNS CAN BE RENDERED","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"COUNT-PR: 0","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"RESOURCE-NAME: st-0-simulate-stagetime-1053581358","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"IDENTIFIER: st-0-simulate-stagetime-1053581358","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"REVISIONRUN-ID: 135866d3v43453","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"STAGE: 0","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"DATE: 2024-02-1016-53-57","time":"10 Feb 24 16:53 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"INCOMING gRPC REQUEST: {\"repo_name\":\"stuttgart-things\",\"pushed_at\":\"2024-01-13T13:40:36Z\",\"author\":\"patrick-hermann-sva\",\"repo_url\":\"https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git\",\"commit_id\":\"135866d3v43453\",\"pipelineruns\":[{\"name\":\"simulate-stagetime\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"},{\"name\":\"simulate-stagetime-2\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"}]}","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"patrick-hermann-sva created RevisionRun 135866d3v43453 at 2024-01-13T13:40:36Z","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"REPOSITORY: stuttgart-things","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"REPOSITORYURL: https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"PIPELINERUNS: 2","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"ALL PIPELINERUNS CAN BE RENDERED","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"COUNT-PR: 0","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"RESOURCE-NAME: st-0-simulate-stagetime-1054321358","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"IDENTIFIER: st-0-simulate-stagetime-1054321358","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"REVISIONRUN-ID: 135866d3v43453","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"STAGE: 0","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"DATE: 2024-02-1016-54-31","time":"10 Feb 24 16:54 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"10 Feb 24 16:56 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"10 Feb 24 16:56 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"10 Feb 24 16:56 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"10 Feb 24 16:56 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"10 Feb 24 16:56 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"11 Feb 24 05:36 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"11 Feb 24 05:36 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"11 Feb 24 05:36 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"11 Feb 24 05:36 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"11 Feb 24 05:36 UTC"}
+{"level":"info","msg":"INCOMING gRPC REQUEST: {\"repo_name\":\"stuttgart-things\",\"pushed_at\":\"2024-01-13T13:40:36Z\",\"author\":\"patrick-hermann-sva\",\"repo_url\":\"https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git\",\"commit_id\":\"135866d3v43453\",\"pipelineruns\":[{\"name\":\"simulate-stagetime\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"},{\"name\":\"simulate-stagetime-2\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"}]}","time":"11 Feb 24 05:43 UTC"}
+{"level":"info","msg":"patrick-hermann-sva created RevisionRun 135866d3v43453 at 2024-01-13T13:40:36Z","time":"11 Feb 24 05:43 UTC"}
+{"level":"info","msg":"REPOSITORY: stuttgart-things","time":"11 Feb 24 05:43 UTC"}
+{"level":"info","msg":"REPOSITORYURL: https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git","time":"11 Feb 24 05:43 UTC"}
+{"level":"info","msg":"PIPELINERUNS: 2","time":"11 Feb 24 05:43 UTC"}
+{"level":"info","msg":"ALL PIPELINERUNS CAN BE RENDERED","time":"11 Feb 24 05:43 UTC"}
+{"level":"info","msg":"COUNT-PR: 0","time":"11 Feb 24 05:43 UTC"}
+{"level":"info","msg":"RESOURCE-NAME: st-0-simulate-stagetime-1143091358","time":"11 Feb 24 05:43 UTC"}
+{"level":"info","msg":"IDENTIFIER: st-0-simulate-stagetime-1143091358","time":"11 Feb 24 05:43 UTC"}
+{"level":"info","msg":"REVISIONRUN-ID: 135866d3v43453","time":"11 Feb 24 05:43 UTC"}
+{"level":"info","msg":"STAGE: 0","time":"11 Feb 24 05:43 UTC"}
+{"level":"info","msg":"DATE: 2024-02-1105-36-25","time":"11 Feb 24 05:43 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"INCOMING gRPC REQUEST: {\"repo_name\":\"stuttgart-things\",\"pushed_at\":\"2024-01-13T13:40:36Z\",\"author\":\"patrick-hermann-sva\",\"repo_url\":\"https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git\",\"commit_id\":\"135866d3v43453\",\"pipelineruns\":[{\"name\":\"simulate-stagetime\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"},{\"name\":\"simulate-stagetime-2\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"}]}","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"patrick-hermann-sva created RevisionRun 135866d3v43453 at 2024-01-13T13:40:36Z","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"REPOSITORY: stuttgart-things","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"REPOSITORYURL: https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"PIPELINERUNS: 2","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"ALL PIPELINERUNS CAN BE RENDERED","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"COUNT-PR: 0","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"RESOURCE-NAME: st-0-simulate-stagetime-1146081358","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"IDENTIFIER: st-0-simulate-stagetime-1146081358","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"REVISIONRUN-ID: 135866d3v43453","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"STAGE: 0","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"DATE: 2024-02-1105-46-06","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"INCOMING gRPC REQUEST: {\"repo_name\":\"stuttgart-things\",\"pushed_at\":\"2024-01-13T13:40:36Z\",\"author\":\"patrick-hermann-sva\",\"repo_url\":\"https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git\",\"commit_id\":\"135866d3v43453\",\"pipelineruns\":[{\"name\":\"simulate-stagetime\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"}]}","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"patrick-hermann-sva created RevisionRun 135866d3v43453 at 2024-01-13T13:40:36Z","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"REPOSITORY: stuttgart-things","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"REPOSITORYURL: https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"PIPELINERUNS: 1","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"ALL PIPELINERUNS CAN BE RENDERED","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"COUNT-PR: 0","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"RESOURCE-NAME: st-0-simulate-stagetime-1146591358","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"IDENTIFIER: st-0-simulate-stagetime-1146591358","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"REVISIONRUN-ID: 135866d3v43453","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"STAGE: 0","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"DATE: 2024-02-1105-46-57","time":"11 Feb 24 05:46 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"INCOMING gRPC REQUEST: {\"repo_name\":\"stuttgart-things\",\"pushed_at\":\"2024-01-13T13:40:36Z\",\"author\":\"patrick-hermann-sva\",\"repo_url\":\"https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git\",\"commit_id\":\"135866d3v43453\",\"pipelineruns\":[{\"name\":\"simulate-stagetime\",\"canfail\":true,\"stage\":0,\"params\":\"gitRevision=main, gitRepoUrl=https://github.com/stuttgart-things/stageTime-server.git, gitWorkspaceSubdirectory=stageTime, scriptPath=tests/prime.sh, scriptTimeout=25s\",\"resolverParams\":\"url=https://github.com/stuttgart-things/stuttgart-things.git, revision=main, pathInRepo=stageTime/pipelines/simulate-stagetime-pipelineruns.yaml\",\"listparams\":\"\",\"workspaces\":\"\",\"volumeClaimTemplates\":\"source=openebs-hostpath;ReadWriteOnce;20Mi\"}]}","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"patrick-hermann-sva created RevisionRun 135866d3v43453 at 2024-01-13T13:40:36Z","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"REPOSITORY: stuttgart-things","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"REPOSITORYURL: https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"PIPELINERUNS: 1","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"ALL PIPELINERUNS CAN BE RENDERED","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"COUNT-PR: 0","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"RESOURCE-NAME: st-0-simulate-stagetime-1149391358","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"IDENTIFIER: st-0-simulate-stagetime-1149391358","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"REVISIONRUN-ID: 135866d3v43453","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"STAGE: 0","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"DATE: 2024-02-1105-49-35","time":"11 Feb 24 05:49 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"11 Feb 24 06:34 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"11 Feb 24 06:34 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"11 Feb 24 06:34 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"11 Feb 24 06:34 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"11 Feb 24 06:34 UTC"}

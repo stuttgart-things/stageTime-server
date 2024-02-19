@@ -102,7 +102,7 @@ func ConnectSecure(address, testFilePath string) {
 	}
 	defer conn.Close()
 
-	json, err := ioutil.ReadFile(testFilePath)
+	json, err := os.ReadFile(testFilePath)
 	if err != nil {
 		log.Fatalln(err)
 	}

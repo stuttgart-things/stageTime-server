@@ -73,9 +73,9 @@ func OutputRevisonRunStatus(renderedPipelineruns map[int][]string) {
 }
 
 // GET REVISIONRUN STATUS FROM REDIS
-func GetRevisionRunFromRedis(redisJSONHandler *rejson.Handler, revisionRunStautsID string, print bool) (revisionRunFromRedis RevisionRunStatus) {
+func GetRevisionRunFromRedis(redisJSONHandler *rejson.Handler, revisionRunStatusID string, print bool) (revisionRunFromRedis RevisionRunStatus) {
 
-	revisionRunStatus := sthingsCli.GetRedisJSON(redisJSONHandler, revisionRunStautsID)
+	revisionRunStatus := sthingsCli.GetRedisJSON(redisJSONHandler, revisionRunStatusID)
 
 	revisionRunFromRedis = RevisionRunStatus{}
 	err := json.Unmarshal(revisionRunStatus, &revisionRunFromRedis)
@@ -91,15 +91,29 @@ func GetRevisionRunFromRedis(redisJSONHandler *rejson.Handler, revisionRunStauts
 }
 
 // SET REVISIONRUN STATUS IN REDIS
-func SetRevisionRunStatusToRedis(redisJSONHandler *rejson.Handler, revisionRunStautsID, updatedMessage string, revisionRunFromRedis RevisionRunStatus, print bool) {
+func SetRevisionRunStatusToRedis(redisJSONHandler *rejson.Handler, revisionRunStatusID, updatedMessage string, revisionRun RevisionRunStatus, print bool) {
 
 	// UPDATE MESSAGE
-	revisionRunFromRedis.Status = updatedMessage
+	revisionRun.Status = updatedMessage
 
-	sthingsCli.SetRedisJSON(redisJSONHandler, revisionRunFromRedis, revisionRunStautsID)
+	sthingsCli.SetRedisJSON(redisJSONHandler, revisionRun, revisionRunStatusID)
 
 	if print {
-		PrintTable(revisionRunFromRedis)
+		PrintTable(revisionRun)
+	}
+
+}
+
+// SET STAGE STATUS IN REDIS
+func SetStageStatusInRedis(redisJSONHandler *rejson.Handler, stageID, updatedMessage string, stageStatus StageStatus, print bool) {
+
+	// UPDATE MESSAGE
+	stageStatus.Status = updatedMessage
+
+	sthingsCli.SetRedisJSON(redisJSONHandler, stageStatus, stageID)
+
+	if print {
+		PrintTable(stageStatus)
 	}
 
 }

@@ -35,14 +35,14 @@ const (
 )
 
 var (
-	serverPort        = port
-	logfilePath       = "stageTime-server.log"
-	log               = sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
-	now               = time.Now()
-	stage             string
-	stageNumber       string
-	revisionRunID     string
-	pipelineRunStatus []server.PipelineRunStatus
+	serverPort    = port
+	logfilePath   = "stageTime-server.log"
+	log           = sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
+	now           = time.Now()
+	stage         string
+	stageNumber   string
+	revisionRunID string
+	prInformation map[string]string
 )
 
 var (
@@ -138,6 +138,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 
 	log.Println("INCOMING gRPC REQUEST:", receivedRevisionRun.String())
 
+	var pipelineRunStatus []server.PipelineRunStatus
+
 	if err := json.Unmarshal([]byte(receivedRevisionRun.Bytes()), &gRPCRequest); err != nil {
 		log.Fatal(err)
 	}
@@ -160,8 +162,6 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 		countPipelineRuns = 0
 
 		for _, pr := range renderedPipelineruns[i] {
-
-			prInformation := make(map[string]string)
 
 			prValid, prInformation := internal.ValidateStorePipelineRuns(pr)
 
@@ -254,6 +254,9 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	// SEND STAGE TO STREAM
 	server.SendStageToMessageQueue(now.Format("2006-01-0215-04-05") + "+" + revisionRunID + "+0")
 	log.Info("STAGE WAS QUEUED FOR PIPELINERUN CREATION ON SERVER (STREAM): ", revisionRunID+"+0")
+
+	pipelineRunStatus = nil
+	clear(prInformation)
 
 	// SEND gRPC RESPONSE
 	return &revisionrun.Response{

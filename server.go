@@ -209,6 +209,11 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 
 	countStage := sthingsBase.ConvertStringToInteger(prInformation["stage"]) + 1
 
+	// CHECK IF REVISIONRUN ALREADY EXISTS
+	revisionRunFromRedis := server.GetRevisionRunFromRedis(redisJSONHandler, revisionRunID+"-status", true)
+	fmt.Println(revisionRunFromRedis)
+	fmt.Println("EXISTS ALREADY")
+
 	// CREATE REVISIONRUN STATUS ON REDIS + PRINT AS TABLE
 	initialRrs := server.RevisionRunStatus{
 		RevisionRun:       revisionRunID,
@@ -220,10 +225,6 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 
 	server.SetRevisionRunStatusInRedis(redisJSONHandler, revisionRunID+"-status", "REVISIONRUN CREATED W/ STAGETIME-SERVER", initialRrs, true)
 	log.Info("INITIAL REVISIONRUNSTATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+"-status")
-
-	// sthingsCli.SetRedisJSON(redisJSONHandler, initialRrs, revisionRunID+"-status")
-	// log.Info("INITIAL REVISIONRUNSTATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+"-status")
-	// server.PrintTable(initialRrs)
 
 	// CREATE PIPELINERUN STATUS ON REDIS + PRINT AS TABLE
 	for _, pr := range pipelineRunStatus {

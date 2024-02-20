@@ -77,15 +77,17 @@ func OutputRevisonRunStatus(renderedPipelineruns map[int][]string) {
 // GET REVISIONRUN STATUS FROM REDIS
 func GetRevisionRunFromRedis(redisJSONHandler *rejson.Handler, revisionRunStatusID string, print bool) (revisionRunFromRedis RevisionRunStatus) {
 
-	revisionRunStatus := sthingsCli.GetRedisJSON(redisJSONHandler, revisionRunStatusID)
+	revisionRunStatus, jsonExists := sthingsCli.GetRedisJSON(redisJSONHandler, revisionRunStatusID)
 
-	err := json.Unmarshal(revisionRunStatus, &revisionRunFromRedis)
-	if err != nil {
-		log.Fatalf("FAILED TO JSON UNMARSHAL REVISIONRUN STATUS")
-	}
+	if jsonExists {
+		err := json.Unmarshal(revisionRunStatus, &revisionRunFromRedis)
+		if err != nil {
+			log.Fatalf("FAILED TO JSON UNMARSHAL REVISIONRUN STATUS")
+		}
 
-	if print {
-		PrintTable(revisionRunFromRedis)
+		if print {
+			PrintTable(revisionRunFromRedis)
+		}
 	}
 
 	return
@@ -94,17 +96,19 @@ func GetRevisionRunFromRedis(redisJSONHandler *rejson.Handler, revisionRunStatus
 // GET STAGE STATUS FROM REDIS
 func GetStageFromRedis(redisJSONHandler *rejson.Handler, stageID string, print bool) (stageStatus StageStatus) {
 
-	revisionRunStatus := sthingsCli.GetRedisJSON(redisJSONHandler, stageID)
+	revisionRunStatus, jsonExists := sthingsCli.GetRedisJSON(redisJSONHandler, stageID)
 
-	err := json.Unmarshal(revisionRunStatus, &stageStatus)
-	if err != nil {
-		log.Fatalf("FAILED TO JSON UNMARSHAL STAGE STATUS")
+	if jsonExists {
+
+		err := json.Unmarshal(revisionRunStatus, &stageStatus)
+		if err != nil {
+			log.Fatalf("FAILED TO JSON UNMARSHAL STAGE STATUS")
+		}
+
+		if print {
+			PrintTable(stageStatus)
+		}
 	}
-
-	if print {
-		PrintTable(stageStatus)
-	}
-
 	return
 }
 

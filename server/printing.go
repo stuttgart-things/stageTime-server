@@ -71,27 +71,29 @@ func SetStage(stages map[string]int, stage string) (updatedValue int) {
 	return
 }
 
-func GetPipelineRunStatus(jsonKey string, redisJSONHandler *rejson.Handler) PipelineRunStatus {
+func GetPipelineRunStatus(jsonKey string, redisJSONHandler *rejson.Handler) (pipelineRunStatus PipelineRunStatus) {
 
-	pipelineRunStatusJson := sthingsCli.GetRedisJSON(redisJSONHandler, jsonKey)
-	pipelineRunStatus := PipelineRunStatus{}
+	pipelineRunStatusJson, jsonExists := sthingsCli.GetRedisJSON(redisJSONHandler, jsonKey)
+	if jsonExists {
 
-	err := json.Unmarshal(pipelineRunStatusJson, &pipelineRunStatus)
-	if err != nil {
-		fmt.Println("FAILED TO JSON UNMARSHAL")
+		err := json.Unmarshal(pipelineRunStatusJson, &pipelineRunStatus)
+		if err != nil {
+			fmt.Println("FAILED TO JSON UNMARSHAL")
+		}
 	}
-
 	return pipelineRunStatus
 }
 
-func GetStageStatus(jsonKey string, redisJSONHandler *rejson.Handler) StageStatus {
+func GetStageStatus(jsonKey string, redisJSONHandler *rejson.Handler) (stageStatus StageStatus) {
 
-	stageStatusJson := sthingsCli.GetRedisJSON(redisJSONHandler, jsonKey)
-	stageStatus := StageStatus{}
+	stageStatusJson, jsonExists := sthingsCli.GetRedisJSON(redisJSONHandler, jsonKey)
 
-	err := json.Unmarshal(stageStatusJson, &stageStatus)
-	if err != nil {
-		fmt.Println("FAILED TO JSON UNMARSHAL")
+	if jsonExists {
+
+		err := json.Unmarshal(stageStatusJson, &stageStatus)
+		if err != nil {
+			fmt.Println("FAILED TO JSON UNMARSHAL")
+		}
 	}
 
 	return stageStatus

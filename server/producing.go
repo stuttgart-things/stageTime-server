@@ -80,6 +80,7 @@ func GetRevisionRunFromRedis(redisJSONHandler *rejson.Handler, revisionRunStatus
 	revisionRunStatus, jsonExists := sthingsCli.GetRedisJSON(redisJSONHandler, revisionRunStatusID)
 
 	if jsonExists {
+
 		err := json.Unmarshal(revisionRunStatus, &revisionRunFromRedis)
 		if err != nil {
 			log.Fatalf("FAILED TO JSON UNMARSHAL REVISIONRUN STATUS")

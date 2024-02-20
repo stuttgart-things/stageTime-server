@@ -125,8 +125,6 @@ func (s StatusService) GetStatus(ctx context.Context, gRPCRequest *revisionrun.S
 
 func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.CreateRevisionRunRequest) (*revisionrun.Response, error) {
 
-	prInformation := make(map[string]string)
-
 	// CREATE REDIS CLIENT / JSON HANDLER
 	redisJSONHandler.SetGoRedisClient(redisClient)
 
@@ -156,11 +154,14 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 
 	// LOOP OVER REVISIONRUN
 	stages := make(map[string]int)
+	stageNumber := 0
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
 
 		countPipelineRuns = 0
 
 		for _, pr := range renderedPipelineruns[i] {
+
+			prInformation := make(map[string]string)
 
 			prValid, prInformation := internal.ValidateStorePipelineRuns(pr)
 
@@ -207,12 +208,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 
 	}
 
-	countStage := sthingsBase.ConvertStringToInteger(prInformation["stage"]) + 1
-
-	// CHECK IF REVISIONRUN ALREADY EXISTS
-	revisionRunFromRedis := server.GetRevisionRunFromRedis(redisJSONHandler, revisionRunID+"-status", true)
-	fmt.Println(revisionRunFromRedis)
-	fmt.Println("EXISTS ALREADY")
+	countStage := stageNumber + 1
 
 	// CREATE REVISIONRUN STATUS ON REDIS + PRINT AS TABLE
 	initialRrs := server.RevisionRunStatus{

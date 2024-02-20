@@ -53,6 +53,7 @@ var (
 	redisClient       = sthingsCli.CreateRedisClient(redisAddress+":"+redisPort, redisPassword)
 	redisJSONHandler  = rejson.NewReJSONHandler()
 	countPipelineRuns = 0
+	pipelineRunStatus []server.PipelineRunStatus
 )
 
 type Server struct {
@@ -138,8 +139,6 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 
 	log.Println("INCOMING gRPC REQUEST:", receivedRevisionRun.String())
 
-	var pipelineRunStatus []server.PipelineRunStatus
-
 	if err := json.Unmarshal([]byte(receivedRevisionRun.Bytes()), &gRPCRequest); err != nil {
 		log.Fatal(err)
 	}
@@ -159,6 +158,7 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	stageNumber := 0
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
 
+		pipelineRunStatus = nil
 		countPipelineRuns = 0
 
 		for _, pr := range renderedPipelineruns[i] {
@@ -223,6 +223,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	log.Info("INITIAL REVISIONRUNSTATUS WAS ADDED TO REDIS (JSON): ", revisionRunID+"-status")
 
 	// CREATE PIPELINERUN STATUS ON REDIS + PRINT AS TABLE
+	fmt.Println("STATUS", pipelineRunStatus)
+
 	for _, pr := range pipelineRunStatus {
 		sthingsCli.SetRedisJSON(redisJSONHandler, pr, pr.PipelineRunName+"-status")
 		log.Info("INITIAL PIPELINERUN STATUS WAS ADDED TO REDIS (JSON): ", pr.PipelineRunName+"-status")

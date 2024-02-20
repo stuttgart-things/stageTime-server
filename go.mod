@@ -9,7 +9,7 @@ require (
 	github.com/redis/go-redis/v9 v9.0.5
 	github.com/stretchr/testify v1.8.4
 	github.com/stuttgart-things/sthingsBase v0.1.35
-	github.com/stuttgart-things/sthingsCli v0.1.87
+	github.com/stuttgart-things/sthingsCli v0.1.88
 	github.com/stuttgart-things/sthingsK8s v0.1.19
 	go.hein.dev/go-version v0.1.0
 	google.golang.org/grpc v1.59.0

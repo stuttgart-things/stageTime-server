@@ -23,6 +23,8 @@ var (
 	redisPort     = os.Getenv("REDIS_PORT")
 	redisPassword = os.Getenv("REDIS_PASSWORD")
 	redisStream   = os.Getenv("REDIS_STREAM")
+	now           = time.Now()
+
 	// log           = sthingsBase.StdOutFileLogger(logfilePath, "2006-01-02 15:04:05", 50, 3, 28)
 	// logfilePath   = "stageTime-server.log"
 )
@@ -111,6 +113,7 @@ func SetRevisionRunStatusInRedis(redisJSONHandler *rejson.Handler, revisionRunSt
 
 	// UPDATE MESSAGE
 	revisionRun.Status = updatedMessage
+	revisionRun.LastUpdated = now.Format("2006-01-0215-04-05")
 
 	sthingsCli.SetRedisJSON(redisJSONHandler, revisionRun, revisionRunStatusID)
 

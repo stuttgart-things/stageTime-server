@@ -202,6 +202,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			sthingsCli.AddValueToRedisSet(redisClient, prInformation["stagetime/date"]+"-"+prInformation["stagetime/commit"]+"-"+prInformation["stagetime/stage"], prInformation["name"])
 			log.Info("ADDED PIPELINERUN NAMES TO REDIS (SET): ", prInformation["stagetime/date"]+"-"+prInformation["stagetime/commit"]+"-"+prInformation["stagetime/stage"])
 		}
+
+		countPipelineRuns = 0
 	}
 
 	countStage := sthingsBase.ConvertStringToInteger(prInformation["stage"]) + 1

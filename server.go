@@ -42,17 +42,17 @@ var (
 	stage             string
 	stageNumber       string
 	revisionRunID     string
-	countPipelineRuns = 0
 	pipelineRunStatus []server.PipelineRunStatus
 )
 
 var (
-	redisAddress     = os.Getenv("REDIS_SERVER")
-	redisPort        = os.Getenv("REDIS_PORT")
-	redisPassword    = os.Getenv("REDIS_PASSWORD")
-	redisStream      = os.Getenv("REDIS_STREAM")
-	redisClient      = sthingsCli.CreateRedisClient(redisAddress+":"+redisPort, redisPassword)
-	redisJSONHandler = rejson.NewReJSONHandler()
+	redisAddress      = os.Getenv("REDIS_SERVER")
+	redisPort         = os.Getenv("REDIS_PORT")
+	redisPassword     = os.Getenv("REDIS_PASSWORD")
+	redisStream       = os.Getenv("REDIS_STREAM")
+	redisClient       = sthingsCli.CreateRedisClient(redisAddress+":"+redisPort, redisPassword)
+	redisJSONHandler  = rejson.NewReJSONHandler()
+	countPipelineRuns = 0
 )
 
 type Server struct {
@@ -158,6 +158,8 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 	stages := make(map[string]int)
 	for i := 0; i < (len(renderedPipelineruns)); i++ {
 
+		countPipelineRuns = 0
+
 		for _, pr := range renderedPipelineruns[i] {
 
 			prValid, prInformation := internal.ValidateStorePipelineRuns(pr)
@@ -203,7 +205,6 @@ func (s Server) CreateRevisionRun(ctx context.Context, gRPCRequest *revisionrun.
 			log.Info("ADDED PIPELINERUN NAMES TO REDIS (SET): ", prInformation["stagetime/date"]+"-"+prInformation["stagetime/commit"]+"-"+prInformation["stagetime/stage"])
 		}
 
-		countPipelineRuns = 0
 	}
 
 	countStage := sthingsBase.ConvertStringToInteger(prInformation["stage"]) + 1

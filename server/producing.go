@@ -53,6 +53,7 @@ func OutputRevisonRunStatus(renderedPipelineruns map[int][]string) {
 			revisionRunID, _ = sthingsBase.GetRegexSubMatch(pr, `commit: "(.*?)"`)
 		}
 	}
+
 	countStage := sthingsBase.ConvertStringToInteger(stageNumber) + 1
 
 	rrs := RevisionRunStatus{

@@ -473,3 +473,59 @@
 {"level":"info","msg":"REPOSITORY: stuttgart-things","time":"19 Feb 24 20:52 UTC"}
 {"level":"info","msg":"REPOSITORYURL: https://codehub.sva.de/Lab/stuttgart-things/stuttgart-things.git","time":"19 Feb 24 20:52 UTC"}
 {"level":"info","msg":"PIPELINERUNS: 3","time":"19 Feb 24 20:52 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"20 Feb 24 07:52 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"20 Feb 24 07:52 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"20 Feb 24 07:52 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"20 Feb 24 07:52 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"20 Feb 24 07:52 UTC"}
+{"level":"info","msg":"Received request for user with Email:  Id: \n","time":"20 Feb 24 07:54 UTC"}
+{"level":"info","msg":"Received request for user with Email: jane@doe.com Id: foo-bar\n","time":"20 Feb 24 07:57 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"20 Feb 24 08:05 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"20 Feb 24 08:05 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"20 Feb 24 08:05 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"20 Feb 24 08:05 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"20 Feb 24 08:05 UTC"}
+{"level":"info","msg":"Received request for user with Email: 1235 Id: %!s(MISSING)\n","time":"20 Feb 24 08:05 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"20 Feb 24 08:05 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"20 Feb 24 08:05 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"20 Feb 24 08:05 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"20 Feb 24 08:05 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"20 Feb 24 08:05 UTC"}
+{"level":"info","msg":"Received request for user with RevisonRunId: 1235","time":"20 Feb 24 08:05 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"20 Feb 24 08:47 UTC"}
+{"level":"info","msg":"REDIS SERVER: ","time":"20 Feb 24 08:47 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"20 Feb 24 08:47 UTC"}
+{"level":"info","msg":"REDIS QUEUE: ","time":"20 Feb 24 08:47 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"20 Feb 24 08:47 UTC"}
+{"level":"info","msg":"Received request for RevisonRunId: 1235","time":"20 Feb 24 08:47 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"20 Feb 24 09:07 UTC"}
+{"level":"info","msg":"REDIS SERVER: 28015","time":"20 Feb 24 09:07 UTC"}
+{"level":"info","msg":"REDIS PORT: ","time":"20 Feb 24 09:07 UTC"}
+{"level":"info","msg":"REDIS QUEUE: stagetime-revisionruns","time":"20 Feb 24 09:07 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"20 Feb 24 09:07 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"20 Feb 24 09:08 UTC"}
+{"level":"info","msg":"REDIS SERVER: 127.0.0.1","time":"20 Feb 24 09:08 UTC"}
+{"level":"info","msg":"REDIS PORT: 28015","time":"20 Feb 24 09:08 UTC"}
+{"level":"info","msg":"REDIS QUEUE: stagetime-revisionruns","time":"20 Feb 24 09:08 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"20 Feb 24 09:08 UTC"}
+{"level":"info","msg":"Received request for RevisonRunId: 1235","time":"20 Feb 24 09:08 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"20 Feb 24 09:10 UTC"}
+{"level":"info","msg":"REDIS SERVER: 127.0.0.1","time":"20 Feb 24 09:10 UTC"}
+{"level":"info","msg":"REDIS PORT: 28015","time":"20 Feb 24 09:10 UTC"}
+{"level":"info","msg":"REDIS QUEUE: stagetime-revisionruns","time":"20 Feb 24 09:10 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"20 Feb 24 09:10 UTC"}
+{"level":"info","msg":"Received request for RevisonRunId: ad3121246532123","time":"20 Feb 24 09:10 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"20 Feb 24 09:12 UTC"}
+{"level":"info","msg":"REDIS SERVER: 127.0.0.1","time":"20 Feb 24 09:12 UTC"}
+{"level":"info","msg":"REDIS PORT: 28015","time":"20 Feb 24 09:12 UTC"}
+{"level":"info","msg":"REDIS QUEUE: stagetime-revisionruns","time":"20 Feb 24 09:12 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"20 Feb 24 09:12 UTC"}
+{"level":"info","msg":"Received request for RevisonRunId: ad3121246532123","time":"20 Feb 24 09:12 UTC"}
+{"level":"info","msg":"GRPC SERVER RUNNING ON PORT: :50051","time":"20 Feb 24 09:27 UTC"}
+{"level":"info","msg":"REDIS SERVER: 127.0.0.1","time":"20 Feb 24 09:27 UTC"}
+{"level":"info","msg":"REDIS PORT: 28015","time":"20 Feb 24 09:27 UTC"}
+{"level":"info","msg":"REDIS QUEUE: stagetime-revisionruns","time":"20 Feb 24 09:27 UTC"}
+{"level":"info","msg":"STAGETIME-SERVER RUNNING AT [::]:50051:50051","time":"20 Feb 24 09:27 UTC"}
+{"level":"info","msg":"Received request for RevisonRunId: ad3121246532123","time":"20 Feb 24 09:27 UTC"}
+{"level":"info","msg":"Received request for RevisonRunId: ad3121246532123","time":"20 Feb 24 09:27 UTC"}
+{"level":"info","msg":"Received request for RevisonRunId: ad3121246532123","time":"20 Feb 24 09:29 UTC"}

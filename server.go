@@ -106,10 +106,23 @@ func main() {
 }
 
 func (s StatusService) GetStatus(ctx context.Context, gRPCRequest *revisionrun.StatusGetRequest) (*revisionrun.StatusGetReply, error) {
+	log.Printf("Received request for RevisonRunId: %s", gRPCRequest.RevisionRunId)
 
-	// SEND gRPC RESPONSE
-	fmt.Println("HELLLOOO")
-	return &revisionrun.StatusGetReply{}, nil
+	if gRPCRequest.RevisionRunId == "" {
+		return nil, nil
+	}
+
+	redisJSONHandler.SetGoRedisClient(redisClient)
+	revisionRunFromRedis := server.GetRevisionRunFromRedis(redisJSONHandler, gRPCRequest.RevisionRunId+"-status", true)
+	fmt.Println(revisionRunFromRedis)
+
+	status := revisionrun.Status{
+		Id:      revisionRunFromRedis.RevisionRun,
+		Updated: revisionRunFromRedis.LastUpdated,
+		Status:  revisionRunFromRedis.Status,
+	}
+
+	return &revisionrun.StatusGetReply{Status: &status}, nil
 
 }
 

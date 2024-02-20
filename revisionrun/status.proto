@@ -10,15 +10,13 @@ service Statuses {
 }
 
 message StatusGetRequest {
-  string email = 1;
-  string id = 2;
+  string revision_run_id = 1;
 }
 
 message Status {
   string id = 1;
-  string first_name = 2;
-  string last_name = 3;
-  int32 age = 4;
+  string updated = 2;
+  string status = 3;
 }
 
 message StatusGetReply {

@@ -99,9 +99,6 @@ func main() {
 	// stageTimeServer := NewServer()
 	registerServices(grpcServer)
 
-	// revisionrun.RegisterStageTimeApplicationServiceServer(grpcServer, stageTimeServer)
-	// revisionrun.RegisterStatusesServer(grpcServer, stageTimeServer)
-
 	log.Fatalln(grpcServer.Serve(listener))
 }
 

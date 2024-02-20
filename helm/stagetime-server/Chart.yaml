@@ -2,8 +2,8 @@ apiVersion: v2
 name: stagetime-server
 description: A Helm chart for Kubernetes
 type: application
-version: v0.4.53
-appVersion: v0.4.53
+version: v0.4.54
+appVersion: v0.4.54
 dependencies:
   - name: sthings-helm-toolkit
     version: 2.4.58
